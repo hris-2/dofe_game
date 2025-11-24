@@ -227,6 +227,7 @@ def weather_change():
     thunder_activate = False
     hail_activate = False
     fog_activate = False
+    weather_effect_done = False
     if this_weather == "sunny" and last_weather == "sunny" and neg2_weather == "sunny":
         heatwave_activate = r.choices(
             [True, False],
@@ -603,79 +604,6 @@ def refresh_companion():
     elif companion == "rock_dweller"
         damage_resistence += 3
 
-def weather_effect_bad_attempt():
-    if t.time() - last_weather_refesh > 300:
-        weather_change()
-        last_weather_refesh = t.time()
-    if this_weather == "heatwave":
-        if warmth >= 10:
-            print("The Sun Is Beating Down On You")
-            t.sleep(1)
-            health_lost_heatwave = 2 / heat_resistence
-            health -= health_lost_heatwave
-            print(f"You Have Lost {health_lost_heatwave} Health. You Now Have {health} Health")
-        else:
-            print("The Sun Is Making You Warming. Seek Coolth")
-            warmth += 1
-        energy_efficenty /= 3
-    elif this_weather == "sunny":
-        energy_efficenty /= 1.5
-    elif this_weather == "clear":
-        perfect_conditions = True
-    elif this_weather == "cloudy":
-        print()
-    elif this_weather == "drizzling":
-        print()
-    elif this_weather == "raining":
-        print()
-    elif this_weather == "thundering":
-        thunderstrike_chance = r.choices(
-            [True, False],
-            weight = [conductabilty / 10, 100],
-            k = 1
-        )
-        if thunderstrike_chance == True:
-            thunderstrike_area = r.choice(["near miss", "near miss", "near miss", "near miss", "you", "you", "you", "you", "you", "you"])
-            if thunderstrike_area == "near miss":
-                print("A Thunder Bolt Came Crashing Down Near You")
-                t.sleep(1)
-                print("That Was Close")
-                print()
-                t.sleep(1)
-            elif thunderstrike_area == "you":
-                save_you_thunder = quick_time_event(2, "random", "Roll Out Of The Way Of The Thunder")
-                if save_you_thunder == True:
-                    print("The Thunder Bolt Smashed Into The Ground Where You Were Standing")
-                    t.sleep(2)
-                    print("That Was Close")
-                else:
-                    print("You Stood Still And Gazed Into The Thunder Bolt Coming Straight Down At You.")
-                    t.sleep(1)
-                    health_lost_thunder = 20 / electrictiy_resistence
-                    health -= health_lost_thunder
-                    print(f"You Have Lost {health_lost_thunder} Health. You Now Have {health} Health.")
-        print()
-        t.sleep(1)
-    elif this_weather == "snowing":
-        if warmth == 0:
-            health_lost_snow = 1
-            health -= health_lost_snow
-            print("The Snow Is Wearing You Down")
-            t.sleep(1)
-            print(f"You Have Lost {health_lost_snow} Health. You Are Now On {health}")
-        else:
-            print("The Snow Is Making You Cold")
-            t.sleep(1)
-            print("You Should Seek Warmth")
-            warmth -= 1
-        visability /= 2
-    elif this_weather == "hail_storm":
-        print("The Hard Hails Are Bouncing Of Your Back And Seeping Into Your Armour")
-        t.sleep(1)
-        health_lost_hail = 1 / ice_resistence
-        print(f"You Lost {health_lost_hail} Health. You Are Now On {health} Health")
-        visability /= 4
-
 def weather_effect_refresh():
     if last_weather_effect_refesh + 180 < t.time(): #Repeating Effects Like Hails
         if this_weather == "thundering":
@@ -739,6 +667,9 @@ def weather_effect_refresh():
                 warmth -= 1
         elif this_weather == "sunny":
             print("The Clear Sky Gives Way To The Hot Sun")
+            if weather_effect_done == False:
+                energy_efficenty = int( energy_efficenty /= 1.25 )
+                weather_effect_done = True
             t.sleep(1)
             print()
         elif this_weather == "clear":
@@ -747,6 +678,13 @@ def weather_effect_refresh():
             print()
         elif this_weather == "drizzling":
             print("Light Rain Drizzles Over The Island")
+            t.sleep(1)
+            print()
+        elif this_weather == "raining":
+            print("The Heavy Rain Drop Cover The Island")
+            if weather_effect_done == False:
+                energy_efficenty = int( energy_efficenty / 1.25 )
+                weather_effect_done = True
             t.sleep(1)
             print()
         
