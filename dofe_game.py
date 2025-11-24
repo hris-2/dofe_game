@@ -607,7 +607,7 @@ def weather_effect_bad_attempt():
     if t.time() - last_weather_refesh > 300:
         weather_change()
         last_weather_refesh = t.time()
-    if this_weather == "heatstroke":
+    if this_weather == "heatwave":
         if warmth >= 10:
             print("The Sun Is Beating Down On You")
             t.sleep(1)
@@ -678,7 +678,7 @@ def weather_effect_bad_attempt():
 
 def weather_effect_refresh():
     if last_weather_effect_refesh + 180 < t.time(): #Repeating Effects Like Hails
-        if this_weather == "thunder":
+        if this_weather == "thundering":
             thunderstrike_happening_determine = r.choices(
                 [True, False],
                 weights = [ thunnderstrike_chance, 100 ]cfxz
@@ -716,9 +716,9 @@ def weather_effect_refresh():
                 print(f"You Have Gained 1 Warmth. You Are Now On {health} Health")
             t.sleep(1)
             print()
-        elif this_weather == "hailstorm":
+        elif this_weather == "hail_storm":
             if in_shelter == False:
-                hail_lost_health = int ( 3 / damage_resistence )
+                hail_lost_health = int( 3 / damage_resistence )
                 health -= hail_lost_health
                 print("The Rough Hails Fall And Hit Your Body")
                 t.sleep(1)
@@ -727,6 +727,29 @@ def weather_effect_refresh():
                 print("The Hails Outside Rattle Against The Roof")
             t.sleep(1)
             print()
+        elif this_weather == "snowing":
+            if warmth <= 0:
+                snow_health_lost = int( 3 / damage_resistence )
+                health -= snow_health_lost
+                print("The Snow Is Numbing Out Your Entire Body")
+                t.sleep(1)
+                print(f"You Have Lost {snow_health_lost} Health. You Are Now On {health} Health")
+            else:
+                print("The Thick White Snow Is Slowing Freezing You")
+                warmth -= 1
+        elif this_weather == "sunny":
+            print("The Clear Sky Gives Way To The Hot Sun")
+            t.sleep(1)
+            print()
+        elif this_weather == "clear":
+            print("The Cloudless Sky Is Complimented By The Calm Sun")
+            t.sleep(1)
+            print()
+        elif this_weather == "drizzling":
+            print("Light Rain Drizzles Over The Island")
+            t.sleep(1)
+            print()
+        
 
 def refresh_all():
     if last_weather_change_refesh + weather_change_addtitional_time < t.time()
