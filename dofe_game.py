@@ -122,6 +122,7 @@ def load_save():
     return data
 
 def quick_time_event(time_allowed, prompt_key, keyword):
+    global event_speed
     '''Creats A Basic Quick Time Event
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Given Key To Be The Trigger Key.
@@ -150,6 +151,7 @@ def quick_time_event(time_allowed, prompt_key, keyword):
     return False
 
 def quick_time_double(time_allowed, prompt_key_1, prompt_key_2, keyword):
+    global event_speed
     '''Creats A Basic Quick Time Event Where 2 Keys Must Be Pressed At Once
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Two Given Key To Be The Trigger Keys.
@@ -180,6 +182,7 @@ def quick_time_double(time_allowed, prompt_key_1, prompt_key_2, keyword):
     return False
 
 def quick_time_choice(time_allowed, prompt_key_1, prompt_key_2, keyword_1, keyword_2):
+    global event_speed
     '''Creates A Basic Quick Time Event Where Multiple Options Are Available Through Different Keys
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Two Given Key To Be The Trigger Keys.
@@ -213,6 +216,7 @@ def quick_time_choice(time_allowed, prompt_key_1, prompt_key_2, keyword_1, keywo
     return False
 
 def quick_time_spam(time_allowed, prompt_key, press_key_number, keyword):
+    global event_speed
     '''Creats A Basic Quick Time Event Where A Key Must Be Pressed Multiple Times
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Given Key To Be The Trigger Key.
