@@ -11,14 +11,14 @@ save_name = "save_file.json"      #Retrives Path For Save File
 save_dir = f"{game_dir}/{save_name}"
 
 def save_data(next_location):
-    globals health, energy, gold, inventory, armour_base, armour_plate, armour_lining
-    globals armour_base_available, armour_plate_available, armour_lining_available
-    globals companion, companion_available, class_, weapon, spell, arrow, skill
-    globals class_available, weapon_available, spell_available, arrow_available, skill_available
-    globals neg2_weather, last_weather, this_weather, next_weather
-    globals last_weather_change_refesh, last_weather_effect_refesh
-    globals beach_discovered, field_discovered, forest_discovered, overhang_discovered
-    globals tutorial_done, save_dir
+    global health, energy, gold, inventory, armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global companion, companion_available, class_, weapon, spell, arrow, skill
+    global class_available, weapon_available, spell_available, arrow_available, skill_available
+    global neg2_weather, last_weather, this_weather, next_weather
+    global last_weather_change_refesh, last_weather_effect_refesh
+    global beach_discovered, field_discovered, forest_discovered, overhang_discovered
+    global tutorial_done, save_dir
     '''Retrives Character Data And Updates The Save Data With It
     Is A Silent Task
     Returns To The Specified Location Or Menu
@@ -69,14 +69,14 @@ def save_data(next_location):
     next_location()
 
 def load_save():
-    globals health, energy, gold, inventory, armour_base, armour_plate, armour_lining
-    globals armour_base_available, armour_plate_available, armour_lining_available
-    globals companion, companion_available, class_, weapon, spell, arrow, skill
-    globals class_available, weapon_available, spell_available, arrow_available, skill_available
-    globals neg2_weather, last_weather, this_weather, next_weather
-    globals last_weather_change_refesh, last_weather_effect_refesh
-    globals beach_discovered, field_discovered, forest_discovered, overhang_discovered
-    globals tutorial_done, save_dir
+    global health, energy, gold, inventory, armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global companion, companion_available, class_, weapon, spell, arrow, skill
+    global class_available, weapon_available, spell_available, arrow_available, skill_available
+    global neg2_weather, last_weather, this_weather, next_weather
+    global last_weather_change_refesh, last_weather_effect_refesh
+    global beach_discovered, field_discovered, forest_discovered, overhang_discovered
+    global tutorial_done, save_dir
     '''Retrives Data From The Save Data And Updates The Character Information
     Is A Silent Task
     Returns To The Previous Location
@@ -273,7 +273,7 @@ def fight_signal():
         print("You Clench You Fists For A Fight")
     elif class_ == "wizard":
         print("You Start Chanting Battle Preperation Spells")
-    elif class_ == "archer"
+    elif class_ == "archer":
         print("You Load An Arrow Into Your Bow")
     else:
         print("You Prepare For A Fight")
@@ -475,7 +475,7 @@ def refresh_class():
         elif weapon == "dagger":
             damage = 2
             crit_chance = 150
-        elif weapon == "nunchuncks"
+        elif weapon == "nunchuncks":
             damage = 1
             crit_chance = 500
     elif class_ == "wizard":
@@ -514,7 +514,7 @@ def refresh_class():
             splash_damage = 1
             splash_range = 5
             damage_affects.append("time_freezing")
-    elif class_ == "archer"
+    elif class_ == "archer":
         if arrow == "none":
             damage = 1
             crit_chance = 100
@@ -588,7 +588,7 @@ def refresh_armour_base():
         damage_resistence = 3
         armour_affects.append("shining_glamour")
         event_speed = 0.75
-    elif armour_base == "fabric_clothing"
+    elif armour_base == "fabric_clothing":
         damage_resistence = 0.5
         event_speed = 3
 
@@ -660,7 +660,7 @@ def refresh_armour_lining():
 def refresh_companion():
     if companion == "parrot":
         damage *= 2
-    elif companion == "rock_dweller"
+    elif companion == "rock_dweller":
         damage_resistence += 3
 
 def weather_effect_refresh():
@@ -668,7 +668,7 @@ def weather_effect_refresh():
         if this_weather == "thundering":
             thunderstrike_happening_determine = r.choices(
                 [True, False],
-                weights = [ thunnderstrike_chance, 100 ]cfxz
+                weights = [ thunderstrike_chance, 100 ],
             )
             if thunderstrike_happening_determine == True:
                 if "auto_dodge" in armour_affects:
@@ -727,7 +727,7 @@ def weather_effect_refresh():
         elif this_weather == "sunny":
             print("The Clear Sky Gives Way To The Hot Sun")
             if weather_effect_done == False:
-                energy_efficenty = int( energy_efficenty /= 1.25 )
+                energy_efficenty = int( energy_efficenty / 1.25 )
                 weather_effect_done = True
             t.sleep(1)
             print()
@@ -749,7 +749,7 @@ def weather_effect_refresh():
         
 
 def refresh_all():
-    if last_weather_change_refesh + weather_change_addtitional_time < t.time()
+    if last_weather_change_refesh + weather_change_addtitional_time < t.time():
         weather_change()
         weather_change_addtitional_time = r.choice[300, 360, 420, 480, 540, 600]
     refresh_class()
@@ -922,7 +922,7 @@ def menu_class(previous_location_function):
         elif arrow == "sweep_kick":
             print("Your Selected Arrow Is A Sweeping Kick")
         t.sleep(1)
-    elif class_ == "archer\":
+    elif class_ == "archer":
         print("You Are An Archer")
         t.sleep(1)
         print("You Fight With Unique Arrows")
@@ -2045,6 +2045,8 @@ thunderstorm_chance = 10
 hailstone_storm_chance = 5
 fog_chance = 1
 
+thunderstrike_chance = 50
+
 last_weather_effect_refesh = 0
 last_weather_change_refesh = 0
 weather_change_addtitional_time = 0
@@ -2055,6 +2057,7 @@ this_weather = "temp"
 next_weather = "temp"
 
 warmth = 5
+in_shelter = False
 
 #tutorial
 tutorial_done = False
