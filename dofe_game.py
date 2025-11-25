@@ -7,10 +7,18 @@ import json as j
 start_load = t.time() #records time at start of loading to see how long it takes to load
 
 game_dir = o.path.dirname(o.path.abspath(__file__))
-save_name = "save_file.json"           #Retrives Path For Save File
+save_name = "save_file.json"      #Retrives Path For Save File
 save_dir = f"{game_dir}/{save_name}"
 
 def save_data(next_location):
+    globals health, energy, gold, inventory, armour_base, armour_plate, armour_lining
+    globals armour_base_available, armour_plate_available, armour_lining_available
+    globals companion, companion_available, class_, weapon, spell, arrow, skill
+    globals class_available, weapon_available, spell_available, arrow_available, skill_available
+    globals neg2_weather, last_weather, this_weather, next_weather
+    globals last_weather_change_refesh, last_weather_effect_refesh
+    globals beach_discovered, field_discovered, forest_discovered, overhang_discovered
+    globals tutorial_done, save_dir
     '''Retrives Character Data And Updates The Save Data With It
     Is A Silent Task
     Returns To The Specified Location Or Menu
@@ -29,24 +37,52 @@ def save_data(next_location):
         "armour_base": armour_base,
         "armour_plate": armour_plate,
         "armour_lining": armour_lining,
+        "armour_base_available": armour_base_available,
+        "armour_plate_available": armour_plate_available,
+        "armour_lining_available": armour_lining_available,
         "companion": companion,
+        "companian_available": companion_available,
+        "class_": class_,
+        "weapon": weapon,
+        "spell": spell,
+        "arrow": arrow,
+        "skill": skill,
+        "neg2_weather": neg2_weather,
+        "last_weather": last_weather,
+        "this_weather": this_weather,
+        "next_weather": next_weather,
+        "last_weather_refresh_time": last_weather_change_refesh,
+        "last_weather_effect_time": last_weather_effect_refesh,
+        "class_available": class_available,
+        "weapon_available": weapon_available,
+        "spell_available": spell_available,
+        "arrow_available": arrow_available,
+        "skill_available": skill_available,
         "beach_discovered": beach_discovered,
         "field_discovered": field_discovered,
         "forest_discovered": forest_discovered,
         "overhang_discovered": overhang_discovered,
-        "game_started": game_started
+        "tutorial_done": tutorial_done
     }
     with open(save_dir, "w") as a:
         j.dump(data, a)
     next_location()
 
 def load_save():
+    globals health, energy, gold, inventory, armour_base, armour_plate, armour_lining
+    globals armour_base_available, armour_plate_available, armour_lining_available
+    globals companion, companion_available, class_, weapon, spell, arrow, skill
+    globals class_available, weapon_available, spell_available, arrow_available, skill_available
+    globals neg2_weather, last_weather, this_weather, next_weather
+    globals last_weather_change_refesh, last_weather_effect_refesh
+    globals beach_discovered, field_discovered, forest_discovered, overhang_discovered
+    globals tutorial_done, save_dir
     '''Retrives Data From The Save Data And Updates The Character Information
     Is A Silent Task
     Returns To The Previous Location
    
     >>> load_save()
-    Would Update Character Data And Return To Previous Location
+    Would Update Character Data From Save File And Return To Previous Location
     '''
     with open(save_dir, "r") as f:
         data = j.load(f)
@@ -54,16 +90,35 @@ def load_save():
     energy = data.get("energy", 30)
     gold = data.get("gold", 0)
     inventory = data.get("inventory", [])
-    damage = data.get("damage", 1)
     armour_base = data.get("armour_base", "none")
     armour_plate = data.get("armour_plate", "none")
     armour_lining = data.get("armour_lining", "none")
+    armour_base_available = data.get("armour_base_available", [])
+    armour_plate_available = data.get("armour_plate_available", [])
+    armour_lining_available = data.get("armour_lining_available", [])
     companion = data.get("companion", "none")
+    companion_available = data.get("companion_available", [])
+    class_ = data.get("class_", "fighter")
+    weapon = data.get("weapon", "none")
+    spell = data.get("spell", "none")
+    arrow = data.get("arrow", "none")
+    skill = data.get("skill", "none")
+    class_available = data.get("class_available", [])
+    weapon_available = data.get("weapon_available", [])
+    spell_available = data.get("spell_available", [])
+    arrow_available = data.get("arrow_available", [])
+    skill_available = data.get("skill_available", [])
+    neg2_weather = data.get("neg2_weather", "none")
+    last_weather = data.get("last_weather", "none")
+    this_weather = data.get("this_weather", "none")
+    next_weather = data.get("next_weather", "none")
+    last_weather_change_refesh = data.get("last_weather_change_refresh", 1)
+    last_weather_effect_refesh = data.get("last_weather_effect_refresh", 1)
     beach_discovered = data.get("beach_discovered", False)
     field_discovered = data.get("field_discovered", False)
     forest_discovered = data.get("forest_discovered", False)
     overhang_discovered = data.get("overhang_discovered", False)
-    game_started = data.get("game_started", False)
+    tutorial_done = data.get("tutorial_done", False)
     return data
 
 def quick_time_event(time_allowed, prompt_key, keyword):
