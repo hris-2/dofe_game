@@ -66,6 +66,8 @@ def save_data(next_location):
     }
     with open(save_dir, "w") as a:
         j.dump(data, a)
+    if next_location == "":
+        return
     next_location()
 
 def load_save():
@@ -74,7 +76,7 @@ def load_save():
     global companion, companion_available, class_, weapon, spell, arrow, skill
     global class_available, weapon_available, spell_available, arrow_available, skill_available
     global neg2_weather, last_weather, this_weather, next_weather
-    global last_weather_change_refesh, last_weather_effect_refesh
+    global last_weather_change_refesh, last_weather_effect_refeshsS
     global beach_discovered, field_discovered, forest_discovered, overhang_discovered
     global tutorial_done, save_dir
     '''Retrives Data From The Save Data And Updates The Character Information
@@ -2089,7 +2091,7 @@ if start_game == "START":
     if game_started == False:
         print("Welcome")
         t.sleep(1)
-        save_data("new")
+        save_data("")
         t.sleep(1)
         print("Starting Your New Journey")
         t.sleep(1)
