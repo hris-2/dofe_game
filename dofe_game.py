@@ -23,8 +23,8 @@ def save_data(next_location):
     Is A Silent Task
     Returns To The Specified Location Or Menu
 
-    >>> save_data(menu)
-    Would Save Data Silently And Return To The Menu
+    >>> save_data()
+    Would Save Data Silently And Return To The Previous Location
     '''
     if not o.path.exists(save_dir):
         open(save_dir, "w").close()
@@ -66,9 +66,7 @@ def save_data(next_location):
     }
     with open(save_dir, "w") as a:
         j.dump(data, a)
-    if next_location == "":
-        return
-    next_location()
+    return
 
 def load_save():
     global health, energy, gold, inventory, armour_base, armour_plate, armour_lining
@@ -281,6 +279,7 @@ def fight_signal():
         print("You Prepare For A Fight")
 
 def weather_change():
+    global last_weather_effect_done, neg2_weather, last_weather, this_weather, next_weather
     '''Takes Current Weather And Changes Weather Based On It
     Weather Can Change, Advance, Devance Or Stay The Same
     Some Weathers Can Advance Into Extereme Weathers'''
@@ -288,23 +287,23 @@ def weather_change():
     thunder_activate = False
     hail_activate = False
     fog_activate = False
-    weather_effect_done = False
+    last_weather_effect_done = 0
     if this_weather == "sunny" and last_weather == "sunny" and neg2_weather == "sunny":
         heatwave_activate = r.choices(
             [True, False],
-            weights = [100, heatwave_chance * 5],
+            weights = [200, 100],
             k = 1
         )
     elif this_weather == "sunny" and last_weather == "sunny":
         heatwave_activate = r.choices(
             [True, False],
-            weights = [100, heatwave_chance * 2],
+            weights = [100, 100],
             k = 1
         )
     elif this_weather == "sunny":
         heatwave_activate = r.choices(
             [True, False],
-            weights = [100, heatwave_chance],
+            weights = [50, 100],
             k = 1
         )
     else:
@@ -312,19 +311,19 @@ def weather_change():
     if this_weather == "raining" and last_weather == "raining" and neg2_weather == "raining":
         thunder_activate = r.choices(
             [True, False],
-            weights = [100, thunderstorm_chance * 5],
+            weights = [200, 100],
             k = 1
         )
     elif this_weather == "raining" and last_weather == "raining":
         thunder_activate = r.choices(
             [True, False],
-            weights = [100, thunderstorm_chance * 2],
+            weights = [100, 100],
             k = 1
         )
     elif this_weather == "raining":
         thunder_activate = r.choices(
             [True, False],
-            weights = [100, thunderstorm_chance],
+            weights = [50, 100],
             k = 1
         )
     else:
@@ -332,19 +331,19 @@ def weather_change():
     if this_weather == "snowing" and last_weather == "snowing" and neg2_weather == "snowing":
         thunder_activate = r.choices(
             [True, False],
-            weights = [100, hailstone_storm_chance * 5],
+            weights = [200, 100],
             k = 1
         )
     elif this_weather == "snowing" and last_weather == "snowing":
         thunder_activate = r.choices(
             [True, False],
-            weights = [100, hailstone_storm_chance * 2],
+            weights = [100, 100],
             k = 1
         )
     elif this_weather == "snowing":
         hail_activate = r.choices(
             [True, False],
-            weights = [100, hailstone_storm_chance],
+            weights = [50, 100],
             k = 1
         )
     else:
@@ -352,19 +351,19 @@ def weather_change():
     if this_weather == "cloudy" and last_weather == "cloudy" and neg2_weather == "cloudy":
         fog_activate = r.choices(
             [True, False],
-            weights = [100, hailstone_storm_chance * 5],
+            weights = [200, 100],
             k = 1
         )
     elif this_weather == "cloudy" and last_weather == "cloudy":
         fog_activate = r.choices(
             [True, False],
-            weights = [100, fog_chance * 2],
+            weights = [100, 100],
             k = 1
         )
     elif this_weather == "cloudy":
         fog_activate = r.choices(
             [True, False],
-            weights = [100, fog_chance],
+            weights = [50, 100],
             k = 1
         )
     else:
@@ -455,6 +454,12 @@ def rest():
         return
 
 def refresh_class():
+    global class_, weapon, spell, arrow, skill, crit_chance, piercing
+    global splash_damage, splash_range, damage, damage_affects
+    '''Checks For Current Value Of 'class_'
+    Then Checks For Current Value Of 'weapon', 'spell', 'arrow', Or 'skill'
+    Adjusts Stats Accordingly
+    '''
     damage_affects.pop(damage_affects)
     piercing = 1
     splash_damage = 0
@@ -565,6 +570,10 @@ def refresh_class():
             crit_chance = 60
 
 def refresh_armour_base():
+    global armour_base, damage_resistence, event_speed, armour_affects
+    '''Checks For Current Value Of 'armour_base'
+    Adjusts Stats Accordingly
+    '''
     armour_affects.pop(armour_affects)
     if armour_base == "none":
         damage_resistence = 1
@@ -595,6 +604,10 @@ def refresh_armour_base():
         event_speed = 3
 
 def refresh_armour_plating():
+    global armour_plate, energy_efficenty, damage_resistence, armour_affects
+    '''Checks For Current Value of 'armour_plate'
+    Adjusts Stat Values Accordingly
+    '''
     if armour_plate == "none":
         energy_efficenty = 1
         damage_resistence += 0
@@ -629,8 +642,12 @@ def refresh_armour_plating():
             armour_affects.append("shining_glamour")
 
 def refresh_armour_lining():
+    global armour_lining, armour_affects, damage, crit_multiplier, crit_chance
+    '''Checks For Current Value of 'armour_lining'
+    Adjusts Stats Accordingly
+    '''
     if armour_lining == "none":
-        t.sleep(0)
+        ...
     elif armour_lining == "ice_thread":
         if "freezing_aura" in armour_affects:
             armour_affects.pop("freezing_aura")
@@ -2091,7 +2108,7 @@ if start_game == "START":
     if game_started == False:
         print("Welcome")
         t.sleep(1)
-        save_data("")
+        save_data()
         t.sleep(1)
         print("Starting Your New Journey")
         t.sleep(1)
