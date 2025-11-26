@@ -10,7 +10,7 @@ game_dir = o.path.dirname(o.path.abspath(__file__))
 save_name = "save_file.json"      #Retrives Path For Save File
 save_dir = f"{game_dir}/{save_name}"
 
-def save_data(next_location):
+def save_data():
     global health, energy, gold, inventory, armour_base, armour_plate, armour_lining
     global armour_base_available, armour_plate_available, armour_lining_available
     global companion, companion_available, class_, weapon, spell, arrow, skill
