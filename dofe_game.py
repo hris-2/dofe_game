@@ -2083,10 +2083,91 @@ def wizard_fight():
     print("You Pose For A Fight")
     t.sleep(1)
     wiz_ran = r.choice["attack", "defend"]
-    if wiz_ran == "attack":
-        crit = r.choices["YES", "NO"]
-
-
+    while wiz_health > 0 and health > 0:
+        if wiz_ran == "attack":
+            wiz_crit = r.choices(
+                [True, False],
+                weights = [crit_chance, 100],
+                ) 
+            if wiz_crit == True:
+                wiz_crit_attack = quick_time_double(5, "random", "random", "Critical Attack The Wizard")
+                t.sleep(1)
+                if wiz_crit_attack == True:
+                    print("You Landed A Critical Hit On The Wizard")
+                    crit_wiz_damage = damage * crit_multiplier
+                    wiz_health -= crit_wiz_damage
+                    t.sleep(1)
+                    print(f"You Did {crit_wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left")
+                else:
+                    print("You Missed Your Critical Hit On The Wizard")
+            else:
+                wiz_attack = quick_time_event(5, "random", "Attack The Wizard")
+                t.sleep(1)
+                if wiz_attack == True:
+                    print("You Landed An Attack On The Wizard")
+                    wiz_damage = damage
+                    wiz_health -= wiz_damage
+                    t.sleep(1)
+                    print(f"You Did {wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left")
+                else:
+                    print("You Missed Your Attack On The Wizard")
+        else:
+            dodge_wiz = quick_time_event(5, "random", "Dodge The Incoming Fireball")
+            t.sleep(1)
+            if dodge_wiz == True:
+                print("You Dodged The Incoming Fireball")
+            else:
+                print("You Gazed Into The Flaming Ball Of Fire As It Came Crashing Down On You")
+                wiz_health_lost = 2 / damage_resistence
+                health -= wiz_health_lost
+                t.sleep(1)
+                print(f"You Lost {wiz_health_lost} Damage. You Now Have {health} Health Left")
+        t.sleep(1)
+        print()
+        if wiz_health <= 0:
+            print("You Defeated The Wizard")
+            t.sleep(1)
+            print("Unexpectedly Before His Body Falls To The Ground")
+            t.sleep(1)
+            print("His Entire Body Fades Away Into Thin Air")
+            t.sleep(1)
+            print("Leaving Only A Book")
+            t.sleep(1)
+            print("The Book Contains Spells But Is Missing Many Pages")
+            t.sleep(1)
+            print("You Have Unlocked The Class Wizard")
+            t.sleep(1)
+            print("You Have Unlocked The Spell Fireball")
+            t.sleep(1)
+            print("Would Like To Equip It? 'YES' / 'NO'")
+            wiz_activate = str(input())
+            print()
+            t.sleep(1)
+            if wiz_activate == "YES":
+                class_ = "wizard"
+                spell = "fireball"
+                print("Wizard Class Equipped With Fireball Spell")
+            else:
+                class_available.append("wizard")
+                spell_available.append("fireball")
+                print("Wizard Class And Fireball Spell Added To Available Classes And Spells")
+        if health <= 0:
+            print("You Have Been Defeated By The Wizard")
+            t.sleep(1)
+            print("Returning To Start")
+            t.sleep(1)
+            health = 30
+            energy = 30
+            inventory.pop(inventory)
+            armour_base = "none"
+            armour_plate = "none"
+            armour_lining = "none"
+            print("You Have Reset Your Health, Energy, Inventory And Armour")
+            t.sleep(1)
+            print()
+            beach()
+    
+            
 def temp():
     global health
     global energy
