@@ -286,7 +286,6 @@ def weather_change():
     heatwave_activate = False
     thunder_activate = False
     hail_activate = False
-    fog_activate = False
     last_weather_effect_done = 0
     if this_weather == "sunny" and last_weather == "sunny" and neg2_weather == "sunny":
         heatwave_activate = r.choices(
@@ -348,35 +347,16 @@ def weather_change():
         )
     else:
         hail_activate = False
-    if this_weather == "cloudy" and last_weather == "cloudy" and neg2_weather == "cloudy":
-        fog_activate = r.choices(
-            [True, False],
-            weights = [200, 100],
-            k = 1
-        )
-    elif this_weather == "cloudy" and last_weather == "cloudy":
-        fog_activate = r.choices(
-            [True, False],
-            weights = [100, 100],
-            k = 1
-        )
-    elif this_weather == "cloudy":
-        fog_activate = r.choices(
-            [True, False],
-            weights = [50, 100],
-            k = 1
-        )
-    else:
-        fog_activate = False
-    if this_weather == "foggy" or this_weather == "heatwave" or this_weather == "hail_storm" or this_weather == "thundering":
+    if this_weather == "heatwave" or this_weather == "hail_storm" or this_weather == "thundering":
         new_weather_decide = r.choices(
             ["new", "same", "calm"],
             weights = [5, 80, 15]
-        )    
-    new_weather_decide = r.choices(
-        ["new", "same", "increase", "decrease"],
-        weights = [15, 15, 35, 35]
-    )
+        )
+    else:    
+        new_weather_decide = r.choices(
+            ["new", "same", "increase", "decrease"],
+            weights = [15, 15, 35, 35]
+        )
     if new_weather_decide == "new":
         new_weather = r.choice[weather_chance]
     elif new_weather_decide == "same":
@@ -410,8 +390,6 @@ def weather_change():
     elif new_weather_decide == "calm":
         if this_weather == "thundering":
             new_weather = "raining"
-        elif this_weather == "foggy":
-            new_weather = "cloudy"
         elif this_weather == "hail_storm":
             new_weather = "snowing"
         elif this_weather == "heatwave":
@@ -419,15 +397,12 @@ def weather_change():
     neg2_weather = last_weather
     last_weather = this_weather
     if heatwave_activate == True:
-        this_weather = "heatwave"
+        next_weather = "heatwave"
     elif thunder_activate == True:
-        this_weather = "thundering"
+        next_weather = "thundering"
     elif hail_activate == True:
-        this_weather = "hail_storm"
-    elif fog_activate == True:
-        this_weather = "foggy"
-    else:
-        this_weather = new_weather
+        next_weather = "hail_storm"
+    this_weather = new_weather
 
 def rest():
     print("Regaining Energy")
@@ -677,12 +652,24 @@ def refresh_armour_lining():
         damage *= 3
        
 def refresh_companion():
+    global companion, damage, damage_resistence
+    '''Checks For Current Value Of 'companion'
+    Adjusts Stats Accordingly
+    '''
     if companion == "parrot":
         damage *= 2
     elif companion == "rock_dweller":
         damage_resistence += 3
 
 def weather_effect_refresh():
+    global last_weather_effect_refesh, this_weather, health, warmth
+    global in_shelter, damage_resistence, armour_affects, energy_efficenty
+    global weather_effect_done, thunderstrike_chance
+    '''Checks For Current Weather And Applies Effects Based On It
+    Effects Are Applied Every 3 Minutes
+    Some Effects Are Repeating While Others Are Constant Until Weather Changes
+    Effects Can Change Health, Warmth, Energy Efficenty And More
+    '''
     if last_weather_effect_refesh + 180 < t.time(): #Repeating Effects Like Hails
         if this_weather == "thundering":
             thunderstrike_happening_determine = r.choices(
@@ -807,6 +794,7 @@ def menu_home(previous_location_function):
             previous_location_function()
 
 def menu_basic(previous_location_function):
+    global health, energy, gold, inventory
     print("Basic Information:")
     t.sleep(0.5)
     print(f"Health: {health}")
@@ -821,6 +809,8 @@ def menu_basic(previous_location_function):
     menu_home(previous_location_function)
 
 def menu_armour(previous_location_function):
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
     print("Armour Information:")
     t.sleep(0.5)
     print(f"Armour Base: {armour_base}")
@@ -887,6 +877,8 @@ def menu_armour(previous_location_function):
         print(menu_home(previous_location_function))
 
 def menu_class(previous_location_function):
+    global class_, weapon, spell, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
     if class_ == "wizard":
         print("You Are A Wizard")
         t.sleep(1)
@@ -969,6 +961,7 @@ def menu_class(previous_location_function):
         menu_class_weapon_change(previous_location_function)
    
 def menu_class_change(previous_location_function):
+    global class_, class_available
     print(f"You Are Currently A {class_}")
     t.sleep(1)
     if len(class_available) == 0:
@@ -1004,6 +997,8 @@ def menu_class_change(previous_location_function):
             menu_class(previous_location_function)
            
 def menu_class_weapon_change(previous_location_function):
+    global class_, spell, weapon, arrow, skill
+    global spell_available, weapon_available, arrow_available, skill_available
     if class_ == "wizard":
         if len(spell_available) == 0:
             print("You Have No Available Spells")
@@ -1134,9 +1129,53 @@ def menu_class_weapon_change(previous_location_function):
             menu_class(previous_location_function)
 
 def menu_weather(previous_location):
-    print(f"Its {this_weather}")
-
+    global this_weather
+    if this_weather == "sunny":
+        print("The Weather Is Sunny")
+        t.sleep(1)
+        print("Energy Efficenty Is Decreased")
+    elif this_weather == "clear":
+        print("The Weather Is Clear")
+        t.sleep(1)
+        print("No Debuffs Applied")
+    elif this_weather == "cloudy":
+        print("The Weather Is Cloudy")
+        t.sleep(1)
+        print("No Debuffs Applied")
+    elif this_weather == "drizzling":       
+        print("The Weather Is Drizzling")
+        t.sleep(1)
+        print("No Debuffs Applied")
+    elif this_weather == "raining":
+        print("The Weather Is Raining")
+        t.sleep(1)
+        print("Energy Efficenty Is Decreased")
+    elif this_weather == "snowing":
+        print("The Weather Is Snowing")
+        t.sleep(1)
+        print("You Lose Warmth Over Time")
+        t.sleep(1)
+        print("If You Run Out Of Warmth You Will Lose Health Over Time")
+    elif this_weather == "hail_storm":
+        print("There Is A Hail Storm")
+        t.sleep(1)
+        print("You Take Damage Over Time Unless In Shelter")
+    elif this_weather == "thundering":
+        print("There Is A Thunder Storm")  
+        t.sleep(1)
+        print("There Is A Chance You Will Be Struck By Lightning")
+    elif this_weather == "heatwave":
+        print("There Is A Heatwave")
+        t.sleep(1)
+        print("You Gain Warmth Over Time")
+        t.sleep(1)
+        print("If You Gain To Much You Will Lose Health Over Time")
+    t.sleep(1)
+    print()
+    menu_home(previous_location)
+    
 def tutorial():
+    global tutorial_done, menu_tutorial_done, fight_tutorial_done, text_tutorial_done
     if tutorial_done == True:
         print("Tutorial Done")
         t.sleep(1)
@@ -1145,7 +1184,7 @@ def tutorial():
         t.sleep(1)
         beach()
     else:
-        if menu_tutorial == True:
+        if menu_tutorial_done == True:
             print("Now You Know How To Use Basic Functions In The Menu")
             t.sleep(1)
             print("I Will Explain Some Other Basic Stuff")
@@ -1168,13 +1207,11 @@ def tutorial():
             t.sleep(2)
             print("For Example At The Start You Are A Fighter. You Collect Weapons And Equip Them")
             t.sleep(2)
-            print("They Are One Dash Away From Enemies But Their Weapons Can Do Great Damage")
-            t.sleep(2)
             print("There Is Also Wizard Where You Collect Spell Book Pages")
             t.sleep(2)
             print("To Use Them Against Your Enemies Like Frost or Fire Ball")
             t.sleep(2)
-            print("You Can Level Up These Classes And Find New Items For Them By Playing Them")
+            print("You Can Level Up These Classes By Find New Items For Them By Playing Them")
             t.sleep(2)
             print("That Is Mostly All For Classes. Next We Will Look At The Level Layout")
             t.sleep(2)
@@ -1187,9 +1224,9 @@ def tutorial():
             print("That's All You Need To Know For Now")
             print()
             tutorial_done = True
-            t.sleep(1)
+            t.sleep(1) 
             beach()
-        elif fight_tutorial == True:
+        elif fight_tutorial_done == True:
             print("Now You Know How Fight")
             t.sleep(1)
             print("You Need To Know How To Use The Menu")
@@ -1202,9 +1239,23 @@ def tutorial():
             t.sleep(1)
             print("Like Health, Energy, Inventory And More")
             t.sleep(1)
-            print("")
+            print("It Is A Critical Part Of The Game")
+            t.sleep(1)
+            print("Have A Go Now")
+            t.sleep(1)
+            print("To Move On You Need To:")
+            t.sleep(1)
+            print("- Access The Menu From A Type Box")
+            t.sleep(0.5)
+            print("- View Your Basic Information")
+            t.sleep(0.5)
+            print("- Save Your Data From The Menu")
+            t.sleep(0.5)
+            print("Once All Those Are Done You Will Be Brought Back Here")
+            t.sleep(1)
+            print()
             beach()
-        elif text_tutorial == True:
+        elif text_tutorial_done == True:
             print("Now You Know How To Navigate The Game")
             t.sleep(1)
             print("You Need To Know How To Fight")
@@ -1276,10 +1327,11 @@ def tutorial():
             tutorial_text_box_white()
 
 def tutorial_text_box_white():
+    global text_tutorial_back, text_tutorial_forward, text_tutorial_chest, text_tutorial_done
     if text_tutorial_back == True and text_tutorial_forward == True and text_tutorial_chest == True:
         print("Well Done You Completed The First Tutorial Section")
         t.sleep(1)
-        text_tutorial = True
+        text_tutorial_done = True
         print()
         tutorial()
     print("You Find Yourself In A White Room")
@@ -1311,7 +1363,7 @@ def tutorial_text_box_white():
         tutorial_text_box_white()
 
 def tutorial_text_box_green():
-
+    global text_tutorial_back, text_tutorial_forward, text_tutorial_done
     print("You Find Yourself In A Green Room")
     if text_tutorial_forward == False:
         t.sleep(1)
@@ -1348,7 +1400,7 @@ def tutorial_text_box_green():
         tutorial_text_box_white()  
 
 def tutorial_text_box_red():
-
+    global text_tutorial_back, text_tutorial_forward, text_tutorial_done
     print("You Find Yourself In A Red Room")
     if text_tutorial_forward == False:
         t.sleep(1)
@@ -1389,6 +1441,7 @@ def tutorial_text_box_red():
         tutorial_text_box_white()  
    
 def tutorial_text_box_blue():
+    global text_tutorial_back, text_tutorial_forward, text_tutorial_done
     print("You Find Yourself In A Blue Room")
     if text_tutorial_forward == False:
         t.sleep(1)
@@ -1429,6 +1482,7 @@ def tutorial_text_box_blue():
         tutorial_text_box_white()  
 
 def fight_tutorial():
+    global fight_tutorial_attack, fight_tutorial_dodge, fight_tutorial_crit, fight_tutorial_done, health
     white_box_health = 5
     print(f"You Are Fighing A Mystical White Box Which Has {white_box_health} Health")
     crit_attack = False
@@ -1488,11 +1542,11 @@ def fight_tutorial():
                 print()
                 t.sleep(1)
                 print("Your Turn To Attack")
-                if quick_time_event(3, "random", "Attack the Baby Dragon") == True:
+                if quick_time_event(3, "random", "Attack the White Box") == True:
                     t.sleep(0.5)
                     white_box_health_taken = 1 * damage
                     white_box_health -= white_box_health_taken
-                    print(f"You Attacked the Baby Dragon For {white_box_health_taken} Damage. It Now Has {white_box_health} Health Left")
+                    print(f"You Attacked the White Box For {white_box_health_taken} Damage. It Now Has {white_box_health} Health Left")
                     crit_attack = True
                 else:
                     print("You Missed Your Attack")
@@ -1508,7 +1562,94 @@ def fight_tutorial():
         t.sleep(1)
         fight_tutorial()
 
+def menu_tuorial_part_1(): 
+    global menu_tutorial_access, menu_tutorial_basic, menu_tutorial_save
+    print("Hello. Respond With 'HI', 'GO AWAY' OR 'I HATE YOU'")
+    menu_1_option = str(input())
+    print()
+    t.sleep(1)
+    if menu_1_option == "HI":
+        print("Thank You.")
+        t.sleep(1)
+        print("But You Failed The Objective. :(")
+        t.sleep(1)
+        print("Try Again")
+        t.sleep(1)
+        print()
+        menu_tuorial_part_1()
+    elif menu_1_option == "GO AWAY":
+        print("What Have I Done")
+        t.sleep(1)
+        print("Doesn't Matter Because You Failed The Objective.")
+        t.sleep(1)
+        print("Try Again")
+        t.sleep(1)
+        print()
+        menu_tuorial_part_1()
+    elif menu_1_option == "I HATE YOU":
+        print("Well That Was Very Mean")
+        t.sleep(1)
+        print("And You Didn't Even Complete The Objective.")
+        t.sleep(1)
+        print("So You Have Try Again Which You Deserve")
+        t.sleep(1)  
+        print()
+        menu_tuorial_part_1()
+    elif menu_1_option == "MENU":
+        menu_tutorial_part_2()
+        
+def menu_tutorial_part_2():
+    global menu_tutorial_access, menu_tutorial_basic, menu_tutorial_save, menu_tutorial_done
+    if menu_tutorial_access == True and menu_tutorial_basic == True and menu_tutorial_save == True:
+        print("Well Done You Completed The Menu Tutorial")
+        menu_tutorial_done = True
+        t.sleep(1)
+        print()
+        tutorial()
+    print("Accessing Menu")
+    t.sleep(1)
+    print("Well Done You Completed The First Objective")
+    menu_tutorial_access = True
+    t.sleep(1)
+    print("You Can View 'BASIC', 'ARMOUR', 'CLASS' Or 'WEATHER' Information")
+    t.sleep(1)
+    print("Or You Can 'SAVE' Your Data")
+    menu_2_option = str(input())
+    print()
+    t.sleep(1)
+    if menu_2_option == "BASIC":
+        print("Well Done You Viewed Your Basic Information")
+        t.sleep(1)
+        menu_tutorial_basic = True
+        print("Going Back To Menu")
+        t.sleep(1)
+        print()
+        menu_tutorial_part_2()
+    elif menu_2_option == "ARMOUR" or menu_2_option == "CLASS" or menu_2_option == "WEATHER":
+        print(f"Well Done You Viewed Your Some Information On")
+        t.sleep(1)
+        print("But It Wasn't Nessecary For The Objective")
+        t.sleep(1)
+        print("Going Back To Menu")
+        t.sleep(1)
+        print()
+        menu_tutorial_part_2()
+    elif menu_2_option == "SAVE":
+        print("Well Done You Saved Your Data")
+        t.sleep(1)
+        print("You Completed The Menu Tutorial")
+        menu_tutorial_save = True
+        print()
+        tutorial()
+    if menu_tutorial_access == True and menu_tutorial_basic == True and menu_tutorial_save == True:
+        print("Well Done You Completed The Menu Tutorial")
+        menu_tutorial_done = True
+        t.sleep(1)
+        print()
+        tutorial()
+        
 def beach():
+    global beach_discovered, energy, game_started
     if beach_discovered == False:
         print("You Wake Up Confused Lying On The Floor")
         t.sleep(1)
@@ -1583,6 +1724,8 @@ def beach():
                 beach()
 
 def beach_wander():
+    global beach_discovered, energy, game_started, gold
+    global beach_wander_loot, energy_efficenty, inventory
     if beach_discovered == False:
         print("You Start Strolling Down The Beach")
         t.sleep(1)
@@ -1647,7 +1790,7 @@ def beach_wander():
         else:
             print(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away")
         t.sleep(1)
-        energy_lost_beach_wander = 1 * energy_efficenty
+        energy_lost_beach_wander = int( 1 / energy_efficenty )
         energy -= energy_lost_beach_wander
         print(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}")
         t.sleep(1)
@@ -1661,6 +1804,8 @@ def beach_wander():
             beach()
 
 def beach_dig():
+    global beach_discovered, energy, game_started, companion
+    global beach_dig_loot, energy_efficenty, inventory, companion_available 
     if beach_discovered == False:
         print("You Start Digging The Sand Beneathe You")
         t.sleep(1)
@@ -1679,7 +1824,7 @@ def beach_dig():
                 t.sleep(1)
                 print("This Will Be Handy")
                 t.sleep(1)
-                energy_lost_beach_dig_fish_rod = 1 * energy_efficenty
+                energy_lost_beach_dig_fish_rod = int ( 1 * energy_efficenty)
                 energy -= energy_lost_beach_dig_fish_rod
                 print(f"You Lost {energy_lost_beach_dig_fish_rod} Energy. You Are Now On {energy}")
                 t.sleep(1)
@@ -1749,7 +1894,6 @@ def beach_dig():
                 t.sleep(1)
                 if rock_dweller_select == "YES":
                     companion = "rock_dweller"
-                    companion_health = 20
                     print("Rock Dweller Set As Companion")
                 else:
                     companion_available.append("rock_dweller")
@@ -1758,7 +1902,6 @@ def beach_dig():
                 print(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away")
         else:
             print("You Failed To Dig Deep Enough")
-    t.sleep(1)
     t.sleep(1)
     energy_lost_beach_dig = 1 * energy_efficenty
     energy -= energy_lost_beach_dig
@@ -1774,6 +1917,8 @@ def beach_dig():
         beach()
 
 def beach_fish():
+    global beach_discovered, energy, game_started, armour_base, armour_base_available, gold
+    global beach_fishing_loot, energy_efficenty, inventory
     if "fishing_rod" in inventory:
         print("You Throw Your Hook Into The Sea")
         pause_time = r.choice([6, 7, 8, 9, 10, 11])
@@ -1953,12 +2098,23 @@ def temp():
     global armour_lining
     global energy_efficenty
     global damage_resistence
-    global fire_resistence
-    global water_resistence
-    global ice_resistence
-    global electrictiy_resistence
-    global heat_resistence
-    global skip_swim
+    global event_speed
+    global crit_chance
+    global crit_attack
+    global crit_multiplier
+    global armour_affects
+    global class_
+    global spell
+    global weapon
+    global arrow
+    global skill
+    global class_available
+    global spell_available
+    global weapon_available
+    global arrow_available
+    global skill_available
+    global damage_affects
+    global armour_affects
     global armour_base_available
     global armour_plate_available
     global armour_lining_available
@@ -1972,27 +2128,21 @@ def temp():
     global game_started
     global save_dir
     global companion
-    global companion_health
     global companion_available
     global tutorial_done
     global text_tutorial_chest
     global text_tutorial_back
     global text_tutorial_forward
-    global text_tutorial
+    global text_tutorial_done
     global fight_tutorial_dodge
     global fight_tutorial_attack
     global fight_tutorial_crit
     global fight_tutorial_done
-    global menu_tutorial_armour
     global menu_tutorial_save
-    global menu_tutorial_companion
-    global menu_tutorial_class
-    global menu_tutorial
+    global menu_tutorial_basic
+    global menu_tutorial_access
+    global menu_tutorial_done
     global weather_chance
-    global heatwave_chance
-    global thunderstorm_chance
-    global fog_chance
-    global hailstone_storm_chance
     global neg2_weather
     global last_weather
     global this_weather
@@ -2059,10 +2209,6 @@ beach_wander_loot = ["plank", "plank", "plank", "plank" "plank", "plank", "plank
 
 #weather system
 weather_chance = ["sunny", "sunny", "sunny", "sunny", "sunny", "sunny", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "clear", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "cloudy", "drizzling", "drizzling", "drizzling", "drizzling", "drizzling", "drizzling", "raining", "raining", "raining", "raining", "raining", "raining", "raining", "raining", "snowing", "snowing", "snowing", "snowing", "snowing"]
-heatwave_chance = 15
-thunderstorm_chance = 10
-hailstone_storm_chance = 5
-fog_chance = 1
 
 thunderstrike_chance = 50
 
@@ -2083,16 +2229,15 @@ tutorial_done = False
 text_tutorial_chest = False
 text_tutorial_back = False
 text_tutorial_forward = False
-text_tutorial = False
+text_tutorial_done = False
 fight_tutorial_dodge = False
 fight_tutorial_attack  = False
 fight_tutorial_crit  = False
 fight_tutorial_done = False
-menu_tutorial_armour = False
+menu_tutorial_basic = False
 menu_tutorial_save = False
-menu_tutorial_companion = False
-menu_tutorial_class = False
-menu_tutorial = False
+menu_tutorial_access = False
+menu_tutorial_done = False
 
 end_load = t.time()
 loading_time = end_load - start_load
