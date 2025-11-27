@@ -1262,17 +1262,11 @@ def tutorial():
             t.sleep(1)
             print("Fights Are Turned Based And It's Random Who Turn It Is")
             t.sleep(1)
-            print("The System Is That Between You And The Enemy There Is By Default 1 Dash")
-            t.sleep(2)
-            print("If You Are Within 1 Dash The Next Attack Can Damage You Or You Can Damage Them")
-            t.sleep(2)
-            print("Without A Special Power Or Weapon This Is The Default")
-            t.sleep(2)
             print("The Fights Are Quick Time Based. A Random Key Will Be Selected For You To Press")
             t.sleep(2)
-            print("If You Get To Attack 2 Times In A Row And The First Attack Was Successful")
+            print("If You Get To Attack And Successfully Get A Critical Attack Chance")
             t.sleep(2)
-            print("Then You Get To Do A Critical Hit By Pressing 2 Keys At The Same Time")
+            print("You Get To Do A Critical Hit By Pressing 2 Keys At The Same Time")
             t.sleep(2)
             print("Have A Go Now")
             t.sleep(2)
@@ -2151,6 +2145,10 @@ def wizard_fight():
                 class_available.append("wizard")
                 spell_available.append("fireball")
                 print("Wizard Class And Fireball Spell Added To Available Classes And Spells")
+            t.sleep(1)
+            print()
+            field_discovered = True
+            field()
         if health <= 0:
             print("You Have Been Defeated By The Wizard")
             t.sleep(1)
@@ -2158,7 +2156,6 @@ def wizard_fight():
             t.sleep(1)
             health = 30
             energy = 30
-            inventory.pop(inventory)
             armour_base = "none"
             armour_plate = "none"
             armour_lining = "none"
@@ -2166,8 +2163,7 @@ def wizard_fight():
             t.sleep(1)
             print()
             beach()
-    
-            
+
 def temp():
     global health
     global energy
