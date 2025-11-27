@@ -755,6 +755,59 @@ def weather_effect_refresh():
         
 
 def refresh_all():
+    global health, energy, armour_base, armour_plate, armour_lining
+    global last_weather_change_refesh, weather_change_addtitional_time
+    '''Refreshes All Stats And Values That Need Refreshing
+    Health And Energy Are Capped At 30
+    If Health Is 0 Or Below The Player Dies And Is Returned To Last Checkpoint
+    Weather Change Is Checked And Changed If Needed
+    All Refresh Functions Are Called
+    Data Is Saved At The End
+    '''
+    if health > 30:
+        health = 30
+    if energy > 30:
+        energy = 30
+    if energy < 0:
+        energy = 0
+    if health <= 0:
+        t.sleep(1)
+        print()
+        print("You Died")
+        t.sleep(1)
+        print("Health Reset To 30")
+        t.sleep(1)
+        health = 30
+        print("Energy Reset To 30")
+        t.sleep(1)
+        energy = 30
+        print("Armour Base, Plating And Lining Reset To None")
+        armour_base = "none"
+        armour_plate = "none"
+        armour_lining = "none"
+        t.sleep(1)
+        print("Returning To Last Checkpoint")
+        t.sleep(1)
+        print()
+        last_checkpoint()
+    if energy <= 0:
+        if energy_timer + 60 < t.time():
+            energy += 1
+            print("You Regained 1 Energy")
+            t.sleep(1)
+            print(f"You Now Have {energy} Energy")
+            t.sleep(1)
+            print()
+            energy_timer = t.time()
+        t.sleep(1)
+        print()
+        print("You Have No Energy Left")
+        t.sleep(1)
+        print("Eat Food Or Lose Health")
+        health -= 2
+        print(f"You Lost 2 Health. YOu Now Have {health} Health")
+        t.sleep(1)
+        print()
     if last_weather_change_refesh + weather_change_addtitional_time < t.time():
         weather_change()
         weather_change_addtitional_time = r.choice[300, 360, 420, 480, 540, 600]
@@ -766,21 +819,26 @@ def refresh_all():
     weather_effect_refresh()
     save_data()
 
+def rp(print: str, wait: int = 0, nl: bool = False) -> None:
+    '''Refreshs Everything While Printing
+    Optional Wait And Newline Featute
+    '''
+    refresh_all()
+    print(print)
+    if wait != 0:
+        t.sleep(wait)
+    if nl == True:
+        print()
+    
+    
 def menu_home(previous_location_function):
     infinte_time = 100
-    print("Menu:")
-    t.sleep(0.5)
-    print("Press 'a' For Basic Information Like Health and Inventory")
-    t.sleep(0.5)
-    print("Press 'b' For Your Armour Information")
-    t.sleep(0.5)
-    print("Press 'c' For Your Class, Weapon And Companion")
-    t.sleep(0.5)
-    print("Press 'd' For Current Weather Effects")
-    t.sleep(0.5)
-    print("Or Press 'e' To Go Back")
-    t.sleep(1)
-    print()
+    rp("Menu:", 0.5)
+    rp("Press 'a' For Basic Information Like Health and Inventory", 0.5)
+    rp("Press 'b' For Your Armour Information", 0.5)
+    rp("Press 'c' For Your Class, Weapon And Companion", 0.5)
+    rp("Press 'd' For Current Weather Effects", 0.5)
+    rp("Or Press 'e' To Go Back", 1, True)
     while infinte_time == 100:
         if k.is_pressed("a"):
             menu_basic(previous_location_function)
@@ -795,35 +853,24 @@ def menu_home(previous_location_function):
 
 def menu_basic(previous_location_function):
     global health, energy, gold, inventory
-    print("Basic Information:")
-    t.sleep(0.5)
-    print(f"Health: {health}")
-    t.sleep(0.5)
-    print(f"Energy: {energy}")
-    t.sleep(0.5)
-    print(f"Gold: {gold}")
-    t.sleep(0.5)
-    print(f"Inventory: {inventory}")
-    t.sleep(0.5)
-    print()
+    rp("Basic Information:", 0.5)
+    rp(f"Health: {health}", 0.5)
+    rp(f"Energy: {energy}", 0.5)
+    rp(f"Gold: {gold}", 0.5)
+    rp(f"Inventory: {inventory}", 0.5, True)
     menu_home(previous_location_function)
 
 def menu_armour(previous_location_function):
     global armour_base, armour_plate, armour_lining
     global armour_base_available, armour_plate_available, armour_lining_available
-    print("Armour Information:")
-    t.sleep(0.5)
-    print(f"Armour Base: {armour_base}")
-    t.sleep(0.5)
-    print(f"Armour Plating: {armour_plate}")
-    t.sleep(0.5)
-    print(f"Armour Lining: {armour_lining}")
-    print()
-    t.sleep(1)
-    print("Would You Like To Change Your Armour 'BASE', 'PLATING', 'LINING' Or 'EXIT'")
+    rp("Armour Information:", 0.5)
+    rp(f"Armour Base: {armour_base}", 0,5)
+    rp(f"Armour Plating: {armour_plate}", 0.5)
+    rp(f"Armour Lining: {armour_lining}", 0.5, True)
+    rp("Would You Like To Change Your Armour 'BASE', 'PLATING', 'LINING' Or 'EXIT'")
     armour_change = str(input())
     if armour_change == "BASE":
-        print(f"You Have {armour_base_available} Armour Bases Available")
+        print(f"You Have {armour_base_available} Armour Bases Available",)
         t.sleep(1)
         print("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
         select_armour_base = str(input())
@@ -1676,6 +1723,7 @@ def beach():
     else:
         print("You Are Back On The Beach You Woke Up On")
         t.sleep(1)
+        last_checkpoint = beach
         if "fishing_rod" in inventory:
             print("You Can 'WANDER', 'DIG', or 'FISH' Or Travel To The 'FOREST', 'FIELD' Or 'OVERHANG' ")
             beach_option_2 = str(input())
@@ -2202,7 +2250,7 @@ def temp():
     global field_discovered
     global forest_discovered
     global overhang_discovered
-    global game_started
+    global last_checkpoint
     global save_dir
     global companion
     global companion_available
@@ -2268,6 +2316,8 @@ skill_available = []
 
 damage_affects = []
 
+energy_timer = 0
+
 #pet
 companion = "none"
 companion_available = []
@@ -2278,6 +2328,8 @@ beach_discovered = False
 field_discovered = False
 forest_discovered = False
 overhang_discovered = False
+
+last_checkpoint = "none"
 
 #loot tables
 beach_fishing_loot = ["fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "fish", "plank", "plank", "plank", "plank", "plank", "plank", "plank",  "plank" "plank", "plank", "plank", "plank", "plank", "plank", "plank", "plank",  "plank" "plank", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "rubbish", "fish_scaling"]
