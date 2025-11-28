@@ -268,15 +268,15 @@ def fight_signal():
     '''Prints A Statement To Signal A Fight
     Takes Class and Weapon And Changes It Accordingly'''
     if class_ == "fighter" and not weapon == "none":
-        print("You Raise You Weapon A Fight")
+        rp("You Raise You Weapon A Fight")
     elif ( class_ == "fighter" and weapon == "none" ) or class_ == "brawler":
-        print("You Clench You Fists For A Fight")
+        rp("You Clench You Fists For A Fight")
     elif class_ == "wizard":
-        print("You Start Chanting Battle Preperation Spells")
+        rp("You Start Chanting Battle Preperation Spells")
     elif class_ == "archer":
-        print("You Load An Arrow Into Your Bow")
+        rp("You Load An Arrow Into Your Bow")
     else:
-        print("You Prepare For A Fight")
+        rp("You Prepare For A Fight")
 
 def weather_change():
     global last_weather_effect_done, neg2_weather, last_weather, this_weather, next_weather
@@ -870,9 +870,8 @@ def menu_armour(previous_location_function):
     rp("Would You Like To Change Your Armour 'BASE', 'PLATING', 'LINING' Or 'EXIT'")
     armour_change = str(input())
     if armour_change == "BASE":
-        print(f"You Have {armour_base_available} Armour Bases Available",)
-        t.sleep(1)
-        print("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
+        rp(f"You Have {armour_base_available} Armour Bases Available", 1)
+        rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
         select_armour_base = str(input())
         print()
         t.sleep(1)
@@ -880,16 +879,13 @@ def menu_armour(previous_location_function):
             armour_base_available.append(armour_base)
             armour_base = select_armour_base
             armour_base_available.pop(select_armour_base)
-            print(f"{select_armour_base} Has Been Applied")
-            t.sleep(1)
-            print()
+            rp(f"{select_armour_base} Has Been Applied", 1, True)
             menu_armour(previous_location_function)
         else:
             menu_armour(previous_location_function)
     if armour_change == "PLATING":
-        print(f"You Have {armour_plate_available} Armour Platings Available")
-        t.sleep(1)
-        print("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
+        rp(f"You Have {armour_plate_available} Armour Platings Available", 1)
+        rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
         select_armour_plate = str(input())
         print()
         t.sleep(1)
@@ -897,16 +893,13 @@ def menu_armour(previous_location_function):
             armour_plate_available.append(armour_plate)
             armour_plate = select_armour_plate
             armour_plate_available.pop(select_armour_plate)
-            print(f"{select_armour_plate} Has Been Applied")
-            t.sleep(1)
-            print()
+            rp(f"{select_armour_plate} Has Been Applied", 1, True)
             menu_armour(previous_location_function)
         else:
             menu_armour(previous_location_function)
     if armour_change == "BASE":
-        print(f"You Have {armour_lining_available} Armour Bases Available")
-        t.sleep(1)
-        print("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
+        rp(f"You Have {armour_lining_available} Armour Bases Available", 1)
+        rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
         select_armour_lining = str(input())
         print()
         t.sleep(1)
@@ -914,9 +907,7 @@ def menu_armour(previous_location_function):
             armour_lining_available.append(armour_lining)
             armour_lining = select_armour_lining
             armour_lining_available.pop(select_armour_lining)
-            print(f"{select_armour_lining} Has Been Applied")
-            t.sleep(1)
-            print()
+            rp(f"{select_armour_lining} Has Been Applied", 1, True)
             menu_armour(previous_location_function)
         else:
             menu_armour(previous_location_function)
@@ -927,78 +918,66 @@ def menu_class(previous_location_function):
     global class_, weapon, spell, arrow, skill
     global class_available, spell_available, weapon_available, arrow_available, skill_available
     if class_ == "wizard":
-        print("You Are A Wizard")
-        t.sleep(1)
-        print("You Fight With Spells")
-        t.sleep(1)
+        rp("You Are A Wizard", 1)
+        rp("You Fight With Spells", 1)
         if spell == "fireball":
-            print("Your Selected Spell Is Fireball")
+            rp("Your Selected Spell Is Fireball", 1)
         elif spell == "iceball":
-            print("Your Selected Spell Is Iceball")
+            rp("Your Selected Spell Is Iceball", 1)
         elif spell == "time_freeze":
-            print("Your Selected Spell Is Time Freeze")
+            rp("Your Selected Spell Is Time Freeze", 1)
         elif spell == "bludgeon":
-            print("Your Selected Spell If Bludgeon")
+            rp("Your Selected Spell If Bludgeon", 1)
         elif spell == "electric":
-            print("Your Selected Spell Is Electric")
+            rp("Your Selected Spell Is Electric", 1)
         elif spell == "poison":
-            print("Your Selected Spell If Poison")
-        t.sleep(1)
+            rp("Your Selected Spell If Poison", 1)
     elif class_ == "fighter":
-        print("You Are A Fighter")
-        t.sleep(1)
-        print("You Fight With Unique Weapons")
-        t.sleep(1)
+        rp("You Are A Fighter", 1)
+        rp("You Fight With Unique Weapons", 1)
         if weapon == "none":
-            print("Your Selected Weapon Is Your Fists")
+            rp("Your Selected Weapon Is Your Fists", 1)
         elif spell == "sword":
-            print("Your Selected Weapon Is A Sword")
+            rp("Your Selected Weapon Is A Sword", 1)
         elif spell == "spear":
-            print("Your Selected Weapon Is A Spear")
+            rp("Your Selected Weapon Is A Spear", 1)
         elif spell == "dagger":
-            print("Your Selected Weapon Is A Dagger")
+            rp("Your Selected Weapon Is A Dagger", 1)
         elif spell == "mace":
-            print("Your Selected Weapon Is A Mace")
+            rp("Your Selected Weapon Is A Mace", 1)
         elif spell == "nunchuncks":
-            print("Your Selected Weapon Is Nunchuncks")
-        t.sleep(1)  
+            rp("Your Selected Weapon Is Nunchuncks", 1)  
     elif class_ == "brawler":
-        print("You Are A Brawler")
-        t.sleep(1)
-        print("You Fight With Unique Moves")
-        t.sleep(1)
+        rp("You Are A Brawler", 1)
+        rp("You Fight With Unique Moves", 1)
         if arrow == "none":
-            print("Your Selected Move Is A Basic Punch")
+            rp("Your Selected Move Is A Basic Punch", 1)
         elif arrow == "fly_kick":
-            print("Your Selected Arrow Is A Flying Kick")
+            rp("Your Selected Arrow Is A Flying Kick", 1)
         elif arrow == "1inch_punch":
-            print("Your Selected Arrow Is The One Inch Punch")
+            rp("Your Selected Arrow Is The One Inch Punch", 1)
         elif arrow == "flurry_punch":
-            print("Your Selected Arrow Is A Flurry Of Punches")
+            rp("Your Selected Arrow Is A Flurry Of Punches", 1)
         elif arrow == "flip_kick":
-            print("Your Selected Arrow Is A Flip Kick")
+            rp("Your Selected Arrow Is A Flip Kick", 1)
         elif arrow == "sweep_kick":
-            print("Your Selected Arrow Is A Sweeping Kick")
-        t.sleep(1)
+            rp("Your Selected Arrow Is A Sweeping Kick", 1)
     elif class_ == "archer":
-        print("You Are An Archer")
-        t.sleep(1)
-        print("You Fight With Unique Arrows")
-        t.sleep(1)
+        rp("You Are An Archer", 1)
+        rp("You Fight With Unique Arrows", 1)
         if arrow == "none":
-            print("Your Selected Arrow Is A Basic Tip")
+            rp("Your Selected Arrow Is A Basic Tip", 1)
         elif arrow == "poison":
-            print("Your Selected Arrow Is A Poison Tip")
+            rp("Your Selected Arrow Is A Poison Tip", 1)
         elif arrow == "flame":
-            print("Your Selected Arrow Is A Flaming Arrow")
+            rp("Your Selected Arrow Is A Flaming Arrow", 1)
         elif arrow == "frozen":
-            print("Your Selected Arrow Is A Freezing Tip")
+            rp("Your Selected Arrow Is A Freezing Tip", 1)
         elif arrow == "conductor":
-            print("Your Selected Arrow Is A Conductive Tip")
+            rp("Your Selected Arrow Is A Conductive Tip", 1)
         elif arrow == "drill":
-            print("Your Selected Arrow Is A Drill Tip")
-        t.sleep(1)
-    print("To Change Class Type 'CLASS' or Spell Type 'SPELL' Otherwise Type 'BACK'")
+            rp("Your Selected Arrow Is A Drill Tip", 1)
+    rp("To Change Class Type 'CLASS' or Spell Type 'SPELL' Otherwise Type 'BACK'", )
     class_choice = str(input())
     print()
     t.sleep(1)
@@ -1009,19 +988,14 @@ def menu_class(previous_location_function):
    
 def menu_class_change(previous_location_function):
     global class_, class_available
-    print(f"You Are Currently A {class_}")
-    t.sleep(1)
+    rp(f"You Are Currently A {class_}", 1)
     if len(class_available) == 0:
-        print("You Have No Available Classes To Change Too")
-        t.sleep(1)
-        print("Going Back")
-        t.sleep(1)
-        print()
+        rp("You Have No Available Classes To Change Too", 1)
+        rp("Going Back", 1, True)
         menu_class(previous_location_function)
     else:
-        print(f"You Can Change Into: {class_available}")
-        t.sleep(1)
-        print("To Change Class Type It As Seen Above")
+        rp(f"You Can Change Into: {class_available}", 1)
+        rp("To Change Class Type It As Seen Above")
         change_class = str(input())
         print()
         t.sleep(1)
@@ -1029,7 +1003,7 @@ def menu_class_change(previous_location_function):
             class_available.append(class_)
             class_ = change_class
             class_available.pop(change_class)
-            print(f"You Are Now A {class_}")
+            rp(f"You Are Now A {class_}", 1)
             t.sleep(1)
             print("Going Back")
             t.sleep(1)
