@@ -830,7 +830,6 @@ def rp(print: str, wait: int = 0, nl: bool = False) -> None:
     if nl == True:
         print()
     
-    
 def menu_home(previous_location_function):
     infinte_time = 100
     rp("Menu:", 0.5)
@@ -912,7 +911,7 @@ def menu_armour(previous_location_function):
         else:
             menu_armour(previous_location_function)
     else:
-        print(menu_home(previous_location_function))
+        menu_home(previous_location_function)
 
 def menu_class(previous_location_function):
     global class_, weapon, spell, arrow, skill
@@ -1004,17 +1003,11 @@ def menu_class_change(previous_location_function):
             class_ = change_class
             class_available.pop(change_class)
             rp(f"You Are Now A {class_}", 1)
-            t.sleep(1)
-            print("Going Back")
-            t.sleep(1)
-            print()
+            rp("Going Back", 1, True)
             menu_class(previous_location_function)
         else:
-            print("That Wasn't An Option")
-            t.sleep(1)
-            print("Going Back")
-            t.sleep(1)
-            print()
+            rp("That Wasn't An Option", 1)
+            rp("Going Back", 1, True)
             menu_class(previous_location_function)
            
 def menu_class_weapon_change(previous_location_function):
@@ -1022,16 +1015,12 @@ def menu_class_weapon_change(previous_location_function):
     global spell_available, weapon_available, arrow_available, skill_available
     if class_ == "wizard":
         if len(spell_available) == 0:
-            print("You Have No Available Spells")
-            t.sleep(1)
-            print("Going Back")
-            t.sleep(1)
-            print()
+            rp("You Have No Available Spells", 1)
+            rp("Going Back", 1, True)
             menu_class(previous_location_function)
         else:
-            print(f"You Can Change To: {spell_available}")
-            t.sleep(1)
-            print("To Change Spell Type It As Seen Above")
+            rp(f"You Can Change To: {spell_available}", 1)
+            rp("To Change Spell Type It As Seen Above")
             change_skill = str(input())
             print()
             t.sleep(1)
@@ -1039,22 +1028,16 @@ def menu_class_weapon_change(previous_location_function):
                 spell_available.append(class_)
                 spell = change_skill
                 spell_available.pop(change_skill)
-                print(f"You Are Now Use {spell}")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp(f"You Are Now Use {spell}", 1)
+                rp("Going Back", 1, True)
                 menu_class(previous_location_function)
             else:
-                print("That Wasn't An Option")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp("That Wasn't An Option", 1)
+                rp("Going Back", 1, True)
             menu_class(previous_location_function)
     if class_ == "fighter":
         if len(weapon_available) == 0:
-            print("You Have No Available Weapons")
+            rp("You Have No Available Weapons", 1)
             t.sleep(1)
             print("Going Back")
             t.sleep(1)
