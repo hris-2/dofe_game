@@ -752,7 +752,6 @@ def weather_effect_refresh():
                 weather_effect_done = True
             t.sleep(1)
             print()
-        
 
 def refresh_all():
     global health, energy, armour_base, armour_plate, armour_lining
@@ -825,11 +824,34 @@ def rp(print: str, wait: int = 0, nl: bool = False) -> None:
     '''
     refresh_all()
     print(print)
-    if wait != 0:
+    if wait is not 0:
         t.sleep(wait)
-    if nl == True:
+    if nl is True:
         print()
-    
+        
+def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str = "", option_3: str = "", option_4: str = "", option_5: str = "", option_6: str = "") -> str:
+    rp(prompt)
+    ci_choice = str(input())
+    print()
+    t.sleep(1)
+    ci_choice = ci_choice.upper()
+    if ci_choice == option_1 and option_1 != "":
+        return "option_1"
+    elif ci_choice == option_2 and option_2 != "":
+        return "option_2"
+    elif ci_choice == option_3 and option_3 != "": 
+        return "option_3"
+    elif ci_choice == option_4 and option_4 != "":
+        return "option_4"
+    elif ci_choice == option_5 and option_5 != "":
+        return "option_5"
+    elif ci_choice == option_6 and option_6 != "":
+        return "option_6"
+    elif ci_choice == "MENU":
+        menu_home(this_location)
+    else:
+        return "back"
+        
 def menu_home(previous_location_function):
     infinte_time = 100
     rp("Menu:", 0.5)
@@ -1038,47 +1060,34 @@ def menu_class_weapon_change(previous_location_function):
     if class_ == "fighter":
         if len(weapon_available) == 0:
             rp("You Have No Available Weapons", 1)
-            t.sleep(1)
-            print("Going Back")
-            t.sleep(1)
-            print()
+            rp("Going Back", 1, True)
             menu_class(previous_location_function)
         else:
-            print(f"You Can Change To: {weapon_available}")
-            t.sleep(1)
-            print("To Change Weapon Type It As Seen Above")
+            rp(f"You Can Change To: {weapon_available}", 1)
+            rp("To Change Weapon Type It As Seen Above")
             change_skill = str(input())
+            change_skill = change_skill.upper()
             print()
             t.sleep(1)
             if change_skill in weapon_available:
                 weapon_available.append(class_)
                 weapon = change_skill
                 weapon_available.pop(change_skill)
-                print(f"You Are Now Use {weapon}")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp(f"You Are Now Use {weapon}", 1)
+                rp("Going Back", 1, True)
                 menu_class(previous_location_function)
             else:
-                print("That Wasn't An Option")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp("That Wasn't An Option", 1)
+                rp("Going Back", 1, True)
             menu_class(previous_location_function)
     if class_ == "archer":
         if len(arrow_available) == 0:
-            print("You Have No Available Arrows")
-            t.sleep(1)
-            print("Going Back")
-            t.sleep(1)
-            print()
+            rp("You Have No Available Arrows", 1)
+            rp("Going Back", 1, True)
             menu_class(previous_location_function)
         else:
-            print(f"You Can Change To: {arrow_available}")
-            t.sleep(1)
-            print("To Change Arrow Type It As Seen Above")
+            rp(f"You Can Change To: {arrow_available}", 1)
+            rp("To Change Arrow Type It As Seen Above", 1)
             change_skill = str(input())
             print()
             t.sleep(1)
@@ -1086,31 +1095,21 @@ def menu_class_weapon_change(previous_location_function):
                 arrow_available.append(class_)
                 arrow = change_skill
                 arrow_available.pop(change_skill)
-                print(f"You Are Now Use {arrow}")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp(f"You Are Now Use {arrow}", 1)
+                rp("Going Back", 1, True)
                 menu_class(previous_location_function)
             else:
-                print("That Wasn't An Option")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp("That Wasn't An Option", 1)
+                rp("Going Back", 1, True)
             menu_class(previous_location_function)
     if class_ == "brawler":
         if len(weapon_available) == 0:
-            print("You Have No Available Moves")
-            t.sleep(1)
-            print("Going Back")
-            t.sleep(1)
-            print()
+            rp("You Have No Available Moves", 1)
+            rp("Going Back", 1, True)
             menu_class(previous_location_function)
         else:
-            print(f"You Can Change To: {skill_available}")
-            t.sleep(1)
-            print("To Change Weapon Type It As Seen Above")
+            rp(f"You Can Change To: {skill_available}", 1)
+            rp("To Change Weapon Type It As Seen Above", 1)
             change_skill = str(input())
             print()
             t.sleep(1)
@@ -1118,64 +1117,45 @@ def menu_class_weapon_change(previous_location_function):
                 skill_available.append(class_)
                 skill = change_skill
                 skill_available.pop(change_skill)
-                print(f"You Are Now Use {skill}")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp(f"You Are Now Use {skill}", 1)
+                rp("Going Back", 1, True)
                 menu_class(previous_location_function)
             else:
-                print("That Wasn't An Option")
-                t.sleep(1)
-                print("Going Back")
-                t.sleep(1)
-                print()
+                rp("That Wasn't An Option", 1)
+                rp("Going Back", 1, True)
             menu_class(previous_location_function)
 
 def menu_weather(previous_location):
     global this_weather
     if this_weather == "sunny":
-        print("The Weather Is Sunny")
-        t.sleep(1)
-        print("Energy Efficenty Is Decreased")
+        rp("The Weather Is Sunny", 1)
+        rp("Energy Efficenty Is Decreased", 1, True)
     elif this_weather == "clear":
-        print("The Weather Is Clear")
-        t.sleep(1)
-        print("No Debuffs Applied")
+        rp("The Weather Is Clear", 1)
+        rp("No Debuffs Applied", 1, True)
     elif this_weather == "cloudy":
-        print("The Weather Is Cloudy")
-        t.sleep(1)
-        print("No Debuffs Applied")
+        rp("The Weather Is Cloudy", 1)
+        rp("No Debuffs Applied", 1, True)
     elif this_weather == "drizzling":       
-        print("The Weather Is Drizzling")
-        t.sleep(1)
-        print("No Debuffs Applied")
+        rp("The Weather Is Drizzling", 1)
+        rp("No Debuffs Applied", 1, True)
     elif this_weather == "raining":
-        print("The Weather Is Raining")
-        t.sleep(1)
-        print("Energy Efficenty Is Decreased")
+        rp("The Weather Is Raining", 1)
+        rp("Energy Efficenty Is Decreased", 1, True)
     elif this_weather == "snowing":
-        print("The Weather Is Snowing")
-        t.sleep(1)
-        print("You Lose Warmth Over Time")
-        t.sleep(1)
-        print("If You Run Out Of Warmth You Will Lose Health Over Time")
+        rp("The Weather Is Snowing", 1)
+        rp("You Lose Warmth Over Time", 1)
+        rp("If You Run Out Of Warmth You Will Lose Health Over Time", 1, True)
     elif this_weather == "hail_storm":
-        print("There Is A Hail Storm")
-        t.sleep(1)
-        print("You Take Damage Over Time Unless In Shelter")
+        rp("There Is A Hail Storm", 1)
+        rp("You Take Damage Over Time Unless In Shelter", 1, True)
     elif this_weather == "thundering":
-        print("There Is A Thunder Storm")  
-        t.sleep(1)
-        print("There Is A Chance You Will Be Struck By Lightning")
+        rp("There Is A Thunder Storm", 1)  
+        rp("There Is A Chance You Will Be Struck By Lightning", 1, True)
     elif this_weather == "heatwave":
-        print("There Is A Heatwave")
-        t.sleep(1)
-        print("You Gain Warmth Over Time")
-        t.sleep(1)
-        print("If You Gain To Much You Will Lose Health Over Time")
-    t.sleep(1)
-    print()
+        rp("There Is A Heatwave", 1)
+        rp("You Gain Warmth Over Time", 1, True)
+        rp("If You Gain To Much You Will Lose Health Over Time", 1, True)
     menu_home(previous_location)
     
 def tutorial():
@@ -1649,39 +1629,26 @@ def menu_tutorial_part_2():
 def beach():
     global beach_discovered, energy, game_started
     if beach_discovered == False:
-        print("You Wake Up Confused Lying On The Floor")
-        t.sleep(1)
-        print("Sand Grains Irritate Your Skin And Seep Into Your Clothes")
-        t.sleep(1)
-        print("Sand, What. You Should Be On A Ship")
-        t.sleep(1)
-        print("You Stand Up And Realise Your On A Beach")
-        t.sleep(1)
-        print("You Try To Think Of Why You Are Here")
-        t.sleep(1)
-        print("But Cannot Remember Anything Else But The Ship")
-        t.sleep(1)
-        print("With Nothing Else To Do")
-        t.sleep(1)
-        print("You Start Looking For Resources")
-        t.sleep(1)
-        print("You Can 'DIG' Or 'WANDER' To Look For Resourses")
-        beach_option_1 = str(input())
-        print()
-        t.sleep(1)
-        if beach_option_1 == "WANDER":
+        rp("You Wake Up Confused Lying On The Floor", 1)
+        rp("Sand Grains Irritate Your Skin And Seep Into Your Clothes", 1)
+        rp("Sand, What. You Should Be On A Ship", 1)
+        rp("You Stand Up And Realise Your On A Beach", 1)
+        rp("You Try To Think Of Why You Are Here", 1)
+        rp("But Cannot Remember Anything Else But The Ship", 1)
+        rp("With Nothing Else To Do", 1)
+        rp("You Start Looking For Resources", 1)
+        beach_option_1 = ci("You Can 'DIG' or 'WANDER' To Look For Resourses", beach, "DIG", "WANDER")
+        if beach_option_1 == "option_1":
             beach_wander()
-        elif beach_option_1 == "DIG":
+        elif beach_option_1 == "option_2":
             beach_dig()
-        elif beach_option_1 == "BACK":
+        elif beach_option_1 == "back":
             ending_1()
-        else:
-            beach()
     else:
-        print("You Are Back On The Beach You Woke Up On")
-        t.sleep(1)
+        rp("You Are Back On The Beach You Woke Up On", 1)
         last_checkpoint = beach
         if "fishing_rod" in inventory:
+            
             print("You Can 'WANDER', 'DIG', or 'FISH' Or Travel To The 'FOREST', 'FIELD' Or 'OVERHANG' ")
             beach_option_2 = str(input())
             print()
