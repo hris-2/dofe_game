@@ -268,15 +268,15 @@ def fight_signal():
     '''Prints A Statement To Signal A Fight
     Takes Class and Weapon And Changes It Accordingly'''
     if class_ == "fighter" and not weapon == "none":
-        rp("You Raise You Weapon A Fight")
+        rp("You Raise You Weapon A Fight", 1,)
     elif ( class_ == "fighter" and weapon == "none" ) or class_ == "brawler":
-        rp("You Clench You Fists For A Fight")
+        rp("You Clench You Fists For A Fight", 1)
     elif class_ == "wizard":
-        rp("You Start Chanting Battle Preperation Spells")
+        rp("You Start Chanting Battle Preperation Spells", 1)
     elif class_ == "archer":
-        rp("You Load An Arrow Into Your Bow")
+        rp("You Load An Arrow Into Your Bow", 1)
     else:
-        rp("You Prepare For A Fight")
+        rp("You Prepare For A Fight", 1)
 
 def weather_change():
     global last_weather_effect_done, neg2_weather, last_weather, this_weather, next_weather
@@ -1648,80 +1648,61 @@ def beach():
         rp("You Are Back On The Beach You Woke Up On", 1)
         last_checkpoint = beach
         if "fishing_rod" in inventory:
-            
-            print("You Can 'WANDER', 'DIG', or 'FISH' Or Travel To The 'FOREST', 'FIELD' Or 'OVERHANG' ")
-            beach_option_2 = str(input())
-            print()
-            t.sleep(1)
-            if beach_option_2 == "WANDER":
+            beach_option_2 = ci("You Can 'WANDER', 'DIG', or 'FISH' Or Travel To The 'FOREST', 'FIELD' Or 'OVERHANG' ", beach, "WANDER", "DIG", "FISH", "FOREST", "FIELD", "OVERHANG")
+            if beach_option_2 == "option_1":
                 beach_wander()
-            elif beach_option_2 == "DIG":
+            elif beach_option_2 == "option_2":
                 beach_dig()
-            elif beach_option_2 == "FISH":
+            elif beach_option_2 == "option_3":
                 beach_fish()
-            elif beach_option_2 == "FOREST":
+            elif beach_option_2 == "option_4":
                 forest()
-            elif beach_option_2 == "FIELD":
+            elif beach_option_2 == "option_5":
                 field()
-            elif beach_option_2 == "OVERHANG":
+            elif beach_option_2 == "option_6":
                 overhang()
             else:
-                print("Not A Valid Option Try Again")
-                t.sleep(1)
+                rp("Not A Valid Option Try Again", 1, True)
                 beach()
         else:
-            print("You Can 'WANDER' Or 'DIG' Or Travel To The 'FOREST', 'FIELD' Or 'OVERHANG' ")
-            beach_option_2 = str(input())
-            print()
-            t.sleep(1)
-            if beach_option_2 == "WANDER":
+            beach_option_3 = ci("You Can 'WANDER' Or 'DIG' Or Travel To The 'FOREST', 'FIELD' Or 'OVERHANG' ", beach, "WANDER", "DIG", "FOREST", "FIELD", "OVERHANG")
+            if beach_option_3 == "option_1":
                 beach_wander()
-            elif beach_option_2 == "DIG":
+            elif beach_option_2 == "option_2":
                 beach_dig()
-            elif beach_option_2 == "FOREST":
+            elif beach_option_2 == "option_3":
                 forest()
-            elif beach_option_2 == "FIELD":
+            elif beach_option_2 == "option_4":
                 field()
-            elif beach_option_2 == "OVERHANG":
+            elif beach_option_2 == "option_5":
                 overhang()
             else:
-                print("Not A Valid Option Try Again")
-                t.sleep(1)
+                rp("Not A Valid Option Try Again", 1, True)
                 beach()
 
 def beach_wander():
     global beach_discovered, energy, game_started, gold
     global beach_wander_loot, energy_efficenty, inventory
     if beach_discovered == False:
-        print("You Start Strolling Down The Beach")
-        t.sleep(1)
-        print("Looking For Resources That Down With The Boat")
+        rp("You Start Strolling Down The Beach", 1)
         fishing_rod_time = r.choice([6, 7, 8, 9, 10])
-        t.sleep(fishing_rod_time)
-        print(f"After {fishing_rod_time} Seconds You Find A Fishing Rod")
+        rp("Looking For Resources That Down With The Boat", fishing_rod_time)
+        rp(f"After {fishing_rod_time} Seconds You Find A Fishing Rod", 1)
         inventory.append("fishing_rod")
         energy_lost_beach_wander_fish_rod = 1 * energy_efficenty
         energy -= energy_lost_beach_wander_fish_rod
-        t.sleep(1)
-        print("This Will Be Handy")
-        t.sleep(1)
-        print("Fishing Rod Added To Inventory")
-        t.sleep(1)
-        print(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}")
-        t.sleep(1)
+        rp("This Will Be Handy", 1)
+        rp("Fishing Rod Added To Inventory", 1)
+        rp(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}", 1)
         beach_discovered = True
-        game_started = True
-        print("Do You Want To Keep Wandering? 'YES'/'NO'")
-        beach_wander_option_1 = str(input())
-        print()
-        t.sleep(1)
-        if beach_wander_option_1 == "YES":
+        beach_wander_option_1 = ci("Do You Want To Keep Wandering? 'YES'/'NO'", beach_wander, "YES", "NO")
+        if beach_wander_option_1 == "option_1":
             beach_wander()
         else:
             beach()
     else:
-        print("You Start Strolling Down The Coast Line")
-        pause_time = r.choice([6, 7, 8, 9, 10, 11])
+        wander_pause_time = r.choice([6, 7, 8, 9, 10, 11])
+        rp("You Start Strolling Down The Coast Line", wander_pause_time)
         loot = r.choice(beach_wander_loot)
         if loot == "plank":
             loot_name = "Plank"
@@ -1733,38 +1714,29 @@ def beach_wander():
             loot_name = "Gold Coin"
         elif loot == "gold_chest":
             loot_name = "Gold Chest"
-        t.sleep(pause_time)
-        print(f"After {pause_time} Seconds You Found A {loot_name}")
-        t.sleep(1)
+        rp(f"After {wander_pause_time} Seconds You Found A {loot_name}", 1)
         if loot == "plank" or loot == "rock":
-            print(f"Do You Want To Keep The {loot_name} 'YES'/'NO'")
-            beach_wander_option_1 = str(input())
-            t.sleep(1)
-            if beach_wander_option_1 == "YES":
+            beach_wander_option_2 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_wander, "YES", "NO")
+            if beach_wander_option_2 == "option_1":
                 inventory.append(loot)
-                print(f"{loot_name} Added To Inventory")
+                rp(f"{loot_name} Added To Inventory", 1)
             else:
-                print(f"You Left The {loot_name}")
+                rp(f"You Left The {loot_name}", 1)
         elif loot == "gold":
             gold_amount = r.choice([1, 2, 3])
             gold += gold_amount
-            print(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold")
+            rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
         elif loot == "gold_chest":
             gold_chest_amount = r.choice([30, 35, 40, 45, 50])
             gold += gold_chest_amount
-            print(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold")
+            rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
         else:
-            print(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away")
-        t.sleep(1)
+            rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
         energy_lost_beach_wander = int( 1 / energy_efficenty )
         energy -= energy_lost_beach_wander
-        print(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}")
-        t.sleep(1)
-        print("Would You Like To Wander Again")
-        beach_wander_option_2 = str(input())
-        print()
-        t.sleep(1)
-        if beach_wander_option_2 == "YES":
+        rp(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}", 1)
+        beach_wander_option_3 = ci("Would You Like To Wander Again 'YES'/'NO'", beach_wander, "YES", "NO")
+        if beach_wander_option_3 == "option_1":
             beach_wander()
         else:
             beach()
@@ -1773,48 +1745,31 @@ def beach_dig():
     global beach_discovered, energy, game_started, companion
     global beach_dig_loot, energy_efficenty, inventory, companion_available 
     if beach_discovered == False:
-        print("You Start Digging The Sand Beneathe You")
-        t.sleep(1)
-        print("To Hopefully Find An Item")
-        t.sleep(1)
-        print("That Will Help You Suvive")
-        t.sleep(1)
-        print("On This Unknown Land")
-        t.sleep(1)
+        rp("You Start Digging The Sand Beneathe You", 1)
+        rp("To Hopefully Find An Item", 1)
+        rp("That Will Help You Suvive", 1)
+        rp("On This Unknown Land", 1)
         while not "fishing_rod" in inventory:
             fishing_rod_dig = quick_time_spam(20, "random", "random", "Dig")
             if fishing_rod_dig == True:
-                print("You Hit A Solid Wooden Pole")
-                t.sleep(1)
-                print("It's A Fishing Rod")
-                t.sleep(1)
-                print("This Will Be Handy")
-                t.sleep(1)
+                rp("You Hit A Solid Wooden Pole", 1)
+                rp("It's A Fishing Rod", 1)
+                rp("This Will Be Handy", 1)
                 energy_lost_beach_dig_fish_rod = int ( 1 * energy_efficenty)
                 energy -= energy_lost_beach_dig_fish_rod
-                print(f"You Lost {energy_lost_beach_dig_fish_rod} Energy. You Are Now On {energy}")
-                t.sleep(1)
-                t.sleep(1)
+                rp(f"You Lost {energy_lost_beach_dig_fish_rod} Energy. You Are Now On {energy}", 1)
                 inventory.append("fishing_rod")
                 beach_discovered = True
-                game_started = True
-                print("Do You Want To Keep Digging? 'YES/'NO'")
-                keep_digging_1 = str(input())
-                print()
-                t.sleep(1)
-                if keep_digging_1 == "YES":
+                keep_digging_1 = ci("Do You Want To Keep Digging? 'YES/'NO'", beach_dig, "YES", "NO")
+                if keep_digging_1 == "option_1":
                     beach_dig()
                 else:
                     beach()
 
             else:
-                print("You Only Ended Up Only Scraping Up A Thin Layer Of Sand Beneathe You")
-                t.sleep(1)
-                print()
-                beach_dig()
+                rp("You Only Ended Up Only Scraping Up A Thin Layer Of Sand Beneathe You", 1, True)
     else:
-        print("You Start Digging Down Into The Sand")
-        pause_time = r.choice([6, 7, 8, 9, 10, 11])
+        rp("You Start Digging Down Into The Sand", 1)
         dig_spam_event = quick_time_spam(20, "random", "random", "Dig")
         if dig_spam_event == True:
             loot = r.choice(beach_dig_loot)
@@ -1832,52 +1787,40 @@ def beach_dig():
                 loot_name = "Gold Chest"
             elif loot == "rock_dweller":
                 loot_name = "Rock Dweller"
-            t.sleep(pause_time)
-            print(f"You Hit A {loot_name}")
-            t.sleep(1)
+            rp(f"You Hit A {loot_name}", 1)
             if loot == "plank" or loot == "rock" or loot == "bone":
-                print(f"Do You Want To Keep The {loot_name} 'YES'/'NO'")
-                beach_wander_option_1 = str(input())
-                t.sleep(1)
-                if beach_wander_option_1 == "YES":
+                beach_dig_option_1 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_dig, "YES", "NO")
+                if beach_dig_option_1 == "option_1":
                     inventory.append(loot)
-                    print(f"{loot_name} Added To Inventory")
+                    rp(f"{loot_name} Added To Inventory", 1)
                 else:
-                    print(f"You Left The {loot_name}")
+                    rp(f"You Left The {loot_name}", 1)
             elif loot == "gold":
                 gold_amount = r.choice([1, 2, 3])
                 gold += gold_amount
-                print(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold")
+                rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
             elif loot == "gold_chest":
                 gold_chest_amount = r.choice([30, 35, 40, 45, 50])
                 gold += gold_chest_amount
-                print(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold")
+                rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
             elif loot == "rock_dweller":
-                print("Do You Want To Set The Rock Dweller As Your Companion.")
-                t.sleep(1)
-                print("Else It Is Added To Your Inventory 'YES'/'NO'")
-                rock_dweller_select = str(input())
-                t.sleep(1)
-                if rock_dweller_select == "YES":
+                rp("Do You Want To Set The Rock Dweller As Your Companion.", 1)
+                rock_dweller_select = ci("Else It Is Added To Your Inventory 'YES'/'NO'", beach_dig, "YES", "NO")
+                if rock_dweller_select == "option_1":
                     companion = "rock_dweller"
-                    print("Rock Dweller Set As Companion")
+                    rp("Rock Dweller Set As Companion", 1)
                 else:
                     companion_available.append("rock_dweller")
-                    print("Rock Dweller Added To Inventory")
+                    rp("Rock Dweller Added To Inventory", 1)
             else:
-                print(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away")
+                rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
         else:
-            print("You Failed To Dig Deep Enough")
-    t.sleep(1)
+            rp("You Failed To Dig Deep Enough", 1)
     energy_lost_beach_dig = 1 * energy_efficenty
     energy -= energy_lost_beach_dig
-    print(f"You Lost {energy_lost_beach_dig} Energy. You Are Now On {energy}")
-    t.sleep(1)
-    print("Would You Like To Dig Again")
-    beach_wander_option_2 = str(input())
-    print()
-    t.sleep(1)
-    if beach_wander_option_2 == "YES":
+    rp(f"You Lost {energy_lost_beach_dig} Energy. You Are Now On {energy}", 1)
+    beach_dig_option_2 = ci("Would You Like To Dig Again 'YES'/'NO'", beach_dig, "YES", "NO")
+    if beach_dig_option_2 == "option_1":
         beach_dig()
     else:
         beach()
@@ -1886,12 +1829,10 @@ def beach_fish():
     global beach_discovered, energy, game_started, armour_base, armour_base_available, gold
     global beach_fishing_loot, energy_efficenty, inventory
     if "fishing_rod" in inventory:
-        print("You Throw Your Hook Into The Sea")
         pause_time = r.choice([6, 7, 8, 9, 10, 11])
-        t.sleep(pause_time)
-        print(f"After {pause_time} Seconds Something Hooked Onto Your Fishing Rod")
-        t.sleep(1)
-        fish_spam_event = quick_time_spam(10, "random", "random/2", "Pull Up The Fish")
+        rp("You Throw Your Hook Into The Sea", pause_time)
+        rp(f"After {pause_time} Seconds Something Hooked Onto Your Fishing Rod")
+        fish_spam_event = quick_time_spam(10, "random", "random/2", "Pull Up The Fish", 1)
         if fish_spam_event == True:
             loot = r.choice(beach_fishing_loot)
             if loot == "plank":
@@ -1908,146 +1849,124 @@ def beach_fish():
                 loot_name = "Gold Chest"
             elif loot == "fish_scaling":
                 loot_name = "Fish Scale Base"
-        print(f"You Fished Up A {loot_name}")
-        t.sleep(1)
+        else:
+            rp("You Failed To Pull Anythng Up", 1)
+        rp(f"You Fished Up A {loot_name}", 1)
         if loot == "plank" or loot == "rock" or loot == "bone":
-            print(f"Do You Want To Keep The {loot_name} 'YES'/'NO'")
-            beach_wander_option_1 = str(input())
-            t.sleep(1)
-            if beach_wander_option_1 == "YES":
+            beach_fish_option_1 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_fish, "YES", "NO")
+            if beach_fish_option_1 == "option_1":
                 inventory.append(loot)
-                print(f"{loot_name} Added To Inventory")
+                rp(f"{loot_name} Added To Inventory", 1)
             else:
-                print(f"You Left The {loot_name}")
+                rp(f"You Left The {loot_name}", 1)
         elif loot == "gold":
             gold_amount = r.choice([1, 2, 3])
             gold += gold_amount
-            print(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold")
+            rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
         elif loot == "gold_chest":
             gold_chest_amount = r.choice([30, 35, 40, 45, 50])
             gold += gold_chest_amount
-            print(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold")
+            rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
         elif loot == "fish_scaling":
-            print("Do You Want To Set The Fish Scaling As Your Armour Base.")
-            t.sleep(1)
-            print("Else It Is Added To Your Inventory 'YES'/'NO'")
-            rock_dweller_select = str(input())
-            t.sleep(1)
-            if rock_dweller_select == "YES":
+            rp("Do You Want To Set The Fish Scaling As Your Armour Base.", 1)
+            fish_scale_select = ci("Else It Is Added To Your Inventory 'YES'/'NO'", beach_fish, "YES", "NO")
+            if fish_scale_select == "option_1":
                 armour_base = "fish_scaling"
-                print("Scale Plating Set As Armour Base")
+                rp("Scale Plating Set As Armour Base", 1)
             else:
                 armour_base_available.append("fish_scaling")
-                print("Scale Plating Added To Inventory")
+                rp("Scale Plating Added To Inventory", 1)
         else:
-            print(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away")
+            rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
     else:
-            print("You Failed To Pull Up The Loot")
-    t.sleep(1)
-    energy_lost_beach_fish = 1 * energy_efficenty
+            rp("You Don't Even Have A Fishing Rod", 1, True)
+            beach()
+    energy_lost_beach_fish = 2 * energy_efficenty
     energy -= energy_lost_beach_fish
-    print(f"You Lost {energy_lost_beach_fish} Energy. You Are Now On {energy}")
-    t.sleep(1)
-    print("Would You Like To Fish Again")
-    beach_wander_option_2 = str(input())
-    print()
-    t.sleep(1)
-    if beach_wander_option_2 == "YES":
+    rp(f"You Lost {energy_lost_beach_fish} Energy. You Are Now On {energy}", 1)
+    beach_fish_option_2 = ci("Would You Like To Fish Again 'YES'/'NO'", beach_fish, "YES", "NO")
+    if beach_fish_option_2 == "YES":
         beach_fish()
     else:
         beach()
 
 def overhang():
     if overhang_discovered == False:
-        print("As You Walk Of The Gritty Sand You Find A Small Overhang")
-        t.sleep(1)
-        print("The Smooth Rock Facing Towards The Calming Sea Would Be A Good Place To Rest")
-        t.sleep(1)
-        print("To Gain 1 Energy It Takes 2 Minutes Of Rest.")
-        t.sleep(1)
-        print(" A New Energy Will Start Regain Automatically Once One Is Done")
+        rp("As You Walk Of The Gritty Sand You Find A Small Overhang", 1)
+        rp("The Smooth Rock Facing Towards The Calming Sea Would Be A Good Place To Rest", 1)
+        rp("To Gain 1 Energy It Takes 2 Minutes Of Rest.", 1) 
+        rp("A New Energy Will Start Regain Automatically Once One Is Done", 1, True)
         overhang_discovered = True
-        print()
         overhang()
     else:
-        print("You Can Rest Here. 'YES' / 'NO'")
-        overhang_choice = str(input())
-        t.sleep(1)
-        print()
-        if overhang_choice == "YES":
-            rest()
-        else:
+        if energy == 30:
+            rp("You Don't Need To Rest", 1)
+            rp("You Are At Full Energy", 1, True)
             beach()
+        else:
+            overhang_choice = ci("You Can Rest Here. 'YES' / 'NO'", overhang, "YES", "NO")
+            if overhang_choice == "YES":
+                rest()
+                beach()
+            else:
+                beach()
            
 def field():
     if field_discovered == False:
-        print("You Step Of The Irritating Sand And Onto The Lucious Grass")
-        t.sleep(1)
-        print("You Hear The Mooing Of Cows In The Background")
-        t.sleep(1)
-        print("The Relaxing Peace Is Quickly Broken By A Man")
-        t.sleep(1)
-        print("This Is The First Human Interaction You Have Had Since The Ship Wreck")
-        t.sleep(1)
-        print("As You Go To Great The Man A Flaming Fire Ball Skims Past Your Face")
-        t.sleep(1)
-        print("This Isn't A Man, Its A Wizard And He Isnt Happy")
-        t.sleep(1)
+        rp("You Step Of The Irritating Sand And Onto The Lucious Grass", 1)
+        rp("You Hear The Mooing Of Cows In The Background", 1)
+        rp("The Relaxing Peace Is Quickly Broken By A Man", 1)
+        rp("This Is The First Human Interaction You Have Had Since The Ship Wreck", 1)
+        rp("As You Go To Great The Man A Flaming Fire Ball Skims Past Your Face", 1)
+        rp("This Isn't A Man, Its A Wizard And He Isnt Happy", 1, True)
         wizard_fight()
     else:
-        print()
+        print("THIS AREA IS NOT AVAILABLE YET")
+        print("RETURNING TO BEACH")
+        beach()
        
 def forest():
-        print("")
+        print("THIS AREA IS NOT AVAILABLE YET")
+        print("RETURNING TO BEACH")
+        beach()
 
 def ending_1():
-      print("After Standing Up And Thinking For A Bit")
-      t.sleep(2)
-      print("You Realise These Are Horrible Terms To Live With")
-      t.sleep(2)
-      print("So You Lie Back Down And Fall Back To Sleep")
-      t.sleep(2)
-      print("Allowing Nature To Take Your Body")
-      t.sleep(2)
-      print("Ending 1 Unlocked!")
-      t.sleep(1)
-      print("If I Had A Reward I Would Announce It Here")
-      t.sleep(1)
-      print()
+      rp("After Standing Up And Thinking For A Bit", 1)
+      rp("You Realise These Are Horrible Terms To Live With", 1)
+      rp("So You Lie Back Down And Fall Back To Sleep", 1)
+      rp("Allowing Nature To Take Your Body", 1)
+      rp("Ending 1 Unlocked!", 1)
+      rp("You Unlocked The Sleepy Armour Lining", 1)
+      rp("It Doubles Your Health & Energy Regenration ", 1)
+      ending_1_choice = ci("Would You Like To Equip It? 'YES' / 'NO'", ending_1, "YES", "NO")
+      if ending_1_choice == "option_1":
+          armour_lining = "sleepy"
+          rp("Sleepy Armour Lining Equipped", 1, True)
+      else:
+          armour_lining_available.append("sleepy")
+          rp("Sleepy Armour Lining Added To Available Armour Linings", 1, True)   
       beach()
 
 def ending_2():
-    print("With All Your Planks Your Start Building A Ship")
-    t.sleep(2)
-    print("It's How This Journy Started, On The Seas")
-    t.sleep(2)
-    print("The Mystery Of The Island Or Your Memory Was Never Discovered")
-    t.sleep(2)
-    print("But You Did Feel The Connection In Pirating")
-    t.sleep(2)
-    print("Ending 2 Unlocked!")
-    t.sleep(2)
-    print("You Unlocked The Parrot Companion")
-    t.sleep(2)
-    print("It Copies Your Attacks So You Do Double Damage")
-    t.sleep(2)
-    print("Would You Like To Equip It? 'YES' / 'NO'")
-    parrot_choice = input()
-    print()
-    t.sleep(1)
-    if parrot_choice == "YES":
-        companion_available.append(companion)
+    rp("With All Your Planks Your Start Building A Ship", 1)
+    rp("It's How This Journy Started, On The Seas", 1)
+    rp("The Mystery Of The Island Or Your Memory Was Never Discovered", 1)
+    rp("But You Did Feel The Connection In Pirating", 1)
+    rp("Ending 2 Unlocked!", 1)
+    rp("You Unlocked The Parrot Companion", 1)
+    rp("It Copies Your Attacks So You Do Double Damage", 1)
+    ending_2_choice = ci("Would You Like To Equip It? 'YES'/'NO'", ending_2, "YES", "NO")
+    if ending_2_choice == "YES":
+        if companion != "none":
+            companion_available.append(companion)
         companion = "parrot"
-        damage *= 2
-        print("Parrot Equipped")
+        rp("Parrot Equipped", 1, True)
     else:
         companion_available.append("parrot")
-        print("Parrot Added To Available Companions")
-
+        rp("Parrot Added To Available Companions", 1)
 
 def wizard_fight():
-    print("You Pose For A Fight")
-    t.sleep(1)
+    fight_signal()
     wiz_ran = r.choice["attack", "defend"]
     while wiz_health > 0 and health > 0:
         if wiz_ran == "attack":
