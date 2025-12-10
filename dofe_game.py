@@ -1978,37 +1978,32 @@ def wizard_fight():
                 wiz_crit_attack = quick_time_double(5, "random", "random", "Critical Attack The Wizard")
                 t.sleep(1)
                 if wiz_crit_attack == True:
-                    print("You Landed A Critical Hit On The Wizard")
+                    rp("You Landed A Critical Hit On The Wizard", 1)
                     crit_wiz_damage = damage * crit_multiplier
                     wiz_health -= crit_wiz_damage
-                    t.sleep(1)
-                    print(f"You Did {crit_wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left")
+                    rp(f"You Did {crit_wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left", 1, True)
                 else:
-                    print("You Missed Your Critical Hit On The Wizard")
+                    rp("You Missed Your Critical Hit On The Wizard", 1, True)
             else:
                 wiz_attack = quick_time_event(5, "random", "Attack The Wizard")
                 t.sleep(1)
                 if wiz_attack == True:
-                    print("You Landed An Attack On The Wizard")
+                    rp("You Landed An Attack On The Wizard", 1)
                     wiz_damage = damage
                     wiz_health -= wiz_damage
-                    t.sleep(1)
-                    print(f"You Did {wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left")
+                    rp(f"You Did {wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left", 1)
                 else:
-                    print("You Missed Your Attack On The Wizard")
+                    rp("You Missed Your Attack On The Wizard", 1, True)
         else:
             dodge_wiz = quick_time_event(5, "random", "Dodge The Incoming Fireball")
             t.sleep(1)
             if dodge_wiz == True:
-                print("You Dodged The Incoming Fireball")
+                rp("You Dodged The Incoming Fireball", 1, True)
             else:
-                print("You Gazed Into The Flaming Ball Of Fire As It Came Crashing Down On You")
-                wiz_health_lost = 2 / damage_resistence
+                rp("You Gazed Into The Flaming Ball Of Fire As It Came Crashing Down On You", 1)
+                wiz_health_lost = int ( 2 / damage_resistence )
                 health -= wiz_health_lost
-                t.sleep(1)
-                print(f"You Lost {wiz_health_lost} Damage. You Now Have {health} Health Left")
-        t.sleep(1)
-        print()
+                rp(f"You Lost {wiz_health_lost} Damage. You Now Have {health} Health Left", 1, True)
         if wiz_health <= 0:
             print("You Defeated The Wizard")
             t.sleep(1)
