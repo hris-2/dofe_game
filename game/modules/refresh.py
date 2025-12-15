@@ -1,3 +1,9 @@
+import time as t
+import os as o
+import random as r
+import keyboard as k
+import json as j 
+
 def fight_signal():
     global class_
     global weapon

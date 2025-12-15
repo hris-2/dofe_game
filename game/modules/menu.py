@@ -1,3 +1,9 @@
+import time as t
+import os as o
+import random as r
+import keyboard as k
+import json as j 
+
 def menu_basic(previous_location_function):
     global health, energy, gold, inventory
     rp("Basic Information:", 0.5)

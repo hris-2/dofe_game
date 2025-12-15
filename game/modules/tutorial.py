@@ -1,3 +1,9 @@
+import time as t
+import os as o
+import random as r
+import keyboard as k
+import json as j 
+
 def tutorial():
     global tutorial_done, menu_tutorial_done, fight_tutorial_done, text_tutorial_done
     if tutorial_done == True:

@@ -366,7 +366,7 @@ def ask_question():
             return True
         elif user_choice == 5 and option_5 == correct_answer:
             print("Correct!")
-            return True   
+            return True
         else:
             print("Incorrect. The correct answer was:", correct_answer)
             return False

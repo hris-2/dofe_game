@@ -13,13 +13,10 @@ save_dir = f"{game_dir}/{save_name}"
 mod_file = f"{game_dir}/mods"
 base_file = f"{game_dir}/modules"
 
-if not o.path.exsist(f"{mod_file}/main.py"):
-    import main.py from f"{base_file}/main.py"
-if not o.path.exsist(f"{mod_file}/weapons.py")
-    import weapons.py from f"{game_dir}/modules/wepons.py"
-if not o.path.exsist(f"{}")
-        
-
+if o.path.exists(f"{mod_file}/story.py"):
+    story_path = f"{mod_file}/story.py"
+else:
+    story_path = f"{base_file}/story.py"
 
 def temp():
     global health

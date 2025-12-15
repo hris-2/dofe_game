@@ -4,8 +4,6 @@ import random as r
 import keyboard as k
 import json as j
 
-start_load = t.time() #records time at start of loading to see how long it takes to load
-
 game_dir = o.path.dirname(o.path.abspath(__file__))
 save_name = "save_file.json"      #Retrives Path For Save File
 save_dir = f"{game_dir}/{save_name}"

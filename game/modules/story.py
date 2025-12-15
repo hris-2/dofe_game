@@ -1,3 +1,9 @@
+import time as t
+import os as o
+import random as r
+import keyboard as k
+import json as j 
+
 def beach():
     global beach_discovered, energy, game_started
     if beach_discovered == False:
