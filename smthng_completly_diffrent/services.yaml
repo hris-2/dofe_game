@@ -1,0 +1,209 @@
+- Entertainment & Media:
+  - Jellyfin:
+    icon: /temp_file_path/jellyfin.png
+    href: donthaveoneyet
+    description: Watch Movies & TV Shows
+    server: opi_docker
+    container: jellyfin
+    showStats: true
+    widget:
+      type: jellyfin
+      url: donthaveoneyet
+      key: donthaveoneyet
+      enableBlocks: true
+      enableNowplaying: true
+      enableUser: true
+      enableMediaControl: true
+      showEpisodeNumber: true
+      expandOneStreamToTwoRows: true
+  - Navidrome:
+    icon: /temp_file_path/navidrome.png
+    href: donthaveoneyet
+    description: Listen To Music
+    server: opi_docker
+    container: navidrome
+    showStats: true
+    widget:
+      type: navidrome
+      url: donthaveoneyet
+      key: donthaveoneyet
+  - Radarr:
+    icon: /temp_file_path/radarr.png
+    href: donthaveoneyet
+    description: Manage Movie Library
+    server: opi_docker
+    container: radarr
+    showStats: true
+    widget:
+      type: radarr
+      url: donthaveoneyet
+      key: donthaveoneyet
+      enableQueue: true
+      fields: ["wanted", "missing", "queued", "movies"]
+  - Sonarr:
+    icon: /temp_file_path/sonarr.png
+    href: donthaveoneyet
+    description: Manage TV Show Library
+    server: opi_docker
+    container: sonarr
+    showStats: true
+    widget:
+      type: sonarr
+      url: donthaveoneyet
+      key: donthaveoneyet
+      enableQueue: true
+      fields: ["wanted", "queued", "series"]
+  - Lidarr:
+    icon: /temp_file_path/lidarr.png
+    href: donthaveoneyet
+    description: Manage Music Library
+    server: opi_docker
+    container: lidarr
+    showStats: true
+    widget:
+      type: lidarr
+      url: donthaveoneyet
+      key: donthaveoneyet
+      enableQueue: true
+      fields: ["wanted", "queued", "artists"]
+  - Bazarr:
+    icon: /temp_file_path/bazarr.png
+    href: donthaveoneyet
+    description: Manage Subtitles
+    server: opi_docker
+    container: bazarr
+    showStats: true
+    widget:
+      type: bazarr
+      url: donthaveoneyet
+      key: donthaveoneyet
+      fields: ["missingEpisodes", "missingMovies"]
+  - Minecraft Server:
+    icon: /temp_file_path/minecraft.png
+    href: donthaveoneyet
+    description: Monitor Minecraft Server
+    server: opi_docker
+    container: mc_server
+    showStats: true
+    actions:
+      - start
+      - stop
+    widget:
+      type: minecraft
+      url: donthaveoneyet
+      fields: ["players", "version", "status"]
+
+- Productivity & Documents:
+  - Nextcloud:
+    icon: /temp_file_path/nextcloud.png
+    href: donthaveoneyet
+    description: Access & Edit Your Files
+    server: opi_docker
+    container: nextcloud
+    showStats: true
+    widget:
+      type: nextcloud
+      url: donthaveoneyet
+      key: donthaveoneyet
+      fields: ["cpuload", "memoryusage", "freespace", "numfiles"]
+  - OnlyOffice:
+    icon: /temp_file_path/onlyoffice.png
+    href: donthaveoneyet
+    description: Create & Edit Documents
+    server: opi_docker
+    container: onlyoffice
+    showStats: true
+  - Joplin:
+    icon: /temp_file_path/joplin.png
+    href: donthaveoneyet
+    description: Note Taking & To-Do Lists
+    server: opi_docker
+    container: joplin
+    showStats: true
+  - Immich:
+    icon: /temp_file_path/immich.png
+    href: donthaveoneyet
+    description: Photo & Video Management
+    server: opi_docker
+    container: immich
+    showStats: true
+    widget:
+      type: immich
+      url: donthaveoneyet
+      key: donthaveoneyet
+      version: 2
+      fields: ["photos", "videos", "storage", "users"]
+  - Vaultwarden:
+    icon: /temp_file_path/vaultwarden.png
+    href: donthaveoneyet
+    description: Password Management
+    server: opi_docker
+    container: vaultwarden
+    showStats: true
+  - VS Code Server:
+    icon: /temp_file_path/vscode.png
+    href: donthaveoneyet
+    description: Online Code Editor
+    server: opi_docker
+    container: vscode_server
+    showStats: true
+  - Linux VM:
+    icon: /temp_file_path/linuxvm.png
+    href: donthaveoneyet
+    description: Access Your Linux Virtual Machine
+
+- Device & Connectivity:
+  - Pi-Hole:
+    icon: /temp_file_path/pihole.png
+    href: donthaveoneyet
+    description: Network-wide Ad Blocking
+    server: opi_docker
+    container: pihole
+    showStats: true
+    widget:
+      type: pihole
+      url: donthaveoneyet
+      key: donthaveoneyet
+      version: 6
+      fields: ["queries", "blocked", "blocked_percent", "gravity"]
+  - Netdata:
+    icon: /temp_file_path/netdata.png
+    href: donthaveoneyet
+    description: Real-time Performance Monitoring
+    server: opi_docker
+    container: netdata
+    showStats: true
+    widget:
+      type: netdata
+      url: donthaveoneyet
+      fields: ["warnings", "criticals"]
+  - Homepage:
+    icon: /temp_file_path/homepage.png
+    href: donthaveoneyet
+    description: Dashboard
+    server: opi_docker
+    container: homepage
+    showStats: true
+  - Watchtower:
+    icon: /temp_file_path/watchtower.png
+    href: donthaveoneyet
+    description: Monitor & Update Containers
+    server: opi_docker
+    container: watchtower
+    showStats: true
+    widget:
+      type: watchtower
+      url: donthaveoneyet
+      fields: ["containers_scanned", "containers_updated", "containers_failed"]
+  - TailScale:
+    icon: /temp_file_path/tailscale.png
+    href: donthaveoneyet
+    description: Secure VPN Access
+    server: opi_docker
+    container: tailscale
+    showStats: true
+    widget:
+      type: tailscale
+      url: donthaveoneyet
+      key: donthaveoneyet
+      fields: ["address", "lastseen", "expires"]
