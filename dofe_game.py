@@ -819,7 +819,8 @@ def refresh_all():
     save_data()
 
 def rp(print: str, wait: int = 0, nl: bool = False) -> None:
-    '''Refreshs Everything While Printing
+    ''' rp = Refresh Print
+    Refreshs Everything While Printing
     Optional Wait And Newline Featute
     '''
     refresh_all()
@@ -829,7 +830,11 @@ def rp(print: str, wait: int = 0, nl: bool = False) -> None:
     if nl is True:
         print()
         
-def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str = "", option_3: str = "", option_4: str = "", option_5: str = "", option_6: str = "") -> str:
+def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str = "", option_3: string = "", option_4: str = "", option_5: str = "", option_6: str = "") -> str:
+    ''' ci = Common Input
+    Simplified Input Function That Can Be Used For Most Inputs
+    Supports Up To 6 Options 
+    '''
     rp(prompt)
     ci_choice = str(input())
     print()
@@ -1238,7 +1243,7 @@ def tutorial():
             print("Once All Those Are Done You Will Be Brought Back Here")
             t.sleep(1)
             print()
-            beach()
+            menu_tuorial_part_1()
         elif text_tutorial_done == True:
             print("Now You Know How To Navigate The Game")
             t.sleep(1)
@@ -1905,7 +1910,7 @@ def overhang():
             beach()
         else:
             overhang_choice = ci("You Can Rest Here. 'YES' / 'NO'", overhang, "YES", "NO")
-            if overhang_choice == "YES":
+            if overhang_choice == "option 1":
                 rest()
                 beach()
             else:
@@ -1920,10 +1925,29 @@ def field():
         rp("As You Go To Great The Man A Flaming Fire Ball Skims Past Your Face", 1)
         rp("This Isn't A Man, Its A Wizard And He Isnt Happy", 1, True)
         wizard_fight()
+    elif field_discovered2 == False:
+        rp("With The Wizard Gone The Field Feels More Relaxing", 1)
+        rp("Some Animals Have Started To Come Back", 1)
+        field_optionxtr = ci("You Can 'HUNT' or 'EXPLORE'", field, "HUNT", "EXPLORE")
+        if field_optionxtr == "option 1":
+            hunt(field)
+        elif field_optionxtr == "option 2": 
+            rp("As You Wander Through The Fresh Lucious Grass", 1)
+            rp("You Are Stopped By A Big Towering Mountain", 1)
+            rp("With A Dark Gaping Hole That Tunnels Down Deep", 1 )
+            rp("And A Contrast Of A Cheerful Village Nearby", 1, True)
+            field_discovered2 = True:
     else:
-        print("THIS AREA IS NOT AVAILABLE YET")
-        print("RETURNING TO BEACH")
-        beach()
+        rp("You Can Go To The 'VILLAGE', Climb The 'MOUNTAIN'")
+        field_option = ci("Explore The 'CAVE' Or 'HUNT' The Animals", field, "VILLAGE", "MOUNTAIN", "CAVE", "HUNT")
+        if field_option == "option 1":
+            village()
+        elif field_option == "option 2":
+            mountain()
+        elif field_option == "option 3":
+            cave()
+        elif field_option == "option 4":
+            hunt(field)
        
 def forest():
         print("THIS AREA IS NOT AVAILABLE YET")
@@ -2025,6 +2049,8 @@ def wizard_fight():
             t.sleep(1)
             if wiz_activate == "YES":
                 class_ = "wizard"
+                class_available.append("fighter")
+                weapon_available.append("none")
                 spell = "fireball"
                 print("Wizard Class Equipped With Fireball Spell")
             else:
@@ -2049,6 +2075,12 @@ def wizard_fight():
             t.sleep(1)
             print()
             beach()
+
+def hunt(previous_location):
+    keep_hunt = "YES"
+    while keep_hunt == "YES"
+    if previous_location == field:
+        r.choice("Cows", "Sheep", "Rabbits")
 
 def temp():
     global health
@@ -2164,6 +2196,7 @@ companion_available = []
 game_started = False
 beach_discovered = False
 field_discovered = False
+field_discovered2 = False
 forest_discovered = False
 overhang_discovered = False
 
