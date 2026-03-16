@@ -262,6 +262,36 @@ def quick_time_spam(time_allowed, prompt_key, press_key_number, keyword):
         print(f"You Hit '{prompt_key}' {key_pressed} Times")
         return False
 
+def waitandhit(time_allowed, prompt_key, keyword):
+    '''Creats A Basic Quick Time Event Where A Key Must Be Pressed After A Random Amount Of Time
+    Sets A Timer With A Random Amount Of Time Between 5 And 15 Seconds
+    Sets The Given Key To Be The Trigger Key.
+    If Trigger Key Is Set To 'random' A Random Letter Is Chosen
+    Prints A Basic Sentence With The Time Allowed, Prompt Key & Keyword Given
+    During The Short Amount Of Time It Checks If THe Key Has Been Pressed
+    Incorrectly Pressed Keys Do Not Effect The Event.
+    Once Correct Key Is Pressed True Is Returned.
+    If The Timer Runs Out Without The Key Being Pressed False Is Returned.
+
+    >>> waitandhit("random", "b", "Test The Feature")
+    Waits A Random Amount Of Time Then Prints "Press 'b' To Test The Feature"
+
+    If The Key Is Pressed In Time True Is Returned
+    Otherwise False Is Return
+    '''
+    if time_allowed == "random":
+        time_allowed = r.choice([5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+    if prompt_key == "random":
+        prompt_key = r.choice(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"])
+    print(f"Wait For It...")
+    t.sleep(time_allowed)
+    print(f"Press '{prompt_key}' To {keyword}")
+    start = t.time()
+    while t.time() - start <= 3:
+        if k.is_pressed(prompt_key):
+            return True
+    return False
+
 def fight_signal():
     global class_
     global weapon
@@ -830,7 +860,7 @@ def rp(print: str, wait: int = 0, nl: bool = False) -> None:
     if nl is True:
         print()
         
-def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str = "", option_3: string = "", option_4: str = "", option_5: str = "", option_6: str = "") -> str:
+def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str = "", option_3: str = "", option_4: str = "", option_5: str = "", option_6: str = "") -> str:
     ''' ci = Common Input
     Simplified Input Function That Can Be Used For Most Inputs
     Supports Up To 6 Options 
@@ -1936,7 +1966,7 @@ def field():
             rp("You Are Stopped By A Big Towering Mountain", 1)
             rp("With A Dark Gaping Hole That Tunnels Down Deep", 1 )
             rp("And A Contrast Of A Cheerful Village Nearby", 1, True)
-            field_discovered2 = True:
+            field_discovered2 = True
     else:
         rp("You Can Go To The 'VILLAGE', Climb The 'MOUNTAIN'")
         field_option = ci("Explore The 'CAVE' Or 'HUNT' The Animals", field, "VILLAGE", "MOUNTAIN", "CAVE", "HUNT")
@@ -1950,9 +1980,54 @@ def field():
             hunt(field)
        
 def forest():
-        print("THIS AREA IS NOT AVAILABLE YET")
-        print("RETURNING TO BEACH")
-        beach()
+    if forest_discovered == False:
+        rp("The Disctint Salty Smell Of The Beach Fades Away", 1)
+        rp("Into The Leafy Scent Of The Forest", 1)
+        rp("The Tall Trees And Their Bushy Leaves Block Out Much Of The Sunlight", 1)
+        rp("The Floor Is Covered In A Range Of Moss, Fungi, Leaves, And Animals")
+        rp("The Sticks Look Dry And Flammable", 1, True)
+        forest_discovered = True
+        forest()
+    else:   
+        forest_choice = ci("You Can 'GATHER' Resources Or Go To The 'RIVER', 'SWAMP' Or A Lonely 'HUT", forest, "GATHER", "RIVER", "SWAMP", "HUT")
+        if forest_choice == "option 1":
+            gather(forest)
+        elif forest_choice == "option 2":
+            river()
+        elif forest_choice == "option 3":   
+            swamp()
+        elif forest_choice == "option 4":
+            hut()
+
+def village():
+    print("THIS AREA IS NOT AVAILABLE YET")
+    print("RETURNING TO FIELD")
+    field()
+
+def mountain(): 
+    print("THIS AREA IS NOT AVAILABLE YET")
+    print("RETURNING TO FIELD")
+    field()
+
+def cave():
+    print("THIS AREA IS NOT AVAILABLE YET")
+    print("RETURNING TO FIELD")
+    field()
+
+def river():
+    print("THIS AREA IS NOT AVAILABLE YET")
+    print("RETURNING TO FOREST")
+    forest()
+
+def swamp():
+    print("THIS AREA IS NOT AVAILABLE YET")
+    print("RETURNING TO FOREST")
+    forest()
+
+def hut():
+    print("THIS AREA IS NOT AVAILABLE YET")
+    print("RETURNING TO FOREST")
+    forest()
 
 def ending_1():
       rp("After Standing Up And Thinking For A Bit", 1)
@@ -2029,21 +2104,14 @@ def wizard_fight():
                 health -= wiz_health_lost
                 rp(f"You Lost {wiz_health_lost} Damage. You Now Have {health} Health Left", 1, True)
         if wiz_health <= 0:
-            print("You Defeated The Wizard")
-            t.sleep(1)
-            print("Unexpectedly Before His Body Falls To The Ground")
-            t.sleep(1)
-            print("His Entire Body Fades Away Into Thin Air")
-            t.sleep(1)
-            print("Leaving Only A Book")
-            t.sleep(1)
-            print("The Book Contains Spells But Is Missing Many Pages")
-            t.sleep(1)
-            print("You Have Unlocked The Class Wizard")
-            t.sleep(1)
-            print("You Have Unlocked The Spell Fireball")
-            t.sleep(1)
-            print("Would Like To Equip It? 'YES' / 'NO'")
+            rp("You Defeated The Wizard", 1)
+            rp("Unexpectedly Before His Body Falls To The Ground", 1)
+            rp("His Entire Body Fades Away Into Thin Air", 1)
+            rp("Leaving Only A Book", 1)
+            rp("The Book Contains Spells But Is Missing Many Pages", 1)
+            rp("You Have Unlocked The Class Wizard", 1)
+            rp("You Have Unlocked The Spell Fireball", 1)
+            rp("Would Like To Equip It? 'YES' / 'NO'", 1)
             wiz_activate = str(input())
             print()
             t.sleep(1)
@@ -2052,35 +2120,80 @@ def wizard_fight():
                 class_available.append("fighter")
                 weapon_available.append("none")
                 spell = "fireball"
-                print("Wizard Class Equipped With Fireball Spell")
+                rp("Wizard Class Equipped With Fireball Spell", 1)
             else:
                 class_available.append("wizard")
                 spell_available.append("fireball")
-                print("Wizard Class And Fireball Spell Added To Available Classes And Spells")
+                rp("Wizard Class And Fireball Spell Added To Available Classes And Spells", 1)
             t.sleep(1)
             print()
             field_discovered = True
             field()
         if health <= 0:
-            print("You Have Been Defeated By The Wizard")
-            t.sleep(1)
-            print("Returning To Start")
-            t.sleep(1)
+            rp("You Have Been Defeated By The Wizard", 1)
+            rp("Returning To Start", 1)
             health = 30
             energy = 30
             armour_base = "none"
             armour_plate = "none"
             armour_lining = "none"
-            print("You Have Reset Your Health, Energy, Inventory And Armour")
-            t.sleep(1)
-            print()
+            rp("You Have Reset Your Health, Energy, Inventory And Armour", 1, True)
             beach()
 
 def hunt(previous_location):
     keep_hunt = "YES"
-    while keep_hunt == "YES"
-    if previous_location == field:
-        r.choice("Cows", "Sheep", "Rabbits")
+    rp("You Are Hunting", 1)
+    while keep_hunt == "YES":
+        if previous_location == field:
+            animal = r.choice("Cow", "Sheep", "Rabbit")
+        if animal == "Cow":
+            animal_health = 5
+        elif animal == "Sheep":
+            animal_health = 4
+        elif animal == "Rabbit":
+            animal_health = 2
+        rp(f"You Encounter A {animal}. It Has {animal_health} Health", 1)
+        while animal_health > 0:
+            attack = waitandhit("random", "random", f"Attack The {animal}")
+            if attack == True:
+                animal_health -= damage
+                if animal_health <= 0:
+                    animal_health = 0
+                rp(f"You Did {damage} Damage. The {animal} Now Has {animal_health} Health Left", 1)
+            else:
+                rp(f"You Missed Your Attack On The {animal}", 1)
+        rp(f"You Defeated The {animal}", 1)
+        if animal == "Cow":
+            if "burning" in damage_affects:
+                rp(f"Your Weapon Cooked The {animal}", 1)
+                inventory.append("cooked_beef")
+                rp("Cooked Beef Added To Inventory", 1)
+            else:
+                inventory.append("raw_beef")
+                rp("Raw Beef Added To Inventory", 1)
+            inventory.append("leather")
+            rp("Leather Added To Inventory", 1, True)
+        elif animal == "Sheep":
+            if "burning" in damage_affects:
+                rp(f"Your Weapon Cooked The {animal}", 1)
+                inventory.append("cooked_mutton")
+                rp("Cooked Mutton Added To Inventory", 1)
+            else:
+                inventory.append("raw_mutton")
+                rp("Raw Mutton Added To Inventory", 1)
+            inventory.append("wool")
+            rp("Wool Added To Inventory", 1, True)
+        elif animal == "Rabbit":
+            rp(f"There Wasn't Enough Meat On The {animal}", 1)
+            inventory.append("rabbit_hide")
+            rp("Rabbit Hide Added To Inventory", 1, True)
+        keep_hunt = ci("Do You Want To Keep Hunting? 'YES' / 'NO'", hunt, "YES", "NO")
+    previous_location()
+
+def gather(previous_location):  
+    print("THIS AREA IS NOT AVAILABLE YET") 
+    print("RETURNING TO FOREST")
+    previous_location()
 
 def temp():
     global health
