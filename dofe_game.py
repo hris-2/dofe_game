@@ -257,10 +257,39 @@ def quick_time_spam(time_allowed, prompt_key, press_key_number, keyword):
             holding = False
     if key_pressed >= press_key_number:
         print(f"You Hit '{prompt_key}' {key_pressed} Times")
+        print()
+        t.sleep(1)
         return True
     else:
         print(f"You Hit '{prompt_key}' {key_pressed} Times")
+        print()
+        t.sleep(1)
         return False
+
+def countspam(time_allowed, prompt_key, keyword):
+    global event_speed
+    '''Similar To quick_time_spam()
+    Except For Baseline For Amount Of Times To Spam Key
+    And Returns Amount Of Times Key Was Pressed'''
+    time_allowed *= event_speed
+    if prompt_key == "random":
+        prompt_key = r.choice(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "o", "m", "n", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y" "z"])
+    print(f"You Have {time_allowed} Seconds To Spam {prompt_key} To {keyword}")
+    t.sleep(0.5)
+    key_pressed = 0
+    holding = False
+    start_time = t.time()
+    while t.time() - start_time <= time_allowed:
+        if k.is_pressed(prompt_key):
+            if not holding:
+                key_pressed += 1
+                holding = True
+        else:
+            holding = False
+    print(f"You Hit '{prompt_key}' {key_pressed} Times")
+    print()
+    t.time(1)
+    return key_pressed
 
 def waitandhit(time_allowed, prompt_key, keyword):
     '''Creats A Basic Quick Time Event Where A Key Must Be Pressed After A Random Amount Of Time
@@ -2225,24 +2254,44 @@ def gather(previous_location):
     keep_gather = "option 1"
     rp("You Are Gathering Resources", 1)
     if previous_location == forest:
-        resources = ["stick", "leaf", "mushroom"]
+        resources = ["stick", "leaf", "mushroom", "honey"]
     gather_choice = cfl(resources, f"You Can Gather {resources}", forest)
     while keep_gather == "option 1":
         if gather_choice == "stick":
             correct_option = r.choice["option 1", "option 2"]
             if correct_option == "option 1":
-                stick_pickup = quick_time_choice(3, "random", "random", "Step On The Stick", "Pick Up The Stick")
+                stick_pickup = quick_time_choice(3, "random", "random", "Pick Up The Stick", "Step On The Stick")
                 if stick_pickup == "option 1":
                     inventory.append("stick")
-                    rp("You Picked Up A Stick. It Has Been Added To YOur Inventory", 1, True)
+                    rp("You Picked Up A Stick. It Has Been Added To Your Inventory", 1)
+                    if inventory.count("stick") == 1:
+                        rp(f"You Now Have 1 Stick In Your Inventory", 1, True)
+                    else:
+                        rp(f"You Have {inventory.count("stick")} In Your Inventory")
                 elif stick_pickup == "option 2":
                     rp("You Crushed The Stick", 1, True)
                 else:
                     rp("You Missed The Stick Before A Bird Took It", 1, True)
-
-    
-
-
+            elif correct_option == "option 2":
+                stick_pickup = quick_time_choice(3, "random", "random", "Step On The Stick", "Pick Up The Stick")
+                if stick_pickup == "option 1":
+                    rp("You Crushed The Stick", 1, True)
+                elif stick_pickup == "option 2":
+                    inventory.append("stick")
+                    rp("You Picked Up A Stick. It Has Been Added To You Inventory", 1)
+                    if inventory.count("stick") == 1:
+                        rp("You Now Have 1 Stick In Your Inventory", 1, True)
+                    else:
+                        rp(f"You Have {inventory.count("stick")} Sticks", 1, True)
+        elif gather_choice == "honey":
+            honey_pickup = countspam(r.choices([5, 6, 7, 8, 9, 10]), "random", "Grab Honey Before The Bees Push You Out")
+            for amount in range(0, honey_pickup):
+                inventory.append("honeycomb")
+            rp(f"You Gathered {honey_pickup} Honeycombs Before You Were Pushed Out", 1)
+            rp(f"You Now Have {inventory.count("honeycomb")} In Your Inventory", 1, True)
+        elif gather_choice == "mushrooms":
+            print()
+                    
 def temp():
     global health
     global energy
