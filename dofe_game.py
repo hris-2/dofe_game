@@ -887,22 +887,28 @@ def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str =
     else:
         return "back"
         
-def cfl(list_to_choose_from: list, prompt: str = "", this_location = "") -> str:
+def cfl(list_to_choose_from: list = ["empty"], prompt: str = "", this_location = "") -> str:
     ''' cfl = Choose From List
     Simplified Input Function That Can Be Used For Choosing From A List
     Takes A List And Prints It With A Prompt
     User Must Type The Option How It Is Shown In The List To Select It
     '''
-    rp(prompt, 1)
-    cfl_choice = str(input())
-    print()
-    t.sleep(1)
-    if cfl_choice in list_to_choose_from:
-        return cfl_choice
-    elif cfl_choice == "MENU":
-        menu_home(this_location)
-    else:
-        return "back"
+    cfl_choice = "SOMETHING RANDOMLY IMPOSSIBLE FOR TO ACTUALLY BE IN THE GAME"
+    while cfl_choice not in list_to_choose_from:
+        rp(prompt, 1)
+        rp("You Must Type It As Seen Above", 1)
+        cfl_choice = str(input())
+        cfl_choice = cfl_choice.lower()
+        print()
+        t.sleep(1)
+        if cfl_choice in list_to_choose_from:
+            return cfl_choice
+        elif cfl_choice == "menu":
+            menu_home(this_location)
+        elif cfl_choice == "back":
+            return "back"
+        else:
+            rp("Try Again", 1)
 
 def menu_home(previous_location_function):
     infinte_time = 100
@@ -1995,6 +2001,8 @@ def field():
             cave()
         elif field_option == "option 4":
             hunt(field)
+        elif field_option == "back":
+            beach()
        
 def forest():
     if forest_discovered == False:
@@ -2015,6 +2023,8 @@ def forest():
             swamp()
         elif forest_choice == "option 4":
             hut()
+        elif forest_choice == "back":
+            beach()
 
 def village():
     print("THIS AREA IS NOT AVAILABLE YET")
@@ -2079,7 +2089,8 @@ def ending_2():
         rp("Parrot Equipped", 1, True)
     else:
         companion_available.append("parrot")
-        rp("Parrot Added To Available Companions", 1)
+        rp("Parrot Added To Available Companions", True)
+    beach()
 
 def wizard_fight():
     fight_signal()
@@ -2213,15 +2224,21 @@ def gather(previous_location):
     previous_location()
     keep_gather = "option 1"
     rp("You Are Gathering Resources", 1)
+    if previous_location == forest:
+        resources = ["stick", "leaf", "mushroom"]
+    gather_choice = cfl(resources, f"You Can Gather {resources}", forest)
     while keep_gather == "option 1":
-        if previous_location == forest:
-            resources = ["STICK", "LEAF", "MUSHROOM"]
-        rp(f"You Can Gather A {resources[0]}, {resources[1]} Or {resources[2]}", 1)
-        rp(f"Type It As It Is Seen Above", 1)
-        gather_choice = str(input())
-        print()
-        t.sleep(1)
-        if gather_choice in 
+        if gather_choice == "stick":
+            correct_option = r.choice["option 1", "option 2"]
+            if correct_option == "option 1":
+                stick_pickup = quick_time_choice(3, "random", "random", "Step On The Stick", "Pick Up The Stick")
+                if stick_pickup == "option 1":
+                    inventory.append("stick")
+                    rp("You Picked Up A Stick. It Has Been Added To YOur Inventory", 1, True)
+                elif stick_pickup == "option 2":
+                    rp("You Crushed The Stick", 1, True)
+                else:
+                    rp("You Missed The Stick Before A Bird Took It", 1, True)
 
     
 
