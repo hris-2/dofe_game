@@ -887,6 +887,23 @@ def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str =
     else:
         return "back"
         
+def cfl(list_to_choose_from: list, prompt: str = "", this_location = "") -> str:
+    ''' cfl = Choose From List
+    Simplified Input Function That Can Be Used For Choosing From A List
+    Takes A List And Prints It With A Prompt
+    User Must Type The Option How It Is Shown In The List To Select It
+    '''
+    rp(prompt, 1)
+    cfl_choice = str(input())
+    print()
+    t.sleep(1)
+    if cfl_choice in list_to_choose_from:
+        return cfl_choice
+    elif cfl_choice == "MENU":
+        menu_home(this_location)
+    else:
+        return "back"
+
 def menu_home(previous_location_function):
     infinte_time = 100
     rp("Menu:", 0.5)
@@ -2141,9 +2158,9 @@ def wizard_fight():
             beach()
 
 def hunt(previous_location):
-    keep_hunt = "YES"
+    keep_hunt = "option 1"
     rp("You Are Hunting", 1)
-    while keep_hunt == "YES":
+    while keep_hunt == "option 1":
         if previous_location == field:
             animal = r.choice("Cow", "Sheep", "Rabbit")
         if animal == "Cow":
@@ -2194,6 +2211,20 @@ def gather(previous_location):
     print("THIS AREA IS NOT AVAILABLE YET") 
     print("RETURNING TO FOREST")
     previous_location()
+    keep_gather = "option 1"
+    rp("You Are Gathering Resources", 1)
+    while keep_gather == "option 1":
+        if previous_location == forest:
+            resources = ["STICK", "LEAF", "MUSHROOM"]
+        rp(f"You Can Gather A {resources[0]}, {resources[1]} Or {resources[2]}", 1)
+        rp(f"Type It As It Is Seen Above", 1)
+        gather_choice = str(input())
+        print()
+        t.sleep(1)
+        if gather_choice in 
+
+    
+
 
 def temp():
     global health
