@@ -2344,7 +2344,20 @@ def gather(previous_location):
             rp(f"{safe_mushrooms_picked} Of Which Were Safe", 1)
             rp(f"And {poisionous_muchrooms_picked} Were Posisionous", 1)
             rp(f"You Failed To Pick Up {mushrooms_failed} Mushrooms", 1, True)
-
+        elif gather_choice == "leaf":
+            leaf_count = 0
+            amount = int(input("How Many Handfuls Of Leaves Do You Want To Grab: "))
+            for count in range(1, amount + 1):
+                jump = quick_time_event(2, "random", "Jump")
+                if jump == True:
+                    grab = quick_time_event(2, "random", "Grab The Leaves")
+                    if grab == True:
+                        added = r.choice([3, 4, 5, 6, 7, 8])
+                        leaf_count += added
+            for count in range(1, leaf_count + 1):
+                inventory.append("leaf")
+            rp(f"{leaf_count} Leaves Added To Your Inventory")
+        keep_gather = ci("Do You Want Keep Hunting. 'YES'/'", gather, "YES", "NO")
 
                     
 def temp():
