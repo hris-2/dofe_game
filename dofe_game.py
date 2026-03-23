@@ -2289,8 +2289,63 @@ def gather(previous_location):
                 inventory.append("honeycomb")
             rp(f"You Gathered {honey_pickup} Honeycombs Before You Were Pushed Out", 1)
             rp(f"You Now Have {inventory.count("honeycomb")} In Your Inventory", 1, True)
-        elif gather_choice == "mushrooms":
-            print()
+        elif gather_choice == "mushroom":
+            rp("You Are Hunting For Mushrooms")
+            mushroom_count = int(input("How Many Mushrooms Would You Like To Gather: "))
+            rp("Key:", 0.5)
+            rp("Spotty: Poisonous If Paired With Another Poisonous Trait", 1)
+            rp("Streaky: Completely Safe To Eat", 1)
+            rp("Tiger Patturn: Completely Posionous", 1)
+            rp("No Patturns: No Correlation To Posion", 1)
+            rp("Red: Poisonous If Paired With Another Poisonous Trait", 1)
+            rp("Brown: Safe Unless Paried With A Completly Posionous Trait", 1)
+            rp("White: No Correlation", 1)
+            mushrooms = ["Spotty Red", "Spotty Brown", "Spotty White", "Streaky Red", "Streaky Brown", "Streaky White", "Tiger Stripes Red"]
+            poisionous = ["Spotty Red", "Tiger Stripes Red", "Tiger Stripes Brown", "Tiger Stripes White",]
+            safe = ["Spotty Brown", "Spotty White", "Streaky Red", "Streaky Brown", "Streaky White", "Patturnless Red", "Patturnless Brown", "Patturnless White"]
+            total_mushrooms_picked = 0
+            safe_mushrooms_picked = 0
+            poisionous_muchrooms_picked = 0
+            mushrooms_failed = 0
+            for count in range(1, mushroom_count + 1):
+                correct_option = r.choice(["option 1", "option 2"])
+                if correct_option == "option 1":
+                    option_1 = r.choice(safe)
+                    option_2 = r.choice(poisionous)
+                elif correct_option == "option 2":
+                    option_1 = r.choice(poisionous)
+                    option_2 = r.choice(safe)
+                forage = quick_time_choice(5, "random", "random", f"Forage A {option_1}", f"Forage A {option_2}")
+                if forage == "Option 1":
+                    total_mushrooms_picked += 1
+                    if option_1 in safe:
+                        safe_mushrooms_picked += 1
+                        inventory.append("safe_mushroom")
+                        rp("You Picked A Safe Mushroom", 1)
+                    elif option_1 in poisionous:
+                        poisionous_muchrooms_picked += 1
+                        inventory.append("poisionous_mushrooms")
+                        rp("You Picked A Poisionous Mushroom", 1)
+                elif forage == "Option 2":
+                    total_mushrooms_picked += 1
+                    if option_2 in safe:
+                        safe_mushrooms_picked += 1
+                        inventory.append("safe_mushroom")
+                        rp("You A Picked A Safe Mushroom", 1)
+                    elif option_2 in poisionous:
+                        poisionous_muchrooms_picked += 1
+                        inventory.append("posisonous_muchroom")
+                        rp("You Picked A Posionous Mushroom", 1)
+                elif forage == False:
+                    mushrooms_failed += 1
+                    rp("You Failed To Choose A Mushroom", 1)
+                print()
+            rp(f"You Picked {total_mushrooms_picked} Mushrooms", 1)
+            rp(f"{safe_mushrooms_picked} Of Which Were Safe", 1)
+            rp(f"And {poisionous_muchrooms_picked} Were Posisionous", 1)
+            rp(f"You Failed To Pick Up {mushrooms_failed} Mushrooms", 1, True)
+
+
                     
 def temp():
     global health
