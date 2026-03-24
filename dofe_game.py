@@ -2042,6 +2042,23 @@ def forest():
         rp("The Sticks Look Dry And Flammable", 1, True)
         forest_discovered = True
         forest()
+    elif "villager's_axe" in inventory and inventory.count("villager's_log") < 30:
+        rp("You Are Here To Gather Logs For The Villagers")
+        chop(forest, 'villager job')
+    elif "villager's_axe" in inventory or "axe" in inventory:
+        forest_choice = ci("You Can 'GATHER' Resources, 'CHOP' Logs Or Go To The 'RIVER', 'SWAMP' Or  A Loneley 'HUT'", forest, "GATHER", "CHOP", "RIVER", "SWAMP", "HUT")
+        if forest_choice == "option 1":
+            gather(forest)
+        elif forest_choice == "option 2":
+            chop(forest, 'normal')
+        elif forest_choice == "option 3":
+            river()
+        elif forest_choice == "option 4":
+            swamp()
+        elif forest_choice == "option 5":
+            hut()
+        elif forest_choice == "back":
+            beach()
     else:   
         forest_choice = ci("You Can 'GATHER' Resources Or Go To The 'RIVER', 'SWAMP' Or A Lonely 'HUT", forest, "GATHER", "RIVER", "SWAMP", "HUT")
         if forest_choice == "option 1":
@@ -2059,6 +2076,27 @@ def village():
     print("THIS AREA IS NOT AVAILABLE YET")
     print("RETURNING TO FIELD")
     field()
+    if village_discovered == False:
+        rp("As You Walk Into The First Civilisation", 1)
+        rp("You Have Seen Since You Landed Here", 1)
+        rp("The Bustling Town Awaken A Long Forgetton Feeling", 1)
+        rp("Of Belonging But Also Hard Labour", 1)
+        rp("However You Don't Have Long Before You Are Noticed", 1)
+        rp("They Don't Trust You But Are Willing To With Proof", 1)
+        rp("Take This Axe And Collect 30 Logs From The Forest", 1)
+        rp("And Then Come Back And Delieve Them To Earn Their Trust", 1)
+        if "villager's_axe" not in inventory:
+            inventory.append("villager's_axe")
+            rp("Villager's Axe Added To Inventory", 1, True)
+        else:
+            print()
+        village_discovered = True
+        field()
+    elif village_first_job == False:
+        if inventory.count("villager's_log") < 30:
+            rp("You Don't Have Enough Logs Yet", 1, True)
+            field()
+
 
 def mountain(): 
     print("THIS AREA IS NOT AVAILABLE YET")
@@ -2359,7 +2397,38 @@ def gather(previous_location):
             rp(f"{leaf_count} Leaves Added To Your Inventory")
         keep_gather = ci("Do You Want Keep Hunting. 'YES'/'", gather, "YES", "NO")
 
-                    
+def chop(previous_location, mode):
+    if mode == "villager job":
+        amount_to_chop = 30 - inventory.count("villager's_logs")
+        rp("You Are Chopping Logs For The Villagers", 1)
+    elif mode == "normal":
+        amount_to_chop = int(input("How Many Logs Do You Want To Chop: "))
+        rp("You Are Chopping Logs For Yourself")
+    rp("You Must Spam The Correct Key At Least 30 Time", 1)
+    rp("And Hit Another Key At The Perfect Time", 1)
+    rp("To Cut The Log", 1, True)
+    for count in range(1, amount_to_chop + 1):
+        strength = countspam(7, "random", "Charge The Swing Of The Axe")
+        rp("Wait", r.choice([3, 4, 5, 6, 7, 8]))
+        chop = quick_time_event(1, "random", "Chop Now")
+        if strength >= 30 and chop == True:
+            rp("You Successfully Chopped Through The Log", 1)
+            if mode == "villager job":
+                inventory.append("villager's_log")
+                rp("1 Villager's Log Added To Inventory", 1, True)
+            elif mode == "normal":
+                inventory.append("log")
+                rp("1 Log Added To Inventory", 1, True)
+        elif strength < 30 and chop == True:
+            rp("You Hit The Log But It Didn't Cut Through", 1, True)
+        elif strength >= 30 and chop == False:
+            rp("You Swing Was Strong But You Missed The Log", 1, True)
+        elif strength < 30 and chop == False:
+            rp("You Swing Was Bad And You Missed The Log", 1)
+            health -= 1
+            rp("Your Bad Technique Cost You 1 Health", 1, True)
+    previous_location()
+
 def temp():
     global health
     global energy
@@ -2477,6 +2546,8 @@ field_discovered = False
 field_discovered2 = False
 forest_discovered = False
 overhang_discovered = False
+village_discovered = False
+village_first_job = False
 
 last_checkpoint = "none"
 
