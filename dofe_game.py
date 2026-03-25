@@ -494,7 +494,7 @@ def refresh_class():
     Then Checks For Current Value Of 'weapon', 'spell', 'arrow', Or 'skill'
     Adjusts Stats Accordingly
     '''
-    damage_affects.pop(damage_affects)
+    damage_affects.clear()
     piercing = 1
     splash_damage = 0
     splash_range = 0
@@ -608,7 +608,7 @@ def refresh_armour_base():
     '''Checks For Current Value Of 'armour_base'
     Adjusts Stats Accordingly
     '''
-    armour_affects.pop(armour_affects)
+    armour_affects.clear()
     if armour_base == "none":
         damage_resistence = 1
         event_speed = 1
@@ -670,7 +670,7 @@ def refresh_armour_plating():
         energy_efficenty = 2
         damage_resistence = 4
         if "shining_glamour" in armour_affects:
-            armour_affects.pop("shining_glamour")
+            armour_affects.remove("shining_glamour")
             armour_affects.append("shining_strength")
         else:
             armour_affects.append("shining_glamour")
@@ -684,19 +684,19 @@ def refresh_armour_lining():
         ...
     elif armour_lining == "ice_thread":
         if "freezing_aura" in armour_affects:
-            armour_affects.pop("freezing_aura")
+            armour_affects.remove("freezing_aura")
             armour_affects.append("freezing_gaze")
         else:
             armour_affects.append("freezing_aura")
     elif armour_lining == "fire_thread":
         if "burning_aura" in armour_affects:
-             armour_affects.pop("burning_aura")
+             armour_affects.remove("burning_aura")
              armour_affects.append("burning_roar")
         else:
             armour_affects.append("burning_aura")
     elif armour_lining == "conductive_thread":
         if "shocking_aura" in armour_affects:
-            armour_affects.pop("shocking_aura")
+            armour_affects.remove("shocking_aura")
             armour_affects.append("shocking_step")
         else:
             armour_affects.append("shocking_aura")
@@ -986,7 +986,7 @@ def menu_armour(previous_location_function):
         if select_armour_base in armour_base_available:
             armour_base_available.append(armour_base)
             armour_base = select_armour_base
-            armour_base_available.pop(select_armour_base)
+            armour_base_available.remove(select_armour_base)
             rp(f"{select_armour_base} Has Been Applied", 1, True)
             menu_armour(previous_location_function)
         else:
@@ -1000,7 +1000,7 @@ def menu_armour(previous_location_function):
         if select_armour_plate in armour_plate_available:
             armour_plate_available.append(armour_plate)
             armour_plate = select_armour_plate
-            armour_plate_available.pop(select_armour_plate)
+            armour_plate_available.remove(select_armour_plate)
             rp(f"{select_armour_plate} Has Been Applied", 1, True)
             menu_armour(previous_location_function)
         else:
@@ -1014,7 +1014,7 @@ def menu_armour(previous_location_function):
         if select_armour_lining in armour_lining_available:
             armour_lining_available.append(armour_lining)
             armour_lining = select_armour_lining
-            armour_lining_available.pop(select_armour_lining)
+            armour_lining_available.remove(select_armour_lining)
             rp(f"{select_armour_lining} Has Been Applied", 1, True)
             menu_armour(previous_location_function)
         else:
@@ -1110,7 +1110,7 @@ def menu_class_change(previous_location_function):
         if change_class in class_available:
             class_available.append(class_)
             class_ = change_class
-            class_available.pop(change_class)
+            class_available.remove(change_class)
             rp(f"You Are Now A {class_}", 1)
             rp("Going Back", 1, True)
             menu_class(previous_location_function)
@@ -1136,7 +1136,7 @@ def menu_class_weapon_change(previous_location_function):
             if change_skill in spell_available:
                 spell_available.append(class_)
                 spell = change_skill
-                spell_available.pop(change_skill)
+                spell_available.remove(change_skill)
                 rp(f"You Are Now Use {spell}", 1)
                 rp("Going Back", 1, True)
                 menu_class(previous_location_function)
@@ -1159,7 +1159,7 @@ def menu_class_weapon_change(previous_location_function):
             if change_skill in weapon_available:
                 weapon_available.append(class_)
                 weapon = change_skill
-                weapon_available.pop(change_skill)
+                weapon_available.remove(change_skill)
                 rp(f"You Are Now Use {weapon}", 1)
                 rp("Going Back", 1, True)
                 menu_class(previous_location_function)
@@ -1181,7 +1181,7 @@ def menu_class_weapon_change(previous_location_function):
             if change_skill in arrow_available:
                 arrow_available.append(class_)
                 arrow = change_skill
-                arrow_available.pop(change_skill)
+                arrow_available.remove(change_skill)
                 rp(f"You Are Now Use {arrow}", 1)
                 rp("Going Back", 1, True)
                 menu_class(previous_location_function)
@@ -1203,7 +1203,7 @@ def menu_class_weapon_change(previous_location_function):
             if change_skill in skill_available:
                 skill_available.append(class_)
                 skill = change_skill
-                skill_available.pop(change_skill)
+                skill_available.remove(change_skill)
                 rp(f"You Are Now Use {skill}", 1)
                 rp("Going Back", 1, True)
                 menu_class(previous_location_function)
@@ -2042,6 +2042,9 @@ def forest():
         rp("The Sticks Look Dry And Flammable", 1, True)
         forest_discovered = True
         forest()
+    elif village_discovered == True and forest_monster_killed == False:
+        rp("You Should Have Take The Villager's Warning", 1)
+        fight_signal()
     elif "villager's_axe" in inventory and inventory.count("villager's_log") < 30:
         rp("You Are Here To Gather Logs For The Villagers")
         chop(forest, 'villager job')
@@ -2096,6 +2099,16 @@ def village():
         if inventory.count("villager's_log") < 30:
             rp("You Don't Have Enough Logs Yet", 1, True)
             field()
+        elif inventory.count("villager's_log") >= 30:
+            log_taken = inventory.count("villager's_log")
+            for count in range(1, log_taken + 1):
+                inventory.remove("villager's_log")
+            rp("The Villagers Are Thankful For Your Help", 1)
+            rp("They Can Now Stay Warm And Away From The Monster In The Woods", 1)
+            rp("You Didn't See Any Monster?", 1)
+            rp("Villager Discoverde. Come Back Her For Trading and Working", 1, True)
+            village_discovered = True
+            village()
 
 
 def mountain(): 
@@ -2548,6 +2561,7 @@ forest_discovered = False
 overhang_discovered = False
 village_discovered = False
 village_first_job = False
+forest_monster_killed = False
 
 last_checkpoint = "none"
 
