@@ -327,7 +327,7 @@ def fight_signal():
     '''Prints A Statement To Signal A Fight
     Takes Class and Weapon And Changes It Accordingly'''
     if class_ == "fighter" and not weapon == "none":
-        rp("You Raise You Weapon A Fight", 1,)
+        rp("You Raise You Weapon A Fight", 1)
     elif ( class_ == "fighter" and weapon == "none" ) or class_ == "brawler":
         rp("You Clench You Fists For A Fight", 1)
     elif class_ == "wizard":
@@ -336,6 +336,7 @@ def fight_signal():
         rp("You Load An Arrow Into Your Bow", 1)
     else:
         rp("You Prepare For A Fight", 1)
+    print()
 
 def weather_change():
     global last_weather_effect_done, neg2_weather, last_weather, this_weather, next_weather
@@ -2043,8 +2044,8 @@ def forest():
         forest_discovered = True
         forest()
     elif village_discovered == True and forest_monster_killed == False:
-        rp("You Should Have Take The Villager's Warning", 1)
-        fight_signal()
+        rp("You Should Have Take Then Villager's Warning", 1)
+        werewolf_fight()
     elif "villager's_axe" in inventory and inventory.count("villager's_log") < 30:
         rp("You Are Here To Gather Logs For The Villagers")
         chop(forest, 'villager job')
@@ -2174,8 +2175,8 @@ def ending_2():
 
 def wizard_fight():
     fight_signal()
-    wiz_ran = r.choice["attack", "defend"]
     while wiz_health > 0 and health > 0:
+        wiz_ran = r.choice["attack", "defend"]
         if wiz_ran == "attack":
             wiz_crit = r.choices(
                 [True, False],
@@ -2247,6 +2248,39 @@ def wizard_fight():
             armour_lining = "none"
             rp("You Have Reset Your Health, Energy, Inventory And Armour", 1, True)
             beach()
+
+def werewolf_fight():
+    rp("As A Full Moons Reveals Itself Through The Thick Branches", 1)
+    rp("You Hear A Loud Howling Coming Towards You", 1)
+    fight_signal()
+    werewolf_health = 20
+    werewolf_effects = []
+    prev_attack = False
+    while werewolf_health > 0 and health > 0:
+        ww_aod = r.choice(["attack", "defend"])
+        if ww_aod == "defend":
+            ww_attack = r.choice(["charge", "bite", "summon"])
+            if ww_attack == "charge":
+                dodge = quick_time_event(3, "random", "Roll Away From The Charge Path")
+                if dodge == True:
+                    counter = r.choice([True, False, False])
+                    if counter == True:
+                        counter = quick_time_event(4, "random", "Hit A Counter Attack")
+                        if counter == True:
+                            werewolf_health -= damage
+                            werewolf_effects.extend(damage_affects)
+                            prev_attack = False
+                            rp("You Dodged The Werewolf's Charge", 1)
+                            rp("And Landed A Counter Hit", 1)
+                            rp(f"The Werewold Lost {damage} Health. It Now Has {werewolf_health} Health", 1)
+                            if len(werewolf_effects) > 0:
+                                rp(f"You Applied {damage_affects} To The Werewolf")
+                        elif counter == False:
+                            rp("You Dodged The Werewolf Charge", 1)
+                    
+
+
+        
 
 def hunt(previous_location):
     keep_hunt = "option 1"
