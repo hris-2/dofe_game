@@ -719,7 +719,10 @@ def refresh_companion():
     if companion == "parrot":
         damage *= 2
     elif companion == "rock_dweller":
-        damage_resistence += 3
+        damage_resistence += 2
+    elif companion == "wolf":
+        damage += 2
+        damage_resistence += 0.5
 
 def weather_effect_refresh():
     global last_weather_effect_refesh, this_weather, health, warmth
@@ -813,7 +816,7 @@ def weather_effect_refresh():
             t.sleep(1)
             print()
 
-def refresh_all():
+def refresh_all(ignore_death):
     global health, energy, armour_base, armour_plate, armour_lining
     global last_weather_change_refesh, weather_change_addtitional_time
     '''Refreshes All Stats And Values That Need Refreshing
@@ -829,26 +832,27 @@ def refresh_all():
         energy = 30
     if energy < 0:
         energy = 0
-    if health <= 0:
-        t.sleep(1)
-        print()
-        print("You Died")
-        t.sleep(1)
-        print("Health Reset To 30")
-        t.sleep(1)
-        health = 30
-        print("Energy Reset To 30")
-        t.sleep(1)
-        energy = 30
-        print("Armour Base, Plating And Lining Reset To None")
-        armour_base = "none"
-        armour_plate = "none"
-        armour_lining = "none"
-        t.sleep(1)
-        print("Returning To Last Checkpoint")
-        t.sleep(1)
-        print()
-        last_checkpoint()
+    if ignore_death == False:
+        if health <= 0:
+            t.sleep(1)
+            print()
+            print("You Died")
+            t.sleep(1)
+            print("Health Reset To 30")
+            t.sleep(1)
+            health = 30
+            print("Energy Reset To 30")
+            t.sleep(1)
+            energy = 30
+            print("Armour Base, Plating And Lining Reset To None")
+            armour_base = "none"
+            armour_plate = "none"
+            armour_lining = "none"
+            t.sleep(1)
+            print("Returning To Last Checkpoint")
+            t.sleep(1)
+            print()
+            last_checkpoint()
     if energy <= 0:
         if energy_timer + 60 < t.time():
             energy += 1
@@ -878,12 +882,12 @@ def refresh_all():
     weather_effect_refresh()
     save_data()
 
-def rp(print: str, wait: int = 0, nl: bool = False) -> None:
+def rp(print: str, wait: int = 0, nl: bool = False, ignore_death: bool = False,) -> None:
     ''' rp = Refresh Print
     Refreshs Everything While Printing
     Optional Wait And Newline Featute
     '''
-    refresh_all()
+    refresh_all(ignore_death)
     print(print)
     if wait is not 0:
         t.sleep(wait)
@@ -895,7 +899,7 @@ def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str =
     Simplified Input Function That Can Be Used For Most Inputs
     Supports Up To 6 Options 
     '''
-    rp(prompt)
+    print(prompt)
     ci_choice = str(input())
     print()
     t.sleep(1)
@@ -1716,6 +1720,7 @@ def menu_tutorial_part_2():
         
 def beach():
     global beach_discovered, energy, game_started
+    last_checkpoint = beach
     if beach_discovered == False:
         rp("You Wake Up Confused Lying On The Floor", 1)
         rp("Sand Grains Irritate Your Skin And Seep Into Your Clothes", 1)
@@ -2000,6 +2005,7 @@ def overhang():
                 beach()
            
 def field():
+    last_checkpoint = field
     if field_discovered == False:
         rp("You Step Of The Irritating Sand And Onto The Lucious Grass", 1)
         rp("You Hear The Mooing Of Cows In The Background", 1)
@@ -2035,6 +2041,7 @@ def field():
             beach()
        
 def forest():
+    last_checkpoint = forest
     if forest_discovered == False:
         rp("The Disctint Salty Smell Of The Beach Fades Away", 1)
         rp("Into The Leafy Scent Of The Forest", 1)
@@ -2077,9 +2084,7 @@ def forest():
             beach()
 
 def village():
-    print("THIS AREA IS NOT AVAILABLE YET")
-    print("RETURNING TO FIELD")
-    field()
+    last_checkpoint = village
     if village_discovered == False:
         rp("As You Walk Into The First Civilisation", 1)
         rp("You Have Seen Since You Landed Here", 1)
@@ -2143,35 +2148,59 @@ def ending_1():
       rp("So You Lie Back Down And Fall Back To Sleep", 1)
       rp("Allowing Nature To Take Your Body", 1)
       rp("Ending 1 Unlocked!", 1)
-      rp("You Unlocked The Sleepy Armour Lining", 1)
-      rp("It Doubles Your Health & Energy Regenration ", 1)
+      rp("You Unlocked The Ice Thread Armour Lining", 1)
+      rp("It Slows Enemies Around You", 1)
       ending_1_choice = ci("Would You Like To Equip It? 'YES' / 'NO'", ending_1, "YES", "NO")
       if ending_1_choice == "option_1":
-          armour_lining = "sleepy"
-          rp("Sleepy Armour Lining Equipped", 1, True)
+          if armour_lining != "none":
+              armour_lining_available.append(companion)
+          armour_lining = "ice_thread"
+          rp("Ice Thread Armour Lining Equipped", 1, True)
       else:
-          armour_lining_available.append("sleepy")
-          rp("Sleepy Armour Lining Added To Available Armour Linings", 1, True)   
+          armour_lining_available.append("ice_thread")
+          rp("Ice Thread Armour Lining Added To Available Armour Linings", 1, True)   
       beach()
 
 def ending_2():
-    rp("With All Your Planks Your Start Building A Ship", 1)
-    rp("It's How This Journy Started, On The Seas", 1)
-    rp("The Mystery Of The Island Or Your Memory Was Never Discovered", 1)
-    rp("But You Did Feel The Connection In Pirating", 1)
-    rp("Ending 2 Unlocked!", 1)
-    rp("You Unlocked The Parrot Companion", 1)
-    rp("It Copies Your Attacks So You Do Double Damage", 1)
+    rp("With All Your Planks Your Start Building A Ship", 1, False, True)
+    rp("It's How This Journy Started, On The Seas", 1, False, True)
+    rp("The Mystery Of The Island Or Your Memory Was Never Discovered", 1, False, True)
+    rp("But You Did Feel The Connection In Pirating", 1, False, True)
+    rp("Ending 2 Unlocked!", 1, False, True)
+    rp("You Unlocked The Parrot Companion", 1, False, True)
+    rp("It Copies Your Attacks So You Do Double Damage", 1, False, True)
     ending_2_choice = ci("Would You Like To Equip It? 'YES'/'NO'", ending_2, "YES", "NO")
-    if ending_2_choice == "YES":
+    if ending_2_choice == "option 1":
         if companion != "none":
             companion_available.append(companion)
         companion = "parrot"
-        rp("Parrot Equipped", 1, True)
+        rp("Parrot Equipped", 1, True, False)
     else:
         companion_available.append("parrot")
-        rp("Parrot Added To Available Companions", True)
+        rp("Parrot Added To Available Companions", True, False)
     beach()
+
+def ending_3():
+    rp(f"You Feel Your Mind Fading To The New Animal Nature In Your Body", 1, False, True)
+    rp(f"Your Last Thought Before You Become A Creature Of The Night", 1, False, True)
+    rp(f"Was The Terror You Felt Looking At The Werewolf", 1, False, True)
+    rp(f"Knowing You Were About To Become One", 1, False, True)
+    rp(f"Ending 3 Unlocked!", 1, False, True)
+    rp(f"You Unlocked The Wolf Companion", 1, False, True)
+    rp(f"It Gives A Small Boost To Damage And Resientence", 1, False, True)
+    ending_3_choice = ci("Would You Like To Equip It? 'YES'/'NO'", ending_3, "YES", "NO")
+    if ending_3_choice == "option 1":
+        if companion != "none":
+            companion_available.append(companion)
+        companion = "wolf"
+        rp(f"Wolf Companion Equipped", 1, True)
+    else:
+        companion_available.append("wolf")
+        rp("Wolf Added To Available Companions", 1, True)
+    rp(f"You Did Die Though", 1)
+    health = 0
+    refresh_all(False)
+
 
 def wizard_fight():
     fight_signal()
@@ -2186,12 +2215,12 @@ def wizard_fight():
                 wiz_crit_attack = quick_time_double(5, "random", "random", "Critical Attack The Wizard")
                 t.sleep(1)
                 if wiz_crit_attack == True:
-                    rp("You Landed A Critical Hit On The Wizard", 1)
+                    rp("You Landed A Critical Hit On The Wizard", 1, False, True)
                     crit_wiz_damage = damage * crit_multiplier
                     wiz_health -= crit_wiz_damage
-                    rp(f"You Did {crit_wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left", 1, True)
+                    rp(f"You Did {crit_wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left", 1, True, True)
                 else:
-                    rp("You Missed Your Critical Hit On The Wizard", 1, True)
+                    rp("You Missed Your Critical Hit On The Wizard", 1, True, True)
             else:
                 wiz_attack = quick_time_event(5, "random", "Attack The Wizard")
                 t.sleep(1)
@@ -2199,19 +2228,19 @@ def wizard_fight():
                     rp("You Landed An Attack On The Wizard", 1)
                     wiz_damage = damage
                     wiz_health -= wiz_damage
-                    rp(f"You Did {wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left", 1)
+                    rp(f"You Did {wiz_damage} Damage. The Wizard Now Has {wiz_health} Health Left", 1, False, True)
                 else:
-                    rp("You Missed Your Attack On The Wizard", 1, True)
+                    rp("You Missed Your Attack On The Wizard", 1, True, True)
         else:
             dodge_wiz = quick_time_event(5, "random", "Dodge The Incoming Fireball")
             t.sleep(1)
             if dodge_wiz == True:
-                rp("You Dodged The Incoming Fireball", 1, True)
+                rp("You Dodged The Incoming Fireball", 1, True, True)
             else:
-                rp("You Gazed Into The Flaming Ball Of Fire As It Came Crashing Down On You", 1)
+                rp("You Gazed Into The Flaming Ball Of Fire As It Came Crashing Down On You", 1, False, True)
                 wiz_health_lost = int ( 2 / damage_resistence )
                 health -= wiz_health_lost
-                rp(f"You Lost {wiz_health_lost} Damage. You Now Have {health} Health Left", 1, True)
+                rp(f"You Lost {wiz_health_lost} Damage. You Now Have {health} Health Left", 1, True, True)
         if wiz_health <= 0:
             rp("You Defeated The Wizard", 1)
             rp("Unexpectedly Before His Body Falls To The Ground", 1)
@@ -2240,26 +2269,81 @@ def wizard_fight():
             field()
         if health <= 0:
             rp("You Have Been Defeated By The Wizard", 1)
-            rp("Returning To Start", 1)
-            health = 30
-            energy = 30
-            armour_base = "none"
-            armour_plate = "none"
-            armour_lining = "none"
-            rp("You Have Reset Your Health, Energy, Inventory And Armour", 1, True)
-            beach()
 
 def werewolf_fight():
-    rp("As A Full Moons Reveals Itself Through The Thick Branches", 1)
-    rp("You Hear A Loud Howling Coming Towards You", 1)
+    rp("As A Full Moons Reveals Itself Through The Thick Branches", 1, False, True)
+    rp("You Hear A Loud Howling Coming Towards You", 1, False, True)
     fight_signal()
-    werewolf_health = 20
+    werewolf_health = 50
     werewolf_effects = []
+    cursed = []
     prev_attack = False
     while werewolf_health > 0 and health > 0:
+        if "level-10" in cursed:
+            ending_3()
+        elif "level-9.5" in cursed:
+            cursed.append("level-10")
+        elif "level-9" in cursed:
+            rp("Fur Starts To Poke And Shred Throught Your Skin", 1, False, True)
+            health -= 3
+            rp(f"You Lost 3 Health. You Are Now On {health} Health", True, True)
+            cursed.append("level-9.5")
+        elif "level-8.5" in cursed:
+            cursed.append("level-9")
+        elif "level-8" in cursed:
+            rp("You Teeth Morph And Sharpen Within Your Own Mouth Leaving It Disfigued", False, True)
+            health -= 3
+            rp(f"You Lost 3 Health. You Are Now On {health} Health", False, True)
+            cursed.append("level-8.5")
+        elif "level-7.5" in cursed:
+            cursed.append("level-8")
+        elif "level-7" in cursed:
+            rp("Your Bones Crack And Your Skin Streches As Your Grow", 1, False, True)
+            health -= 3
+            rp(f"You Lost 3 Health. You Are On {health} Health.", 1, True, True)
+            cursed.append("level-7.5")
+        elif "level-6.5" in cursed:
+            cursed.append("level-7")
+        elif "level-6" in cursed:
+            rp(f"Sharp Claws Grow Out Of Your Hands And Feet Popping Your Nails Of In The Process", 1, False, True)
+            health -= 2
+            rp(f"You Lost 2 Health. You Are On {health} Health.", 1, True, True)
+            cursed.append("level-6.5")
+        elif "level-5.5" in cursed:
+            cursed.append("level-6")
+        elif "level-5" in cursed:
+            rp(f"A Tail Starts To Poke Through Your Tail Bone Ripping The Skin Along The Way", 1, False, True)
+            health -= 2
+            rp(f"You Lost 2 Health. You Are On {health} Health.", 1, True, True)
+            cursed.append("level-5.5")
+        elif "level-4.5" in cursed:
+            cursed.append("level-5")
+        elif "level-4" in cursed:
+            rp("Your Nose Starts To Extend Out Of Your Face Into The Shape Of An Animal", 1, False, True)
+            health -= 1
+            rp(f"You Lost 1 Health. You Are On {health} Health", 1, True, True)
+            cursed.append("level-4.5")
+        elif "level-3.5" in cursed:
+            cursed.append("level-4")
+        elif "level-3" in cursed:
+            rp("Without Relising It You Start Running On All Fours", 1, False, True)
+            health -= 1
+            rp(f"You Lost 1 Health. You Are On {health} Health.", 1, True, True)
+            cursed.append("level-3.5")
+        elif "level-2.5" in cursed:
+            cursed.append("level-3")
+        elif "level-2" in cursed:
+            rp(f"The Colour From Your Eyes Fade Into The Shade Of The Glistening Moon", 1, False, True)
+            health -= 1
+            rp(f"You Lost 1 Health. You Are Now On {health} Health", 1, True, True)
+            cursed.append("level-2.5")
+        elif "level-1.5" in cursed:
+            cursed.append("level-2")
+        elif "level-1" in cursed:
+            cursed.append("level-1.5")
         ww_aod = r.choice(["attack", "defend"])
         if ww_aod == "defend":
-            ww_attack = r.choice(["charge", "bite", "summon"])
+            ww_attack = r.choice(["charge", "pounce", "summon"])
             if ww_attack == "charge":
                 dodge = quick_time_event(3, "random", "Roll Away From The Charge Path")
                 if dodge == True:
@@ -2270,17 +2354,53 @@ def werewolf_fight():
                             werewolf_health -= damage
                             werewolf_effects.extend(damage_affects)
                             prev_attack = False
-                            rp("You Dodged The Werewolf's Charge", 1)
-                            rp("And Landed A Counter Hit", 1)
-                            rp(f"The Werewold Lost {damage} Health. It Now Has {werewolf_health} Health", 1)
+                            rp("You Dodged The Werewolf's Charge", 1, False, True)
+                            rp("And Landed A Counter Hit", 1, False, True)
+                            rp(f"The Werewold Lost {damage} Health. It Now Has {werewolf_health} Health", 1, False, True)
                             if len(werewolf_effects) > 0:
-                                rp(f"You Applied {damage_affects} To The Werewolf")
+                                rp(f"You Applied {damage_affects} To The Werewolf", False, True)
                         elif counter == False:
-                            rp("You Dodged The Werewolf Charge", 1)
-                    
+                            rp("You Dodged The Werewolf's Charge But Missed The Counter", 1, False, True)
+                    elif counter == False:
+                        rp("You Dodged The Werewolf's Charge", 1, False, True)
+                elif dodge == False:
+                    damage_done = 8 / damage_resistence
+                    health -= damage_done
+                    rp(f"The Werewolf Charged Into You Dealing {damage_done} Health. You Have {health} Health Left", 1, False, True)
+            elif ww_attack == "pounce":
+                get_of_me = quick_time_spam(4, "random", r.choice([25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]), "Get The Werewolf Of You As It Tries To Bite Your Head Of")
+                if get_of_me == True:
+                    rp("You Pushed The Wolf Off You Saving You From It's Bite", 1, False, True)
+                else:
+                    damage_done = 12 / damage_resistence
+                    health -= damage_done
+                    rp(f"The Werewolf Bit You For {damage_done} Health. You Have {health} Health Left.", 1, False, True)
+                    if "level-1" not in cursed:
+                        rp(f"You Feel Something Weird Flowing Through Your Blood", 1, False, True)
+                        rp(f"Something Animlistic", 1, False, True)
+                        rp(f"But There Isn't Time To Investigate It During This Fight", 1, False, True)
+            elif ww_attack == "summon":
+                wolf_1 = 5
+                wolf_2 = 5
+                rp("The Werewolf Has Summoned 2 Wolfs To Attack You", 1, False, True)
+                rp("Each One Has 2 Health", 1, False, True)
+                while ( wolf_1 > 0 or wolf_2 > 0 ) and health > 0:
+                    if wolf_1 > 0 and wolf_2 > 0:
+                        l_or_r = quick_time_choice(4, "random", "random", "Target The Left One", "Target The Right One")
+                        if l_or_r == "Option 1":
+                            attack_left = quick_time_event(3, "random", "Attack The Left Wolf")
+                            if attack_left == True:
+                                wolf_1 -= damage
+                                rp(f"You Did {damage} Damage To Wolf 1. It Has {wolf_1} Health Left", 1, False, True)
+                                if splash_range >= 2:
+                                    wolf_2 -= splash_damage
+                                    rp(f"You Did {splash_damage} Splash Damage To Wolf 2. It Has {wolf_2} Health Left", 1, False, True)
+                                else:
+                                    damage_done = 5 / damage_resistence
+                                    rp(f"")
+                                
 
 
-        
 
 def hunt(previous_location):
     keep_hunt = "option 1"
