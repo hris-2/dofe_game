@@ -2353,7 +2353,7 @@ def werewolf_fight():
                         if counter == True:
                             werewolf_health -= damage
                             werewolf_effects.extend(damage_affects)
-                            prev_attack = False
+                            prev_attack = True
                             rp("You Dodged The Werewolf's Charge", 1, False, True)
                             rp("And Landed A Counter Hit", 1, False, True)
                             rp(f"The Werewold Lost {damage} Health. It Now Has {werewolf_health} Health", 1, False, True)
@@ -2363,10 +2363,12 @@ def werewolf_fight():
                             rp("You Dodged The Werewolf's Charge But Missed The Counter", 1, False, True)
                     elif counter == False:
                         rp("You Dodged The Werewolf's Charge", 1, False, True)
+                        prev_attack = False
                 elif dodge == False:
                     damage_done = 8 / damage_resistence
                     health -= damage_done
                     rp(f"The Werewolf Charged Into You Dealing {damage_done} Health. You Have {health} Health Left", 1, False, True)
+                    prev_attack = False
             elif ww_attack == "pounce":
                 get_of_me = quick_time_spam(4, "random", r.choice([25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]), "Get The Werewolf Of You As It Tries To Bite Your Head Of")
                 if get_of_me == True:
@@ -2379,6 +2381,7 @@ def werewolf_fight():
                         rp(f"You Feel Something Weird Flowing Through Your Blood", 1, False, True)
                         rp(f"Something Animlistic", 1, False, True)
                         rp(f"But There Isn't Time To Investigate It During This Fight", 1, False, True)
+                prev_attack = False
             elif ww_attack == "summon":
                 wolf_1 = 5
                 wolf_2 = 5
@@ -2395,9 +2398,69 @@ def werewolf_fight():
                                 if splash_range >= 2:
                                     wolf_2 -= splash_damage
                                     rp(f"You Did {splash_damage} Splash Damage To Wolf 2. It Has {wolf_2} Health Left", 1, False, True)
-                                else:
-                                    damage_done = 5 / damage_resistence
-                                    rp(f"")
+                            else:
+                                damage_done = 7 / damage_resistence
+                                health -= damage_done
+                                rp(f"You Missed Your Attack And Both Wolfs Attacked You For {damage_done} Health", 1, False, True)
+                                rp(f"You Are Now On {health} Health", 1, False, True)
+                        elif l_or_r == "Option 2":
+                            attack_right = quick_time_event(3, "random", "Attack The Right Wolf")
+                            if attack_right == True:
+                                wolf_2 -= damage
+                                rp(f"You Did {damage} Damage To Wolf 2. It Has {wolf_2} Health Left", 1, False, True)
+                                if splash_range >= 2:
+                                    wolf_1 -= splash_damage
+                                    rp(f"You Did {splash_damage} Damage To Wolf 1. It Has {wolf_1} Health Left", 1, False, True)
+                            else:
+                                damage_done = 7 / damage_resistence
+                                health -= damage_done
+                                rp(f"You Missed Your Attack And Both Wolfs Attacked You For {damage_done} Health", 1, False, True)
+                                rp(f"You Are Now On {health} Health", 1, False, True)
+                        else:
+                            damage_done = 7 / damage_resistence
+                            health -= damage_done
+                            rp(f"You Couldn't Choose Before They Attacked You For {damage_done} Health", 1, False, True)
+                            rp(f"You Are Now On {health} Health", 1, False, True)
+                    elif wolf_1 <= 0 and wolf_2 > 0:  
+                        attack_right = quick_time_event(3, "random", "Attack The Right Wolf")
+                        if attack_right == True:
+                            wolf_2 -= damage
+                            rp(f"You Did {damage} To Wolf 2. It Now Has {wolf_2} Health", 1, False, True)
+                        else:
+                            damage_done = 3 / damage_resistence
+                            health -= damage_done
+                            rp(f"You Missed Your Attack And Got Hit For {damage_done} Health", 1, False, True)
+                            rp(f"You Are Now On {health} Health", 1, False, True)
+                    elif wolf_2 <= 0 and wolf_1 > 0:
+                        attack_left = quick_time_event(3, "random", "Attack The Left Wolf", 1, False, True)
+                        if attack_left == True:
+                            wolf_1 -= damage_done
+                            rp(f"You Did {damage} To Wolf 1. It Now Has {wolf_1} Health", 1, False, True)
+                        else:
+                            damage_done = 3 / damage_resistence
+                            health -= damage_done
+                            rp(f"You Missed Your Attack And Got Hit For {damage_done} Health", 1, False, True)
+                            rp(f"You Are Now On {health} Health", 1, False, True)
+                    print()
+                if wolf_1 <= 0 and wolf_2 <= 0:
+                    rp(f"You Deafeated The Two Wolves")
+                    prev_attack = False
+        elif ww_aod == "attack":
+            if prev_attack == True:
+                crit_attack = quick_time_double(4, "random", "random", "Critical Hit The Werewolf")
+                if crit_attack == True:
+                    damage_done = damage * crit_multiplier
+                    werewolf_health -= damage_done
+                    rp(f"You Critical Hit The Wolf For {damage_done}. It Now Has {werewolf_health} Health", 1, False, True)
+                    if len(damage_affects) > 0:
+                        werewolf_effects.extend(damage_affects)
+                        rp(f"You Applied {damage_affects} To The Werewolf", 1, False, True)
+                    prev_attack = False
+                else:
+                    rp(f"You Missed Your Critical Hit", 1, False, True)
+                
+
+
                                 
 
 
