@@ -149,7 +149,7 @@ def load_save():
     forest_discovered = data.get("forest_discovered", False)
     overhang_discovered = data.get("overhang_discovered", False)
     tutorial_done = data.get("tutorial_done", False)
-    return data
+    return 
 
 def quick_time_event(time_allowed, prompt_key, keyword):
     global health, energy, damage, inventory, gold
@@ -1367,24 +1367,25 @@ def menu_home(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    infinte_time = 100
-    rp("Menu:", 0.5)
-    rp("Press 'a' For Basic Information Like Health and Inventory", 0.5)
-    rp("Press 'b' For Your Armour Information", 0.5)
-    rp("Press 'c' For Your Class, Weapon And Companion", 0.5)
-    rp("Press 'd' For Current Weather Effects", 0.5)
-    rp("Or Press 'e' To Go Back", 1, True)
-    while infinte_time == 100:
-        if k.is_pressed("a"):
-            menu_basic(previous_location_function)
-        elif k.is_pressed("b"):
-            menu_armour(previous_location_function)
-        if k.is_pressed("c"):
-            menu_class(previous_location_function)
-        elif k.is_pressed("d"):
-            menu_weather(previous_location_function)
-        elif k.is_pressed("e"):
-            previous_location_function()
+    printed_menu_home = False
+    while True:
+        if printed_menu_home = False:
+            rp("Menu:", 0.5)
+            rp("Press 'a' For Basic Information Like Health and Inventory", 0.5)
+            rp("Press 'b' For Your Armour Information", 0.5)
+            rp("Press 'c' For Your Class, Weapon And Companion", 0.5)
+            rp("Press 'd' For Current Weather Effects", 0.5)
+            rp("Or Press 'e' To Go Back", 1, True)
+            if k.is_pressed("a"):
+                menu_basic(previous_location_function)
+            elif k.is_pressed("b"):
+                menu_armour(previous_location_function)
+            if k.is_pressed("c"):
+                menu_class(previous_location_function)
+            elif k.is_pressed("d"):
+                menu_weather(previous_location_function)
+            elif k.is_pressed("e"):
+                return
 
 def menu_basic(previous_location_function):
     global health, energy, damage, inventory, gold
@@ -1414,7 +1415,8 @@ def menu_basic(previous_location_function):
     rp(f"Energy: {energy}", 0.5)
     rp(f"Gold: {gold}", 0.5)
     rp(f"Inventory: {inventory}", 0.5, True)
-    menu_home(previous_location_function)
+    printed_menu_home = False
+    return
 
 def menu_armour(previous_location_function):
     global health, energy, damage, inventory, gold
@@ -1438,56 +1440,55 @@ def menu_armour(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    rp("Armour Information:", 0.5)
-    rp(f"Armour Base: {armour_base}", 0,5)
-    rp(f"Armour Plating: {armour_plate}", 0.5)
-    rp(f"Armour Lining: {armour_lining}", 0.5, True)
-    rp("Would You Like To Change Your Armour 'BASE', 'PLATING', 'LINING' Or 'EXIT'")
-    armour_change = str(input())
-    if armour_change == "BASE":
-        rp(f"You Have {armour_base_available} Armour Bases Available", 1)
-        rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
-        select_armour_base = str(input())
-        print()
-        t.sleep(1)
-        if select_armour_base in armour_base_available:
-            armour_base_available.append(armour_base)
-            armour_base = select_armour_base
-            armour_base_available.remove(select_armour_base)
-            rp(f"{select_armour_base} Has Been Applied", 1, True)
-            menu_armour(previous_location_function)
+    printed_menu_home = False
+    while True:
+        rp("Armour Information:", 0.5)
+        rp(f"Armour Base: {armour_base}", 0,5)
+        rp(f"Armour Plating: {armour_plate}", 0.5)
+        rp(f"Armour Lining: {armour_lining}", 0.5, True)
+        rp("Would You Like To Change Your Armour 'BASE', 'PLATING', 'LINING' Or 'BACK'")
+        armour_change = str(input())
+        if armour_change == "BASE":
+            rp(f"You Have {armour_base_available} Armour Bases Available", 1)
+            rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
+            select_armour_base = str(input())
+            print()
+            t.sleep(1)
+            if select_armour_base in armour_base_available:
+                armour_base_available.append(armour_base)
+                armour_base = select_armour_base
+                armour_base_available.remove(select_armour_base)
+                rp(f"{select_armour_base} Has Been Applied", 1, True)
+            else:
+                rp("Not Vailid", 1)
+        elif armour_change == "PLATING":
+            rp(f"You Have {armour_plate_available} Armour Platings Available", 1)
+            rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
+            select_armour_plate = str(input())
+            print()
+            t.sleep(1)
+            if select_armour_plate in armour_plate_available:
+                armour_plate_available.append(armour_plate)
+                armour_plate = select_armour_plate
+                armour_plate_available.remove(select_armour_plate)
+                rp(f"{select_armour_plate} Has Been Applied", 1, True)
+            else:
+                rp("Not Vailid", 1)
+        elif armour_change == "BASE":
+            rp(f"You Have {armour_lining_available} Armour Bases Available", 1)
+            rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
+            select_armour_lining = str(input())
+            print()
+            t.sleep(1)
+            if select_armour_lining in armour_lining_available:
+                armour_lining_available.append(armour_lining)
+                armour_lining = select_armour_lining
+                armour_lining_available.remove(select_armour_lining)
+                rp(f"{select_armour_lining} Has Been Applied", 1, True)
+            else:
+                rp("Not Vailid", 1)
         else:
-            menu_armour(previous_location_function)
-    if armour_change == "PLATING":
-        rp(f"You Have {armour_plate_available} Armour Platings Available", 1)
-        rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
-        select_armour_plate = str(input())
-        print()
-        t.sleep(1)
-        if select_armour_plate in armour_plate_available:
-            armour_plate_available.append(armour_plate)
-            armour_plate = select_armour_plate
-            armour_plate_available.remove(select_armour_plate)
-            rp(f"{select_armour_plate} Has Been Applied", 1, True)
-            menu_armour(previous_location_function)
-        else:
-            menu_armour(previous_location_function)
-    if armour_change == "BASE":
-        rp(f"You Have {armour_lining_available} Armour Bases Available", 1)
-        rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
-        select_armour_lining = str(input())
-        print()
-        t.sleep(1)
-        if select_armour_lining in armour_lining_available:
-            armour_lining_available.append(armour_lining)
-            armour_lining = select_armour_lining
-            armour_lining_available.remove(select_armour_lining)
-            rp(f"{select_armour_lining} Has Been Applied", 1, True)
-            menu_armour(previous_location_function)
-        else:
-            menu_armour(previous_location_function)
-    else:
-        menu_home(previous_location_function)
+            return
 
 def menu_class(previous_location_function):
     global health, energy, damage, inventory, gold
@@ -1512,74 +1513,78 @@ def menu_class(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if class_ == "wizard":
-        rp("You Are A Wizard", 1)
-        rp("You Fight With Spells", 1)
-        if spell == "fireball":
-            rp("Your Selected Spell Is Fireball", 1)
-        elif spell == "iceball":
-            rp("Your Selected Spell Is Iceball", 1)
-        elif spell == "time_freeze":
-            rp("Your Selected Spell Is Time Freeze", 1)
-        elif spell == "bludgeon":
-            rp("Your Selected Spell If Bludgeon", 1)
-        elif spell == "electric":
-            rp("Your Selected Spell Is Electric", 1)
-        elif spell == "poison":
-            rp("Your Selected Spell If Poison", 1)
-    elif class_ == "fighter":
-        rp("You Are A Fighter", 1)
-        rp("You Fight With Unique Weapons", 1)
-        if weapon == "none":
-            rp("Your Selected Weapon Is Your Fists", 1)
-        elif spell == "sword":
-            rp("Your Selected Weapon Is A Sword", 1)
-        elif spell == "spear":
-            rp("Your Selected Weapon Is A Spear", 1)
-        elif spell == "dagger":
-            rp("Your Selected Weapon Is A Dagger", 1)
-        elif spell == "mace":
-            rp("Your Selected Weapon Is A Mace", 1)
-        elif spell == "nunchuncks":
-            rp("Your Selected Weapon Is Nunchuncks", 1)  
-    elif class_ == "brawler":
-        rp("You Are A Brawler", 1)
-        rp("You Fight With Unique Moves", 1)
-        if arrow == "none":
-            rp("Your Selected Move Is A Basic Punch", 1)
-        elif arrow == "fly_kick":
-            rp("Your Selected Arrow Is A Flying Kick", 1)
-        elif arrow == "1inch_punch":
-            rp("Your Selected Arrow Is The One Inch Punch", 1)
-        elif arrow == "flurry_punch":
-            rp("Your Selected Arrow Is A Flurry Of Punches", 1)
-        elif arrow == "flip_kick":
-            rp("Your Selected Arrow Is A Flip Kick", 1)
-        elif arrow == "sweep_kick":
-            rp("Your Selected Arrow Is A Sweeping Kick", 1)
-    elif class_ == "archer":
-        rp("You Are An Archer", 1)
-        rp("You Fight With Unique Arrows", 1)
-        if arrow == "none":
-            rp("Your Selected Arrow Is A Basic Tip", 1)
-        elif arrow == "poison":
-            rp("Your Selected Arrow Is A Poison Tip", 1)
-        elif arrow == "flame":
-            rp("Your Selected Arrow Is A Flaming Arrow", 1)
-        elif arrow == "frozen":
-            rp("Your Selected Arrow Is A Freezing Tip", 1)
-        elif arrow == "conductor":
-            rp("Your Selected Arrow Is A Conductive Tip", 1)
-        elif arrow == "drill":
-            rp("Your Selected Arrow Is A Drill Tip", 1)
-    rp("To Change Class Type 'CLASS' or Spell Type 'SPELL' Otherwise Type 'BACK'", )
-    class_choice = str(input())
-    print()
-    t.sleep(1)
-    if class_choice == "CLASS":
-        menu_class_change(previous_location_function)
-    elif class_choice == "SPELL":
-        menu_class_weapon_change(previous_location_function)
+    printed_menu_home = False
+    while True:
+        if class_ == "wizard":
+            rp("You Are A Wizard", 1)
+            rp("You Fight With Spells", 1)
+            if spell == "fireball":
+                rp("Your Selected Spell Is Fireball", 1)
+            elif spell == "iceball":
+                rp("Your Selected Spell Is Iceball", 1)
+            elif spell == "time_freeze":
+                rp("Your Selected Spell Is Time Freeze", 1)
+            elif spell == "bludgeon":
+                rp("Your Selected Spell If Bludgeon", 1)
+            elif spell == "electric":
+                rp("Your Selected Spell Is Electric", 1)
+            elif spell == "poison":
+                rp("Your Selected Spell If Poison", 1)
+        elif class_ == "fighter":
+            rp("You Are A Fighter", 1)
+            rp("You Fight With Unique Weapons", 1)
+            if weapon == "none":
+                rp("Your Selected Weapon Is Your Fists", 1)
+            elif spell == "sword":
+                rp("Your Selected Weapon Is A Sword", 1)
+            elif spell == "spear":
+                rp("Your Selected Weapon Is A Spear", 1)
+            elif spell == "dagger":
+                rp("Your Selected Weapon Is A Dagger", 1)
+            elif spell == "mace":
+                rp("Your Selected Weapon Is A Mace", 1)
+            elif spell == "nunchuncks":
+                rp("Your Selected Weapon Is Nunchuncks", 1)  
+        elif class_ == "brawler":
+            rp("You Are A Brawler", 1)
+            rp("You Fight With Unique Moves", 1)
+            if arrow == "none":
+                rp("Your Selected Move Is A Basic Punch", 1)
+            elif arrow == "fly_kick":
+                rp("Your Selected Arrow Is A Flying Kick", 1)
+            elif arrow == "1inch_punch":
+                rp("Your Selected Arrow Is The One Inch Punch", 1)
+            elif arrow == "flurry_punch":
+                rp("Your Selected Arrow Is A Flurry Of Punches", 1)
+            elif arrow == "flip_kick":
+                rp("Your Selected Arrow Is A Flip Kick", 1)
+            elif arrow == "sweep_kick":
+                rp("Your Selected Arrow Is A Sweeping Kick", 1)
+        elif class_ == "archer":
+            rp("You Are An Archer", 1)
+            rp("You Fight With Unique Arrows", 1)
+            if arrow == "none":
+                rp("Your Selected Arrow Is A Basic Tip", 1)
+            elif arrow == "poison":
+                rp("Your Selected Arrow Is A Poison Tip", 1)
+            elif arrow == "flame":
+                rp("Your Selected Arrow Is A Flaming Arrow", 1)
+            elif arrow == "frozen":
+                rp("Your Selected Arrow Is A Freezing Tip", 1)
+            elif arrow == "conductor":
+                rp("Your Selected Arrow Is A Conductive Tip", 1)
+            elif arrow == "drill":
+                rp("Your Selected Arrow Is A Drill Tip", 1)
+        rp("To Change Class Type 'CLASS' or Spell Type 'SPELL' Otherwise Type 'BACK'", )
+        class_choice = str(input())
+        print()
+        t.sleep(1)
+        if class_choice == "CLASS":
+            menu_class_change(previous_location_function)
+        elif class_choice == "SPELL":
+            menu_class_weapon_change(previous_location_function)
+        else:
+            return
    
 def menu_class_change(previous_location_function):
     global health, energy, damage, inventory, gold
@@ -1607,7 +1612,7 @@ def menu_class_change(previous_location_function):
     if len(class_available) == 0:
         rp("You Have No Available Classes To Change Too", 1)
         rp("Going Back", 1, True)
-        menu_class(previous_location_function)
+        return
     else:
         rp(f"You Can Change Into: {class_available}", 1)
         rp("To Change Class Type It As Seen Above")
@@ -1620,11 +1625,11 @@ def menu_class_change(previous_location_function):
             class_available.remove(change_class)
             rp(f"You Are Now A {class_}", 1)
             rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
         else:
             rp("That Wasn't An Option", 1)
             rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
            
 def menu_class_weapon_change(previous_location_function):
     global health, energy, damage, inventory, gold
@@ -1652,7 +1657,7 @@ def menu_class_weapon_change(previous_location_function):
         if len(spell_available) == 0:
             rp("You Have No Available Spells", 1)
             rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
         else:
             rp(f"You Can Change To: {spell_available}", 1)
             rp("To Change Spell Type It As Seen Above")
@@ -1665,16 +1670,16 @@ def menu_class_weapon_change(previous_location_function):
                 spell_available.remove(change_skill)
                 rp(f"You Are Now Use {spell}", 1)
                 rp("Going Back", 1, True)
-                menu_class(previous_location_function)
+                return
             else:
                 rp("That Wasn't An Option", 1)
                 rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
     if class_ == "fighter":
         if len(weapon_available) == 0:
             rp("You Have No Available Weapons", 1)
             rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
         else:
             rp(f"You Can Change To: {weapon_available}", 1)
             rp("To Change Weapon Type It As Seen Above")
@@ -1688,16 +1693,16 @@ def menu_class_weapon_change(previous_location_function):
                 weapon_available.remove(change_skill)
                 rp(f"You Are Now Use {weapon}", 1)
                 rp("Going Back", 1, True)
-                menu_class(previous_location_function)
+                return
             else:
                 rp("That Wasn't An Option", 1)
                 rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
     if class_ == "archer":
         if len(arrow_available) == 0:
             rp("You Have No Available Arrows", 1)
             rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
         else:
             rp(f"You Can Change To: {arrow_available}", 1)
             rp("To Change Arrow Type It As Seen Above", 1)
@@ -1710,16 +1715,16 @@ def menu_class_weapon_change(previous_location_function):
                 arrow_available.remove(change_skill)
                 rp(f"You Are Now Use {arrow}", 1)
                 rp("Going Back", 1, True)
-                menu_class(previous_location_function)
+                return
             else:
                 rp("That Wasn't An Option", 1)
                 rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
     if class_ == "brawler":
         if len(weapon_available) == 0:
             rp("You Have No Available Moves", 1)
             rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
         else:
             rp(f"You Can Change To: {skill_available}", 1)
             rp("To Change Weapon Type It As Seen Above", 1)
@@ -1732,11 +1737,11 @@ def menu_class_weapon_change(previous_location_function):
                 skill_available.remove(change_skill)
                 rp(f"You Are Now Use {skill}", 1)
                 rp("Going Back", 1, True)
-                menu_class(previous_location_function)
+                return
             else:
                 rp("That Wasn't An Option", 1)
                 rp("Going Back", 1, True)
-            menu_class(previous_location_function)
+            return
 
 def menu_weather(previous_location):
     global health, energy, damage, inventory, gold
@@ -1789,7 +1794,7 @@ def menu_weather(previous_location):
         rp("There Is A Heatwave", 1)
         rp("You Gain Warmth Over Time", 1, True)
         rp("If You Gain To Much You Will Lose Health Over Time", 1, True)
-    menu_home(previous_location)
+    return
     
 def tutorial():
     global health, energy, damage, inventory, gold
@@ -1813,15 +1818,16 @@ def tutorial():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if tutorial_done == True:
-        print("Tutorial Done")
-        t.sleep(1)
-        print("Starting Game")
-        print()
-        t.sleep(1)
-        beach()
-    else:
-        if menu_tutorial_done == True:
+    while True:
+        if tutorial_done == True:
+            print("Tutorial Done")
+            t.sleep(1)
+            print("Starting Game")
+            print()
+            t.sleep(1)
+            beach()
+        else:
+            if menu_tutorial_done == True:
             print("Now You Know How To Use Basic Functions In The Menu")
             t.sleep(1)
             print("I Will Explain Some Other Basic Stuff")
@@ -1979,39 +1985,39 @@ def tutorial_text_box_white():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if text_tutorial_back == True and text_tutorial_forward == True and text_tutorial_chest == True:
-        print("Well Done You Completed The First Tutorial Section")
+    printed_text_white = False
+    while True:
+        if text_tutorial_back == True and text_tutorial_forward == True and text_tutorial_chest == True:
+            print("Well Done You Completed The First Tutorial Section")
+            t.sleep(1)
+            text_tutorial_done = True
+            print()
+            return
+        print("You Find Yourself In A White Room")
         t.sleep(1)
-        text_tutorial_done = True
-        print()
-        tutorial()
-    print("You Find Yourself In A White Room")
-    t.sleep(1)
-    print("You Can Move To The 'GREEN' Room, 'RED' Room Or 'BLUE' Room")
-    tutorial_room_move = str(input())
-    print()
-    t.sleep(1)
-    if tutorial_room_move == "GREEN":
-        tutorial_text_box_green()
-    elif tutorial_room_move == "RED":
-        tutorial_text_box_red()
-    elif tutorial_room_move == "BLUE":
-        tutorial_text_box_blue()
-    elif tutorial_room_move == "CHEST":
-        print("You Found This Chest")
-        t.sleep(1)
-        print("Well Done")
-        text_tutorial_chest = True
+        print("You Can Move To The 'GREEN' Room, 'RED' Room Or 'BLUE' Room")
+        tutorial_room_move = str(input())
         print()
         t.sleep(1)
-        tutorial_text_box_white()
-    else:
-        print("That's Not An Option")
-        t.sleep(1)
-        print("Try Again")
-        print()
-        t.sleep(1)
-        tutorial_text_box_white()
+        if tutorial_room_move == "GREEN":
+            tutorial_text_box_green()
+        elif tutorial_room_move == "RED":
+            tutorial_text_box_red()
+        elif tutorial_room_move == "BLUE":
+            tutorial_text_box_blue()
+        elif tutorial_room_move == "CHEST":
+            print("You Found This Chest")
+            t.sleep(1)
+            print("Well Done")
+            text_tutorial_chest = True
+            print()
+            t.sleep(1)
+        else:
+            print("That's Not An Option")
+            t.sleep(1)
+            print("Try Again")
+            print()
+            t.sleep(1)
 
 def tutorial_text_box_green():
     global health, energy, damage, inventory, gold
@@ -2035,40 +2041,39 @@ def tutorial_text_box_green():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("You Find Yourself In A Green Room")
-    if text_tutorial_forward == False:
+    while True:
+        print("You Find Yourself In A Green Room")
+        if text_tutorial_forward == False:
+            t.sleep(1)
+            print("Well Done")
+            t.sleep(1)
+            print("You Went To A New Room")
+            text_tutorial_forward = True
         t.sleep(1)
-        print("Well Done")
-        t.sleep(1)
-        print("You Went To A New Room")
-        text_tutorial_forward = True
-    t.sleep(1)
-    print("You Can Move To The 'PURPLE' Room, 'BROWN' Room Or Go 'BACK'")
-    tutorial_room_move = str(input())
-    print()
-    t.sleep(1)
-    if tutorial_room_move == "PURPLE":
-        print("This Door Is Locked")
+        print("You Can Move To The 'PURPLE' Room, 'BROWN' Room Or Go 'BACK'")
+        tutorial_room_move = str(input())
         print()
         t.sleep(1)
-        tutorial_text_box_green()
-    elif tutorial_room_move == "BROWN":
-        print("You Enter The Brown Room")
-        t.sleep(1)
-        print("An Overwhelming Stench Takes Over You As You Run Back To The Green Room")
-        t.sleep(2)
-        print()
-        tutorial_text_box_green()
-    elif tutorial_room_move == "BACK":
-        tutorial_text_box_white()
-    else:
-        print("Well Done")
-        t.sleep(1)
-        print("You Went Back Without Typing 'BACK'")
-        print()
-        text_tutorial_back = True
-        t.sleep(1)
-        tutorial_text_box_white()  
+        if tutorial_room_move == "PURPLE":
+            print("This Door Is Locked")
+            print()
+            t.sleep(1)
+        elif tutorial_room_move == "BROWN":
+            print("You Enter The Brown Room")
+            t.sleep(1)
+            print("An Overwhelming Stench Takes Over You As You Run Back To The Green Room")
+            t.sleep(2)
+            print()
+        elif tutorial_room_move == "BACK":
+            return
+        else:
+            print("Well Done")
+            t.sleep(1)
+            print("You Went Back Without Typing 'BACK'")
+            print()
+            text_tutorial_back = True
+            t.sleep(1)
+            return  
 
 def tutorial_text_box_red():
     global health, energy, damage, inventory, gold
@@ -2092,44 +2097,43 @@ def tutorial_text_box_red():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("You Find Yourself In A Red Room")
-    if text_tutorial_forward == False:
+    while True:
+        print("You Find Yourself In A Red Room")
+        if text_tutorial_forward == False:
+            t.sleep(1)
+            print("Well Done")
+            t.sleep(1)
+            print("You Went To A New Room")
+            text_tutorial_forward = True
         t.sleep(1)
-        print("Well Done")
-        t.sleep(1)
-        print("You Went To A New Room")
-        text_tutorial_forward = True
-    t.sleep(1)
-    print("You Can Move To The 'YELLOW' Room, 'ORANGE' Room Or Go 'BACK'")
-    tutorial_room_move = str(input())
-    print()
-    t.sleep(1)
-    if tutorial_room_move == "YELLOW":
-        print("As You Open The Door A Heat Greater Than A Millon Suns Hit You")
-        t.sleep(1)
-        print("You Rush To Close The Door")
+        print("You Can Move To The 'YELLOW' Room, 'ORANGE' Room Or Go 'BACK'")
+        tutorial_room_move = str(input())
         print()
         t.sleep(1)
-        tutorial_text_box_red()
-    elif tutorial_room_move == "ORANGE":
-        print("You Enter The Orange Room")
-        t.sleep(1)
-        print("The Room Is Filled With Oranges")
-        t.sleep(1)
-        print("Unfortunatly You Are Deadly Allergic To Oranges So You Go Back")
-        t.sleep(2)
-        print(1)
-        tutorial_text_box_red()
-    elif tutorial_room_move == "BACK":
-        tutorial_text_box_white()
-    else:
-        print("Well Done")
-        t.sleep(1)
-        print("You Went Back Without Typing 'BACK'")
-        print()
-        text_tutorial_back = True
-        t.sleep(1)
-        tutorial_text_box_white()  
+        if tutorial_room_move == "YELLOW":
+            print("As You Open The Door A Heat Greater Than A Millon Suns Hit You")
+            t.sleep(1)
+            print("You Rush To Close The Door")
+            print()
+            t.sleep(1)
+        elif tutorial_room_move == "ORANGE":
+            print("You Enter The Orange Room")
+            t.sleep(1)
+            print("The Room Is Filled With Oranges")
+            t.sleep(1)
+            print("Unfortunatly You Are Deadly Allergic To Oranges So You Go Back")
+            t.sleep(2)
+            print()
+        elif tutorial_room_move == "BACK":
+            return
+        else:
+            print("Well Done")
+            t.sleep(1)
+            print("You Went Back Without Typing 'BACK'")
+            print()
+            text_tutorial_back = True
+            t.sleep(1)
+            return  
    
 def tutorial_text_box_blue():
     global health, energy, damage, inventory, gold
@@ -2153,44 +2157,43 @@ def tutorial_text_box_blue():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("You Find Yourself In A Blue Room")
-    if text_tutorial_forward == False:
+    while True:
+        print("You Find Yourself In A Blue Room")
+        if text_tutorial_forward == False:
+            t.sleep(1)
+            print("Well Done")
+            t.sleep(1)
+            print("You Went To A New Room")
+            text_tutorial_forward = True
         t.sleep(1)
-        print("Well Done")
-        t.sleep(1)
-        print("You Went To A New Room")
-        text_tutorial_forward = True
-    t.sleep(1)
-    print("You Can Move To The 'AQUA' Room, 'LILAC' Room Or Go 'BACK'")
-    tutorial_room_move = str(input())
-    print()
-    t.sleep(1)
-    if tutorial_room_move == "AQUA":
-        print("As You Open The Door Water Floods In")
-        t.sleep(1)
-        print("You Rush To Close The Door")
+        print("You Can Move To The 'AQUA' Room, 'LILAC' Room Or Go 'BACK'")
+        tutorial_room_move = str(input())
         print()
         t.sleep(1)
-        tutorial_text_box_blue()
-    elif tutorial_room_move == "LILAC":
-        print("You Enter The Lilac Room")
-        t.sleep(1)
-        print("The Air Smells Of A Scent Of Flowers")
-        t.sleep(1)
-        print("The Air Was So Good You Fell Asleep And Found Yourself Back In The Blue Room")
-        t.sleep(2)
-        print(1)
-        tutorial_text_box_blue()
-    elif tutorial_room_move == "BACK":
-        tutorial_text_box_white()
-    else:
-        print("Well Done")
-        t.sleep(1)
-        print("You Went Back Without Typing 'BACK'")
-        print()
-        text_tutorial_back = True
-        t.sleep(1)
-        tutorial_text_box_white()  
+        if tutorial_room_move == "AQUA":
+            print("As You Open The Door Water Floods In")
+            t.sleep(1)
+            print("You Rush To Close The Door")
+            print()
+            t.sleep(1)
+        elif tutorial_room_move == "LILAC":
+            print("You Enter The Lilac Room")
+            t.sleep(1)
+            print("The Air Smells Of A Scent Of Flowers")
+            t.sleep(1)
+            print("The Air Was So Good You Fell Asleep And Found Yourself Back In The Blue Room")
+            t.sleep(2)
+            print(1)
+        elif tutorial_room_move == "BACK":
+            return
+        else:
+            print("Well Done")
+            t.sleep(1)
+            print("You Went Back Without Typing 'BACK'")
+            print()
+            text_tutorial_back = True
+            t.sleep(1)
+            return  
 
 def fight_tutorial():
     global health, energy, damage, inventory, gold
@@ -2214,75 +2217,75 @@ def fight_tutorial():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    white_box_health = 5
-    print(f"You Are Fighing A Mystical White Box Which Has {white_box_health} Health")
-    crit_attack = False
-    print()
-    t.sleep(1)
-    while white_box_health > 0:
-        if health <= 0:
-            print("Try Again")
-            health = 30
-            fight_tutorial()
+    while True:
+        white_box_health = 5
+        print(f"You Are Fighing A Mystical White Box Which Has {white_box_health} Health")
+        crit_attack = False
+        print()
         t.sleep(1)
-        if fight_tutorial_attack == True and fight_tutorial_dodge == True and fight_tutorial_crit == True:
-            print("Well Done")
+        while white_box_health > 0:
+            if health <= 0:
+                print("Try Again")
+                health = 30
             t.sleep(1)
-            print("You Have Completed The Fight Tutorial")
-            fight_tutorial_done = True
-            crit_attack = False
-            print()
-            t.sleep(1)
-        action = r.choice(["attack", "dodge"])
-        if action == "dodge":
-            t.sleep(1)
-            print()
-            print("The Box Is Attacking")
-            if quick_time_event(3, "random", "Dodge the Attack") == True:
-                t.sleep(0.5)
-                print("The Box Misses and Hits The Wall Behind You")
-                if fight_tutorial_dodge == False:
-                    print("Well Done You Dodge An Attack")
-                    fight_tutorial_dodge = True
+            if fight_tutorial_attack == True and fight_tutorial_dodge == True and fight_tutorial_crit == True:
+                print("Well Done")
+                t.sleep(1)
+                print("You Have Completed The Fight Tutorial")
+                fight_tutorial_done = True
                 crit_attack = False
+                print()
+                t.sleep(1)
+                return
+            action = r.choice(["attack", "dodge"])
+            if action == "dodge":
+                t.sleep(1)
+                print()
+                print("The Box Is Attacking")
+                if quick_time_event(3, "random", "Dodge the Attack") == True:
+                    t.sleep(0.5)
+                    print("The Box Misses and Hits The Wall Behind You")
+                    if fight_tutorial_dodge == False:
+                        print("Well Done You Dodge An Attack")
+                        fight_tutorial_dodge = True
+                    crit_attack = False
+                else:
+                    damage_taken = 2 / damage_resistence
+                    health -= damage_taken
+                    t.sleep(0.5)
+                    print(f"The Box Hit You For {damage_taken} Health. You Now Have {health} Health Left")
+                    crit_attack = False
             else:
-                damage_taken = 2 / damage_resistence
-                health -= damage_taken
-                t.sleep(0.5)
-                print(f"The Box Hit You For {damage_taken} Health. You Now Have {health} Health Left")
-                crit_attack = False
-        else:
-            if crit_attack == True:
-                print()
-                t.sleep(1)
-                print("Your Turn To Attack")
-                print("You Have a Chance for a Critical Hit")
-                if quick_time_double(2, "random", "random", "Critical Hit the Baby Dragon") == True:
-                    t.sleep(0.5)
-                    white_box_health_taken = 2 * damage
-                    white_box_health -= white_box_health_taken
-                    print(f"You Attacked the White Box with a Critical Hit For {white_box_health_taken} Damage. It Now Has {white_box_health} Health Left")
-                    if fight_tutorial_crit == False:
-                        print("Well Done You Hit A Critical Attack")
-                        fight_tutorial_crit = True
-                    crit_attack = False
-                else:
-                    print("You Missed Your Attack")
-                    crit_attack = False
-            else:  
-                print()
-                t.sleep(1)
-                print("Your Turn To Attack")
-                if quick_time_event(3, "random", "Attack the White Box") == True:
-                    t.sleep(0.5)
-                    white_box_health_taken = 1 * damage
-                    white_box_health -= white_box_health_taken
-                    print(f"You Attacked the White Box For {white_box_health_taken} Damage. It Now Has {white_box_health} Health Left")
-                    crit_attack = True
-                else:
-                    print("You Missed Your Attack")
-                    crit_attack = False
-            tutorial()
+                if crit_attack == True:
+                    print()
+                    t.sleep(1)
+                    print("Your Turn To Attack")
+                    print("You Have a Chance for a Critical Hit")
+                    if quick_time_double(2, "random", "random", "Critical Hit the Baby Dragon") == True:
+                        t.sleep(0.5)
+                        white_box_health_taken = 2 * damage
+                        white_box_health -= white_box_health_taken
+                        print(f"You Attacked the White Box with a Critical Hit For {white_box_health_taken} Damage. It Now Has {white_box_health} Health Left")
+                        if fight_tutorial_crit == False:
+                            print("Well Done You Hit A Critical Attack")
+                            fight_tutorial_crit = True
+                            crit_attack = False
+                    else:
+                        print("You Missed Your Attack")
+                        crit_attack = False
+                else:  
+                    print()
+                    t.sleep(1)
+                    print("Your Turn To Attack")
+                    if quick_time_event(3, "random", "Attack the White Box") == True:
+                        t.sleep(0.5)
+                        white_box_health_taken = 1 * damage
+                        white_box_health -= white_box_health_taken
+                        print(f"You Attacked the White Box For {white_box_health_taken} Damage. It Now Has {white_box_health} Health Left")
+                        crit_attack = True
+                    else:
+                        print("You Missed Your Attack")
+                        crit_attack = False
     if white_box_health >= 0:
         t.sleep(1)
         print("You Defeated the White Box But Not Complete The Task")
@@ -2291,7 +2294,6 @@ def fight_tutorial():
         crit_attack = False
         print()
         t.sleep(1)
-        fight_tutorial()
 
 def menu_tuorial_part_1(): 
     global health, energy, damage, inventory, gold
@@ -2315,39 +2317,37 @@ def menu_tuorial_part_1():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("Hello. Respond With 'HI', 'GO AWAY' OR 'I HATE YOU'")
-    menu_1_option = str(input())
-    print()
-    t.sleep(1)
-    if menu_1_option == "HI":
-        print("Thank You.")
-        t.sleep(1)
-        print("But You Failed The Objective. :(")
-        t.sleep(1)
-        print("Try Again")
-        t.sleep(1)
+    while menu_tutorial_done == False:
+        print("Hello. Respond With 'HI', 'GO AWAY' OR 'I HATE YOU'")
+        menu_1_option = str(input())
         print()
-        menu_tuorial_part_1()
-    elif menu_1_option == "GO AWAY":
-        print("What Have I Done")
         t.sleep(1)
-        print("Doesn't Matter Because You Failed The Objective.")
-        t.sleep(1)
-        print("Try Again")
-        t.sleep(1)
-        print()
-        menu_tuorial_part_1()
-    elif menu_1_option == "I HATE YOU":
-        print("Well That Was Very Mean")
-        t.sleep(1)
-        print("And You Didn't Even Complete The Objective.")
-        t.sleep(1)
-        print("So You Have Try Again Which You Deserve")
-        t.sleep(1)  
-        print()
-        menu_tuorial_part_1()
-    elif menu_1_option == "MENU":
-        menu_tutorial_part_2()
+        if menu_1_option == "HI":
+            print("Thank You.")
+            t.sleep(1)
+            print("But You Failed The Objective. :(")
+            t.sleep(1)
+            print("Try Again")
+            t.sleep(1)
+            print()
+        elif menu_1_option == "GO AWAY":
+            print("What Have I Done")
+            t.sleep(1)
+            print("Doesn't Matter Because You Failed The Objective.")
+            t.sleep(1)
+            print("Try Again")
+            t.sleep(1)
+            print()
+        elif menu_1_option == "I HATE YOU":
+            print("Well That Was Very Mean")
+            t.sleep(1)
+            print("And You Didn't Even Complete The Objective.")
+            t.sleep(1)
+            print("So You Have Try Again Which You Deserve")
+            t.sleep(1)  
+            print()
+        elif menu_1_option == "MENU":
+            menu_tutorial_part_2()
         
 def menu_tutorial_part_2():
     global health, energy, damage, inventory, gold
@@ -2371,53 +2371,46 @@ def menu_tutorial_part_2():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if menu_tutorial_access == True and menu_tutorial_basic == True and menu_tutorial_save == True:
-        print("Well Done You Completed The Menu Tutorial")
-        menu_tutorial_done = True
+    while True:
+        if menu_tutorial_access == True and menu_tutorial_basic == True and menu_tutorial_save == True:
+            print("Well Done You Completed The Menu Tutorial")
+            menu_tutorial_done = True
+            t.sleep(1)
+            print()
+            return
+        print("Accessing Menu")
         t.sleep(1)
+        print("Well Done You Completed The First Objective")
+        menu_tutorial_access = True
+        t.sleep(1)
+        print("You Can View 'BASIC', 'ARMOUR', 'CLASS' Or 'WEATHER' Information")
+        t.sleep(1)
+        print("Or You Can 'SAVE' Your Data")
+        menu_2_option = str(input())
         print()
-        tutorial()
-    print("Accessing Menu")
-    t.sleep(1)
-    print("Well Done You Completed The First Objective")
-    menu_tutorial_access = True
-    t.sleep(1)
-    print("You Can View 'BASIC', 'ARMOUR', 'CLASS' Or 'WEATHER' Information")
-    t.sleep(1)
-    print("Or You Can 'SAVE' Your Data")
-    menu_2_option = str(input())
-    print()
-    t.sleep(1)
-    if menu_2_option == "BASIC":
-        print("Well Done You Viewed Your Basic Information")
         t.sleep(1)
-        menu_tutorial_basic = True
-        print("Going Back To Menu")
-        t.sleep(1)
-        print()
-        menu_tutorial_part_2()
-    elif menu_2_option == "ARMOUR" or menu_2_option == "CLASS" or menu_2_option == "WEATHER":
-        print(f"Well Done You Viewed Your Some Information On")
-        t.sleep(1)
-        print("But It Wasn't Nessecary For The Objective")
-        t.sleep(1)
-        print("Going Back To Menu")
-        t.sleep(1)
-        print()
-        menu_tutorial_part_2()
-    elif menu_2_option == "SAVE":
-        print("Well Done You Saved Your Data")
-        t.sleep(1)
-        print("You Completed The Menu Tutorial")
-        menu_tutorial_save = True
-        print()
-        tutorial()
-    if menu_tutorial_access == True and menu_tutorial_basic == True and menu_tutorial_save == True:
-        print("Well Done You Completed The Menu Tutorial")
-        menu_tutorial_done = True
-        t.sleep(1)
-        print()
-        tutorial()
+        if menu_2_option == "BASIC":
+            print("Well Done You Viewed Your Basic Information")
+            t.sleep(1)
+            menu_tutorial_basic = True
+            print("Going Back To Menu")
+            t.sleep(1)
+            print()
+        elif menu_2_option == "ARMOUR" or menu_2_option == "CLASS" or menu_2_option == "WEATHER":
+            print(f"Well Done You Viewed Your Some Information On")
+            t.sleep(1)
+            print("But It Wasn't Nessecary For The Objective")
+            t.sleep(1)
+            print("Going Back To Menu")
+            t.sleep(1)
+            print()
+        elif menu_2_option == "SAVE":
+            print("Well Done You Saved Your Data")
+            t.sleep(1)
+            print("You Completed An Objective")
+            menu_tutorial_save = True
+            t.sleep(1)
+            print()
         
 def beach():
     global health, energy, damage, inventory, gold
@@ -2442,26 +2435,26 @@ def beach():
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     last_checkpoint = beach
-    if beach_discovered == False:
-        rp("You Wake Up Confused Lying On The Floor", 1)
-        rp("Sand Grains Irritate Your Skin And Seep Into Your Clothes", 1)
-        rp("Sand, What. You Should Be On A Ship", 1)
-        rp("You Stand Up And Realise Your On A Beach", 1)
-        rp("You Try To Think Of Why You Are Here", 1)
-        rp("But Cannot Remember Anything Else But The Ship", 1)
-        rp("With Nothing Else To Do", 1)
-        rp("You Start Looking For Resources", 1)
-        beach_option_1 = ci("You Can 'DIG' or 'WANDER' To Look For Resourses", beach, "DIG", "WANDER")
-        if beach_option_1 == "option_1":
-            beach_dig()
-        elif beach_option_1 == "option_2":
-            beach_wander()
-        elif beach_option_1 == "back":
-            ending_1()
-    else:
-        rp("You Are Back On The Beach You Woke Up On", 1)
-        last_checkpoint = beach
-        if "fishing_rod" in inventory:
+    while True:
+        if beach_discovered == False:
+            rp("You Wake Up Confused Lying On The Floor", 1)
+            rp("Sand Grains Irritate Your Skin And Seep Into Your Clothes", 1)
+            rp("Sand, What. You Should Be On A Ship", 1)
+            rp("You Stand Up And Realise Your On A Beach", 1)
+            rp("You Try To Think Of Why You Are Here", 1)
+            rp("But Cannot Remember Anything Else But The Ship", 1)
+            rp("With Nothing Else To Do", 1)
+            rp("You Start Looking For Resources", 1)
+            beach_option_1 = ci("You Can 'DIG' or 'WANDER' To Look For Resourses", beach, "DIG", "WANDER")
+            if beach_option_1 == "option_1":
+                beach_dig()
+            elif beach_option_1 == "option_2":
+                beach_wander()
+            elif beach_option_1 == "back":
+                ending_1()
+        else:
+            rp("You Are Back On The Beach You Woke Up On", 1)
+            if "fishing_rod" in inventory:
             beach_option_2 = ci("You Can 'WANDER', 'DIG', or 'FISH' Or Travel To The 'FOREST', 'FIELD' Or 'OVERHANG' ", beach, "WANDER", "DIG", "FISH", "FOREST", "FIELD", "OVERHANG")
             if beach_option_2 == "option_1":
                 beach_wander()
@@ -2492,7 +2485,6 @@ def beach():
                 overhang()
             else:
                 rp("Not A Valid Option Try Again", 1, True)
-                beach()
 
 def beach_wander():
     global health, energy, damage, inventory, gold
@@ -2516,63 +2508,60 @@ def beach_wander():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if beach_discovered == False:
-        rp("You Start Strolling Down The Beach", 1)
-        fishing_rod_time = r.choice([6, 7, 8, 9, 10])
-        rp("Looking For Resources That Down With The Boat", fishing_rod_time)
-        rp(f"After {fishing_rod_time} Seconds You Find A Fishing Rod", 1)
-        inventory.append("fishing_rod")
-        energy_lost_beach_wander_fish_rod = 1 * energy_efficenty
-        energy -= energy_lost_beach_wander_fish_rod
-        rp("This Will Be Handy", 1)
-        rp("Fishing Rod Added To Inventory", 1)
-        rp(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}", 1)
-        beach_discovered = True
-        beach_wander_option_1 = ci("Do You Want To Keep Wandering? 'YES'/'NO'", beach_wander, "YES", "NO")
-        if beach_wander_option_1 == "option_1":
-            beach_wander()
+    while True:
+        if beach_discovered == False:
+            rp("You Start Strolling Down The Beach", 1)
+            fishing_rod_time = r.choice([6, 7, 8, 9, 10])
+            rp("Looking For Resources That Down With The Boat", fishing_rod_time)
+            rp(f"After {fishing_rod_time} Seconds You Find A Fishing Rod", 1)
+            inventory.append("fishing_rod")
+            energy_lost_beach_wander_fish_rod = 1 * energy_efficenty
+            energy -= energy_lost_beach_wander_fish_rod
+            rp("This Will Be Handy", 1)
+            rp("Fishing Rod Added To Inventory", 1)
+            rp(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}", 1)
+            beach_discovered = True
+            beach_wander_option_1 = ci("Do You Want To Keep Wandering? 'YES'/'NO'", beach_wander, "YES", "NO")
+            if beach_wander_option_1 != "option_1":
+                return
         else:
-            beach()
-    else:
-        wander_pause_time = r.choice([6, 7, 8, 9, 10, 11])
-        rp("You Start Strolling Down The Coast Line", wander_pause_time)
-        loot = r.choice(beach_wander_loot)
-        if loot == "plank":
-            loot_name = "Plank"
-        elif loot == "rock":
-            loot_name = "Rock"
-        elif loot == "rubbish":
-            loot_name = "Piece Of Rubbish"
-        elif loot == "gold":
-            loot_name = "Gold Coin"
-        elif loot == "gold_chest":
-            loot_name = "Gold Chest"
-        rp(f"After {wander_pause_time} Seconds You Found A {loot_name}", 1)
-        if loot == "plank" or loot == "rock":
-            beach_wander_option_2 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_wander, "YES", "NO")
-            if beach_wander_option_2 == "option_1":
-                inventory.append(loot)
-                rp(f"{loot_name} Added To Inventory", 1)
+            wander_pause_time = r.choice([6, 7, 8, 9, 10, 11])
+            rp("You Start Strolling Down The Coast Line", wander_pause_time)
+            loot = r.choice(beach_wander_loot)
+            if loot == "plank":
+                loot_name = "Plank"
+            elif loot == "rock":
+                loot_name = "Rock"
+            elif loot == "rubbish":
+                loot_name = "Piece Of Rubbish"
+            elif loot == "gold":
+                loot_name = "Gold Coin"
+            elif loot == "gold_chest":
+                loot_name = "Gold Chest"
+            rp(f"After {wander_pause_time} Seconds You Found A {loot_name}", 1)
+            if loot == "plank" or loot == "rock":
+                beach_wander_option_2 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_wander, "YES", "NO")
+                if beach_wander_option_2 == "option_1":
+                    inventory.append(loot)
+                    rp(f"{loot_name} Added To Inventory", 1)
+                else:
+                    rp(f"You Left The {loot_name}", 1)
+            elif loot == "gold":
+                gold_amount = r.choice([1, 2, 3])
+                gold += gold_amount
+                rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
+            elif loot == "gold_chest":
+                gold_chest_amount = r.choice([30, 35, 40, 45, 50])
+                gold += gold_chest_amount
+                rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
             else:
-                rp(f"You Left The {loot_name}", 1)
-        elif loot == "gold":
-            gold_amount = r.choice([1, 2, 3])
-            gold += gold_amount
-            rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
-        elif loot == "gold_chest":
-            gold_chest_amount = r.choice([30, 35, 40, 45, 50])
-            gold += gold_chest_amount
-            rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
-        else:
-            rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
-        energy_lost_beach_wander = int( 1 / energy_efficenty )
-        energy -= energy_lost_beach_wander
-        rp(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}", 1)
-        beach_wander_option_3 = ci("Would You Like To Wander Again 'YES'/'NO'", beach_wander, "YES", "NO")
-        if beach_wander_option_3 == "option_1":
-            beach_wander()
-        else:
-            beach()
+                rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
+            energy_lost_beach_wander = int( 1 / energy_efficenty )
+            energy -= energy_lost_beach_wander
+            rp(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}", 1)
+            beach_wander_option_3 = ci("Would You Like To Wander Again 'YES'/'NO'", beach_wander, "YES", "NO")
+            if beach_wander_option_3 != "option_1":
+                beach_wander()
 
 def beach_dig():
     global health, energy, damage, inventory, gold
@@ -2596,86 +2585,82 @@ def beach_dig():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if beach_discovered == False:
-        rp("You Start Digging The Sand Beneathe You", 1)
-        rp("To Hopefully Find An Item", 1)
-        rp("That Will Help You Suvive", 1)
-        rp("On This Unknown Land", 1)
-        while not "fishing_rod" in inventory:
-            fishing_rod_dig = quick_time_spam(20, "random", "random", "Dig")
-            if fishing_rod_dig == True:
-                rp("You Hit A Solid Wooden Pole", 1)
-                rp("It's A Fishing Rod", 1)
-                rp("This Will Be Handy", 1)
-                energy_lost_beach_dig_fish_rod = int ( 1 * energy_efficenty)
-                energy -= energy_lost_beach_dig_fish_rod
-                rp(f"You Lost {energy_lost_beach_dig_fish_rod} Energy. You Are Now On {energy}", 1)
-                inventory.append("fishing_rod")
-                beach_discovered = True
-                keep_digging_1 = ci("Do You Want To Keep Digging? 'YES/'NO'", beach_dig, "YES", "NO")
-                if keep_digging_1 == "option_1":
-                    beach_dig()
+    while True:
+        if beach_discovered == False:
+            rp("You Start Digging The Sand Beneathe You", 1)
+            rp("To Hopefully Find An Item", 1)
+            rp("That Will Help You Suvive", 1)
+            rp("On This Unknown Land", 1)
+            while not "fishing_rod" in inventory:
+                fishing_rod_dig = quick_time_spam(20, "random", "random", "Dig")
+                if fishing_rod_dig == True:
+                    rp("You Hit A Solid Wooden Pole", 1)
+                    rp("It's A Fishing Rod", 1)
+                    rp("This Will Be Handy", 1)
+                    energy_lost_beach_dig_fish_rod = int ( 1 * energy_efficenty)
+                    energy -= energy_lost_beach_dig_fish_rod
+                    rp(f"You Lost {energy_lost_beach_dig_fish_rod} Energy. You Are Now On {energy}", 1)
+                    inventory.append("fishing_rod")
+                    beach_discovered = True
+                    keep_digging_1 = ci("Do You Want To Keep Digging? 'YES/'NO'", beach_dig, "YES", "NO")
+                    if keep_digging_1 != "option_1":
+                        return
                 else:
-                    beach()
-
-            else:
-                rp("You Only Ended Up Only Scraping Up A Thin Layer Of Sand Beneathe You", 1, True)
-    else:
-        rp("You Start Digging Down Into The Sand", 1)
-        dig_spam_event = quick_time_spam(20, "random", "random", "Dig")
-        if dig_spam_event == True:
-            loot = r.choice(beach_dig_loot)
-            if loot == "plank":
-                loot_name = "Plank"
-            elif loot == "rock":
-                loot_name = "Rock"
-            elif loot == "bone":
-                loot_name = "Bone"
-            elif loot == "rubbish":
-                loot_name = "Piece Of Rubbish"
-            elif loot == "gold":
-                loot_name = "Gold Coin"
-            elif loot == "gold_chest":
-                loot_name = "Gold Chest"
-            elif loot == "rock_dweller":
-                loot_name = "Rock Dweller"
-            rp(f"You Hit A {loot_name}", 1)
-            if loot == "plank" or loot == "rock" or loot == "bone":
-                beach_dig_option_1 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_dig, "YES", "NO")
-                if beach_dig_option_1 == "option_1":
-                    inventory.append(loot)
-                    rp(f"{loot_name} Added To Inventory", 1)
-                else:
-                    rp(f"You Left The {loot_name}", 1)
-            elif loot == "gold":
-                gold_amount = r.choice([1, 2, 3])
-                gold += gold_amount
-                rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
-            elif loot == "gold_chest":
-                gold_chest_amount = r.choice([30, 35, 40, 45, 50])
-                gold += gold_chest_amount
-                rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
-            elif loot == "rock_dweller":
-                rp("Do You Want To Set The Rock Dweller As Your Companion.", 1)
-                rock_dweller_select = ci("Else It Is Added To Your Inventory 'YES'/'NO'", beach_dig, "YES", "NO")
-                if rock_dweller_select == "option_1":
-                    companion = "rock_dweller"
-                    rp("Rock Dweller Set As Companion", 1)
-                else:
-                    companion_available.append("rock_dweller")
-                    rp("Rock Dweller Added To Inventory", 1)
-            else:
-                rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
+                    rp("You Only Ended Up Only Scraping Up A Thin Layer Of Sand Beneathe You", 1, True)
         else:
-            rp("You Failed To Dig Deep Enough", 1)
-    energy_lost_beach_dig = 1 * energy_efficenty
-    energy -= energy_lost_beach_dig
-    rp(f"You Lost {energy_lost_beach_dig} Energy. You Are Now On {energy}", 1)
-    beach_dig_option_2 = ci("Would You Like To Dig Again 'YES'/'NO'", beach_dig, "YES", "NO")
-    if beach_dig_option_2 == "option_1":
-        beach_dig()
-    else:
-        beach()
+            rp("You Start Digging Down Into The Sand", 1)
+            dig_spam_event = quick_time_spam(20, "random", "random", "Dig")
+            if dig_spam_event == True:
+                loot = r.choice(beach_dig_loot)
+                if loot == "plank":
+                    loot_name = "Plank"
+                elif loot == "rock":
+                    loot_name = "Rock"
+                elif loot == "bone":
+                    loot_name = "Bone"
+                elif loot == "rubbish":
+                    loot_name = "Piece Of Rubbish"
+                elif loot == "gold":
+                    loot_name = "Gold Coin"
+                elif loot == "gold_chest":
+                    loot_name = "Gold Chest"
+                elif loot == "rock_dweller":
+                    loot_name = "Rock Dweller"
+                rp(f"You Hit A {loot_name}", 1)
+                if loot == "plank" or loot == "rock" or loot == "bone":
+                    beach_dig_option_1 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_dig, "YES", "NO")
+                    if beach_dig_option_1 == "option_1":
+                        inventory.append(loot)
+                        rp(f"{loot_name} Added To Inventory", 1)
+                    else:
+                        rp(f"You Left The {loot_name}", 1)
+                elif loot == "gold":
+                    gold_amount = r.choice([1, 2, 3])
+                    gold += gold_amount
+                    rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
+                elif loot == "gold_chest":
+                    gold_chest_amount = r.choice([30, 35, 40, 45, 50])
+                    gold += gold_chest_amount
+                    rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
+                elif loot == "rock_dweller":
+                    rp("Do You Want To Set The Rock Dweller As Your Companion.", 1)
+                    rock_dweller_select = ci("Else It Is Added To Your Inventory 'YES'/'NO'", beach_dig, "YES", "NO")
+                    if rock_dweller_select == "option_1":
+                        companion = "rock_dweller"
+                        rp("Rock Dweller Set As Companion", 1)
+                    else:
+                        companion_available.append("rock_dweller")
+                        rp("Rock Dweller Added To Inventory", 1)
+                else:
+                r   p(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
+            else:
+                rp("You Failed To Dig Deep Enough", 1)
+        energy_lost_beach_dig = 1 * energy_efficenty
+        energy -= energy_lost_beach_dig
+        rp(f"You Lost {energy_lost_beach_dig} Energy. You Are Now On {energy}", 1)
+        beach_dig_option_2 = ci("Would You Like To Dig Again 'YES'/'NO'", beach_dig, "YES", "NO")
+        if beach_dig_option_2 != "option_1":
+            return
 
 def beach_fish():
     global health, energy, damage, inventory, gold
@@ -2699,19 +2684,20 @@ def beach_fish():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if "fishing_rod" in inventory:
-        pause_time = r.choice([6, 7, 8, 9, 10, 11])
-        rp("You Throw Your Hook Into The Sea", pause_time)
-        rp(f"After {pause_time} Seconds Something Hooked Onto Your Fishing Rod")
-        fish_spam_event = quick_time_spam(10, "random", "random/2", "Pull Up The Fish")
-        if fish_spam_event == True:
-            loot = r.choice(beach_fishing_loot)
-            if loot == "plank":
-                loot_name = "Plank"
-            elif loot == "rock":
-                loot_name = "Rock"
-            elif loot == "fish":
-                loot_name = "Fish"
+    while True:
+        if "fishing_rod" in inventory:
+            pause_time = r.choice([6, 7, 8, 9, 10, 11])
+            rp("You Throw Your Hook Into The Sea", pause_time)
+            rp(f"After {pause_time} Seconds Something Hooked Onto Your Fishing Rod")
+            fish_spam_event = quick_time_spam(10, "random", "random/2", "Pull Up The Fish")
+            if fish_spam_event == True:
+                loot = r.choice(beach_fishing_loot)
+                if loot == "plank":
+                    loot_name = "Plank"
+                elif loot == "rock":
+                    loot_name = "Rock"
+                elif loot == "fish":
+                    loot_name = "Fish"
             elif loot == "rubbish":
                 loot_name = "Piece Of Rubbish"
             elif loot == "gold":
@@ -2720,46 +2706,44 @@ def beach_fish():
                 loot_name = "Gold Chest"
             elif loot == "fish_scaling":
                 loot_name = "Fish Scale Base"
-        else:
-            rp("You Failed To Pull Anythng Up", 1)
-        rp(f"You Fished Up A {loot_name}", 1)
-        if loot == "plank" or loot == "rock" or loot == "bone":
-            beach_fish_option_1 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_fish, "YES", "NO")
-            if beach_fish_option_1 == "option_1":
-                inventory.append(loot)
-                rp(f"{loot_name} Added To Inventory", 1)
             else:
-                rp(f"You Left The {loot_name}", 1)
-        elif loot == "gold":
-            gold_amount = r.choice([1, 2, 3])
-            gold += gold_amount
-            rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
-        elif loot == "gold_chest":
-            gold_chest_amount = r.choice([30, 35, 40, 45, 50])
-            gold += gold_chest_amount
-            rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
-        elif loot == "fish_scaling":
-            rp("Do You Want To Set The Fish Scaling As Your Armour Base.", 1)
-            fish_scale_select = ci("Else It Is Added To Your Inventory 'YES'/'NO'", beach_fish, "YES", "NO")
-            if fish_scale_select == "option_1":
-                armour_base = "fish_scaling"
-                rp("Scale Plating Set As Armour Base", 1)
+                rp("You Failed To Pull Anythng Up", 1)
+            rp(f"You Fished Up A {loot_name}", 1)
+            if loot == "plank" or loot == "rock" or loot == "bone":
+                beach_fish_option_1 = ci(f"Do You Want To Keep The {loot_name} 'YES'/'NO'", beach_fish, "YES", "NO")
+                if beach_fish_option_1 == "option_1":
+                    inventory.append(loot)
+                    rp(f"{loot_name} Added To Inventory", 1)
+                else:
+                    rp(f"You Left The {loot_name}", 1)
+            elif loot == "gold":
+                gold_amount = r.choice([1, 2, 3])
+                gold += gold_amount
+                rp(f"{gold_amount} Gold Was Put In Your Gold Pouch. You Are Now On {gold} Gold", 1)
+            elif loot == "gold_chest":
+                gold_chest_amount = r.choice([30, 35, 40, 45, 50])
+                gold += gold_chest_amount
+                rp(f"{gold_chest_amount} Was Added To Your Gold Pouch. You Are Now On {gold} Gold", 1)
+            elif loot == "fish_scaling":
+                rp("Do You Want To Set The Fish Scaling As Your Armour Base.", 1)
+                fish_scale_select = ci("Else It Is Added To Your Inventory 'YES'/'NO'", beach_fish, "YES", "NO")
+                if fish_scale_select == "option_1":
+                    armour_base = "fish_scaling"
+                    rp("Scale Plating Set As Armour Base", 1)
+                else:
+                    armour_base_available.append("fish_scaling")
+                    rp("Scale Plating Added To Inventory", 1)
             else:
-                armour_base_available.append("fish_scaling")
-                rp("Scale Plating Added To Inventory", 1)
+                rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
         else:
-            rp(f"The {loot_name} Wasn't Worth Keeping So You Threw It Away", 1)
-    else:
             rp("You Don't Even Have A Fishing Rod", 1, True)
             beach()
-    energy_lost_beach_fish = 2 * energy_efficenty
-    energy -= energy_lost_beach_fish
-    rp(f"You Lost {energy_lost_beach_fish} Energy. You Are Now On {energy}", 1)
-    beach_fish_option_2 = ci("Would You Like To Fish Again 'YES'/'NO'", beach_fish, "YES", "NO")
-    if beach_fish_option_2 == "YES":
-        beach_fish()
-    else:
-        beach()
+            energy_lost_beach_fish = 2 * energy_efficenty
+            energy -= energy_lost_beach_fish
+            rp(f"You Lost {energy_lost_beach_fish} Energy. You Are Now On {energy}", 1)
+            beach_fish_option_2 = ci("Would You Like To Fish Again 'YES'/'NO'", beach_fish, "YES", "NO")
+            if beach_fish_option_2 != "option_1":
+                return
 
 def overhang():
     global health, energy, damage, inventory, gold
@@ -4122,7 +4106,7 @@ def work():
                 rp(f"Well Done You Did The Job", 1)
                 gold += 10
                 rp(f"You Got 10 Gold. You Are Now On {gold} Gold", 1, True)
-            else:
+            else:\
                 rp(f"You Failed The Job", 1, True)
     elif work_ == "hunt":
         rp("You Are Hunting Animals", 1)
