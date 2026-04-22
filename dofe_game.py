@@ -1,7 +1,11 @@
 import time as t
 import os as o
 import random as r
-import keyboard as k
+try:
+    import keyboard as k
+except:
+    o.system('pip install keyboard')
+    import keyboard as k
 import json as j
 
 start_load = t.time() #records time at start of loading to see how long it takes to load
@@ -11,14 +15,27 @@ save_name = "save_file.json"      #Retrives Path For Save File
 save_dir = f"{game_dir}/{save_name}"
 
 def save_data():
-    global health, energy, gold, inventory, armour_base, armour_plate, armour_lining
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
     global armour_base_available, armour_plate_available, armour_lining_available
-    global companion, companion_available, class_, weapon, spell, arrow, skill
-    global class_available, weapon_available, spell_available, arrow_available, skill_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
     global neg2_weather, last_weather, this_weather, next_weather
-    global last_weather_change_refesh, last_weather_effect_refesh
-    global beach_discovered, field_discovered, forest_discovered, overhang_discovered
-    global tutorial_done, save_dir
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Retrives Character Data And Updates The Save Data With It
     Is A Silent Task
     Returns To The Specified Location Or Menu
@@ -50,7 +67,7 @@ def save_data():
         "neg2_weather": neg2_weather,
         "last_weather": last_weather,
         "this_weather": this_weather,
-        "next_weather": next_weather,
+        "new_weather": new_weather,
         "last_weather_refresh_time": last_weather_change_refesh,
         "last_weather_effect_time": last_weather_effect_refesh,
         "class_available": class_available,
@@ -69,14 +86,27 @@ def save_data():
     return
 
 def load_save():
-    global health, energy, gold, inventory, armour_base, armour_plate, armour_lining
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
     global armour_base_available, armour_plate_available, armour_lining_available
-    global companion, companion_available, class_, weapon, spell, arrow, skill
-    global class_available, weapon_available, spell_available, arrow_available, skill_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
     global neg2_weather, last_weather, this_weather, next_weather
-    global last_weather_change_refesh, last_weather_effect_refeshsS
-    global beach_discovered, field_discovered, forest_discovered, overhang_discovered
-    global tutorial_done, save_dir
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Retrives Data From The Save Data And Updates The Character Information
     Is A Silent Task
     Returns To The Previous Location
@@ -122,7 +152,27 @@ def load_save():
     return data
 
 def quick_time_event(time_allowed, prompt_key, keyword):
-    global event_speed
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Creats A Basic Quick Time Event
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Given Key To Be The Trigger Key.
@@ -151,7 +201,27 @@ def quick_time_event(time_allowed, prompt_key, keyword):
     return False
 
 def quick_time_double(time_allowed, prompt_key_1, prompt_key_2, keyword):
-    global event_speed
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Creats A Basic Quick Time Event Where 2 Keys Must Be Pressed At Once
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Two Given Key To Be The Trigger Keys.
@@ -182,7 +252,27 @@ def quick_time_double(time_allowed, prompt_key_1, prompt_key_2, keyword):
     return False
 
 def quick_time_choice(time_allowed, prompt_key_1, prompt_key_2, keyword_1, keyword_2):
-    global event_speed
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Creates A Basic Quick Time Event Where Multiple Options Are Available Through Different Keys
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Two Given Key To Be The Trigger Keys.
@@ -216,7 +306,27 @@ def quick_time_choice(time_allowed, prompt_key_1, prompt_key_2, keyword_1, keywo
     return False
 
 def quick_time_spam(time_allowed, prompt_key, press_key_number, keyword):
-    global event_speed
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Creats A Basic Quick Time Event Where A Key Must Be Pressed Multiple Times
     Sets A Timer With The Time Given Multiplied By The Event Speed Stat.
     Sets The Given Key To Be The Trigger Key.
@@ -267,7 +377,27 @@ def quick_time_spam(time_allowed, prompt_key, press_key_number, keyword):
         return False
 
 def countspam(time_allowed, prompt_key, keyword):
-    global event_speed
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Similar To quick_time_spam()
     Except For Baseline For Amount Of Times To Spam Key
     And Returns Amount Of Times Key Was Pressed'''
@@ -292,6 +422,27 @@ def countspam(time_allowed, prompt_key, keyword):
     return key_pressed
 
 def waitandhit(time_allowed, prompt_key, keyword):
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Creats A Basic Quick Time Event Where A Key Must Be Pressed After A Random Amount Of Time
     Sets A Timer With A Random Amount Of Time Between 5 And 15 Seconds
     Sets The Given Key To Be The Trigger Key.
@@ -322,8 +473,28 @@ def waitandhit(time_allowed, prompt_key, keyword):
     return False
 
 def fight_signal():
-    global class_
-    global weapon
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Prints A Statement To Signal A Fight
     Takes Class and Weapon And Changes It Accordingly'''
     if class_ == "fighter" and not weapon == "none":
@@ -339,7 +510,28 @@ def fight_signal():
     print()
 
 def weather_change():
-    global last_weather_effect_done, neg2_weather, last_weather, this_weather, next_weather
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Takes Current Weather And Changes Weather Based On It
     Weather Can Change, Advance, Devance Or Stay The Same
     Some Weathers Can Advance Into Extereme Weathers'''
@@ -417,8 +609,9 @@ def weather_change():
             ["new", "same", "increase", "decrease"],
             weights = [15, 15, 35, 35]
         )
+    new_weather = "cloudy"
     if new_weather_decide == "new":
-        new_weather = r.choice[weather_chance]
+        new_weather = r.choice(weather_chance)
     elif new_weather_decide == "same":
         new_weather = this_weather
     elif new_weather_decide == "increase":
@@ -457,11 +650,11 @@ def weather_change():
     neg2_weather = last_weather
     last_weather = this_weather
     if heatwave_activate == True:
-        next_weather = "heatwave"
+        new_weather = "heatwave"
     elif thunder_activate == True:
-        next_weather = "thundering"
+        new_weather = "thundering"
     elif hail_activate == True:
-        next_weather = "hail_storm"
+        new_weather = "hail_storm"
     this_weather = new_weather
 
 def rest():
@@ -489,8 +682,28 @@ def rest():
         return
 
 def refresh_class():
-    global class_, weapon, spell, arrow, skill, crit_chance, piercing
-    global splash_damage, splash_range, damage, damage_affects
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Checks For Current Value Of 'class_'
     Then Checks For Current Value Of 'weapon', 'spell', 'arrow', Or 'skill'
     Adjusts Stats Accordingly
@@ -605,7 +818,28 @@ def refresh_class():
             crit_chance = 60
 
 def refresh_armour_base():
-    global armour_base, damage_resistence, event_speed, armour_affects
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Checks For Current Value Of 'armour_base'
     Adjusts Stats Accordingly
     '''
@@ -639,7 +873,28 @@ def refresh_armour_base():
         event_speed = 3
 
 def refresh_armour_plating():
-    global armour_plate, energy_efficenty, damage_resistence, armour_affects
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Checks For Current Value of 'armour_plate'
     Adjusts Stat Values Accordingly
     '''
@@ -677,7 +932,28 @@ def refresh_armour_plating():
             armour_affects.append("shining_glamour")
 
 def refresh_armour_lining():
-    global armour_lining, armour_affects, damage, crit_multiplier, crit_chance
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Checks For Current Value of 'armour_lining'
     Adjusts Stats Accordingly
     '''
@@ -712,7 +988,28 @@ def refresh_armour_lining():
         damage *= 3
        
 def refresh_companion():
-    global companion, damage, damage_resistence
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Checks For Current Value Of 'companion'
     Adjusts Stats Accordingly
     '''
@@ -725,9 +1022,28 @@ def refresh_companion():
         damage_resistence += 0.5
 
 def weather_effect_refresh():
-    global last_weather_effect_refesh, this_weather, health, warmth
-    global in_shelter, damage_resistence, armour_affects, energy_efficenty
-    global weather_effect_done, thunderstrike_chance
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Checks For Current Weather And Applies Effects Based On It
     Effects Are Applied Every 3 Minutes
     Some Effects Are Repeating While Others Are Constant Until Weather Changes
@@ -817,8 +1133,28 @@ def weather_effect_refresh():
             print()
 
 def refresh_all(ignore_death):
-    global health, energy, armour_base, armour_plate, armour_lining
-    global last_weather_change_refesh, weather_change_addtitional_time
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     '''Refreshes All Stats And Values That Need Refreshing
     Health And Energy Are Capped At 30
     If Health Is 0 Or Below The Player Dies And Is Returned To Last Checkpoint
@@ -873,7 +1209,7 @@ def refresh_all(ignore_death):
         print()
     if last_weather_change_refesh + weather_change_addtitional_time < t.time():
         weather_change()
-        weather_change_addtitional_time = r.choice[300, 360, 420, 480, 540, 600]
+        weather_change_addtitional_time = r.choice([300, 360, 420, 480, 540, 600])
     refresh_class()
     refresh_armour_base()
     refresh_armour_lining()
@@ -882,19 +1218,62 @@ def refresh_all(ignore_death):
     weather_effect_refresh()
     save_data()
 
-def rp(print: str, wait: int = 0, nl: bool = False, ignore_death: bool = False,) -> None:
+def rp(to_print_: str, wait: int = 0, nl: bool = False, ignore_death: bool = False,) -> None:
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     ''' rp = Refresh Print
     Refreshs Everything While Printing
     Optional Wait And Newline Featute
     '''
     refresh_all(ignore_death)
-    print(print)
-    if wait is not 0:
+    print(to_print_)
+    if wait != 0:
         t.sleep(wait)
     if nl is True:
         print()
         
 def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str = "", option_3: str = "", option_4: str = "", option_5: str = "", option_6: str = "") -> str:
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     ''' ci = Common Input
     Simplified Input Function That Can Be Used For Most Inputs
     Supports Up To 6 Options 
@@ -922,13 +1301,34 @@ def ci(prompt: str = "", this_location = "", option_1: str = "", option_2: str =
         return "back"
         
 def cfl(list_to_choose_from: list = ["empty"], prompt: str = "", this_location = "") -> str:
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     ''' cfl = Choose From List
     Simplified Input Function That Can Be Used For Choosing From A List
     Takes A List And Prints It With A Prompt
     User Must Type The Option How It Is Shown In The List To Select It
     '''
     cfl_choice = "SOMETHING RANDOMLY IMPOSSIBLE FOR TO ACTUALLY BE IN THE GAME"
-    while cfl_choice not in list_to_choose_from:
+    while cfl_choice not in list_to_choose_from :
         rp(prompt, 1)
         rp("You Must Type It As Seen Above", 1)
         cfl_choice = str(input())
@@ -945,6 +1345,28 @@ def cfl(list_to_choose_from: list = ["empty"], prompt: str = "", this_location =
             rp("Try Again", 1)
 
 def menu_home(previous_location_function):
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     infinte_time = 100
     rp("Menu:", 0.5)
     rp("Press 'a' For Basic Information Like Health and Inventory", 0.5)
@@ -965,7 +1387,28 @@ def menu_home(previous_location_function):
             previous_location_function()
 
 def menu_basic(previous_location_function):
-    global health, energy, gold, inventory
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     rp("Basic Information:", 0.5)
     rp(f"Health: {health}", 0.5)
     rp(f"Energy: {energy}", 0.5)
@@ -974,8 +1417,27 @@ def menu_basic(previous_location_function):
     menu_home(previous_location_function)
 
 def menu_armour(previous_location_function):
+    global health, energy, damage, inventory, gold
     global armour_base, armour_plate, armour_lining
     global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     rp("Armour Information:", 0.5)
     rp(f"Armour Base: {armour_base}", 0,5)
     rp(f"Armour Plating: {armour_plate}", 0.5)
@@ -1028,8 +1490,28 @@ def menu_armour(previous_location_function):
         menu_home(previous_location_function)
 
 def menu_class(previous_location_function):
-    global class_, weapon, spell, arrow, skill
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
     global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if class_ == "wizard":
         rp("You Are A Wizard", 1)
         rp("You Fight With Spells", 1)
@@ -1100,8 +1582,28 @@ def menu_class(previous_location_function):
         menu_class_weapon_change(previous_location_function)
    
 def menu_class_change(previous_location_function):
-    global class_, class_available
-    rp(f"You Are Currently A {class_}", 1)
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if len(class_available) == 0:
         rp("You Have No Available Classes To Change Too", 1)
         rp("Going Back", 1, True)
@@ -1125,8 +1627,27 @@ def menu_class_change(previous_location_function):
             menu_class(previous_location_function)
            
 def menu_class_weapon_change(previous_location_function):
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
     global class_, spell, weapon, arrow, skill
-    global spell_available, weapon_available, arrow_available, skill_available
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if class_ == "wizard":
         if len(spell_available) == 0:
             rp("You Have No Available Spells", 1)
@@ -1218,7 +1739,27 @@ def menu_class_weapon_change(previous_location_function):
             menu_class(previous_location_function)
 
 def menu_weather(previous_location):
-    global this_weather
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if this_weather == "sunny":
         rp("The Weather Is Sunny", 1)
         rp("Energy Efficenty Is Decreased", 1, True)
@@ -1251,7 +1792,27 @@ def menu_weather(previous_location):
     menu_home(previous_location)
     
 def tutorial():
-    global tutorial_done, menu_tutorial_done, fight_tutorial_done, text_tutorial_done
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if tutorial_done == True:
         print("Tutorial Done")
         t.sleep(1)
@@ -1397,7 +1958,27 @@ def tutorial():
             tutorial_text_box_white()
 
 def tutorial_text_box_white():
-    global text_tutorial_back, text_tutorial_forward, text_tutorial_chest, text_tutorial_done
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if text_tutorial_back == True and text_tutorial_forward == True and text_tutorial_chest == True:
         print("Well Done You Completed The First Tutorial Section")
         t.sleep(1)
@@ -1433,7 +2014,27 @@ def tutorial_text_box_white():
         tutorial_text_box_white()
 
 def tutorial_text_box_green():
-    global text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("You Find Yourself In A Green Room")
     if text_tutorial_forward == False:
         t.sleep(1)
@@ -1470,7 +2071,27 @@ def tutorial_text_box_green():
         tutorial_text_box_white()  
 
 def tutorial_text_box_red():
-    global text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("You Find Yourself In A Red Room")
     if text_tutorial_forward == False:
         t.sleep(1)
@@ -1511,7 +2132,27 @@ def tutorial_text_box_red():
         tutorial_text_box_white()  
    
 def tutorial_text_box_blue():
-    global text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("You Find Yourself In A Blue Room")
     if text_tutorial_forward == False:
         t.sleep(1)
@@ -1552,7 +2193,27 @@ def tutorial_text_box_blue():
         tutorial_text_box_white()  
 
 def fight_tutorial():
-    global fight_tutorial_attack, fight_tutorial_dodge, fight_tutorial_crit, fight_tutorial_done, health
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     white_box_health = 5
     print(f"You Are Fighing A Mystical White Box Which Has {white_box_health} Health")
     crit_attack = False
@@ -1633,7 +2294,27 @@ def fight_tutorial():
         fight_tutorial()
 
 def menu_tuorial_part_1(): 
-    global menu_tutorial_access, menu_tutorial_basic, menu_tutorial_save
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("Hello. Respond With 'HI', 'GO AWAY' OR 'I HATE YOU'")
     menu_1_option = str(input())
     print()
@@ -1669,7 +2350,27 @@ def menu_tuorial_part_1():
         menu_tutorial_part_2()
         
 def menu_tutorial_part_2():
-    global menu_tutorial_access, menu_tutorial_basic, menu_tutorial_save, menu_tutorial_done
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if menu_tutorial_access == True and menu_tutorial_basic == True and menu_tutorial_save == True:
         print("Well Done You Completed The Menu Tutorial")
         menu_tutorial_done = True
@@ -1719,7 +2420,27 @@ def menu_tutorial_part_2():
         tutorial()
         
 def beach():
-    global beach_discovered, energy, game_started
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     last_checkpoint = beach
     if beach_discovered == False:
         rp("You Wake Up Confused Lying On The Floor", 1)
@@ -1732,9 +2453,9 @@ def beach():
         rp("You Start Looking For Resources", 1)
         beach_option_1 = ci("You Can 'DIG' or 'WANDER' To Look For Resourses", beach, "DIG", "WANDER")
         if beach_option_1 == "option_1":
-            beach_wander()
-        elif beach_option_1 == "option_2":
             beach_dig()
+        elif beach_option_1 == "option_2":
+            beach_wander()
         elif beach_option_1 == "back":
             ending_1()
     else:
@@ -1774,8 +2495,27 @@ def beach():
                 beach()
 
 def beach_wander():
-    global beach_discovered, energy, game_started, gold
-    global beach_wander_loot, energy_efficenty, inventory
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if beach_discovered == False:
         rp("You Start Strolling Down The Beach", 1)
         fishing_rod_time = r.choice([6, 7, 8, 9, 10])
@@ -1835,8 +2575,27 @@ def beach_wander():
             beach()
 
 def beach_dig():
-    global beach_discovered, energy, game_started, companion
-    global beach_dig_loot, energy_efficenty, inventory, companion_available 
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if beach_discovered == False:
         rp("You Start Digging The Sand Beneathe You", 1)
         rp("To Hopefully Find An Item", 1)
@@ -1919,13 +2678,32 @@ def beach_dig():
         beach()
 
 def beach_fish():
-    global beach_discovered, energy, game_started, armour_base, armour_base_available, gold
-    global beach_fishing_loot, energy_efficenty, inventory
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if "fishing_rod" in inventory:
         pause_time = r.choice([6, 7, 8, 9, 10, 11])
         rp("You Throw Your Hook Into The Sea", pause_time)
         rp(f"After {pause_time} Seconds Something Hooked Onto Your Fishing Rod")
-        fish_spam_event = quick_time_spam(10, "random", "random/2", "Pull Up The Fish", 1)
+        fish_spam_event = quick_time_spam(10, "random", "random/2", "Pull Up The Fish")
         if fish_spam_event == True:
             loot = r.choice(beach_fishing_loot)
             if loot == "plank":
@@ -1984,6 +2762,27 @@ def beach_fish():
         beach()
 
 def overhang():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if overhang_discovered == False:
         rp("As You Walk Of The Gritty Sand You Find A Small Overhang", 1)
         rp("The Smooth Rock Facing Towards The Calming Sea Would Be A Good Place To Rest", 1)
@@ -2005,6 +2804,27 @@ def overhang():
                 beach()
            
 def field():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     last_checkpoint = field
     if field_discovered == False:
         rp("You Step Of The Irritating Sand And Onto The Lucious Grass", 1)
@@ -2041,6 +2861,27 @@ def field():
             beach()
        
 def forest():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     last_checkpoint = forest
     if forest_discovered == False:
         rp("The Disctint Salty Smell Of The Beach Fades Away", 1)
@@ -2084,6 +2925,27 @@ def forest():
             beach()
 
 def village():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     last_checkpoint = village
     if village_discovered == False:
         rp("As You Walk Into The First Civilisation", 1)
@@ -2112,56 +2974,235 @@ def village():
             rp("The Villagers Are Thankful For Your Help", 1)
             rp("They Can Now Stay Warm And Away From The Monster In The Woods", 1)
             rp("You Didn't See Any Monster?", 1)
-            rp("Villager Discoverde. Come Back Her For Trading and Working", 1, True)
-            village_discovered = True
+            rp("Villager Discovered. Come Back Her For Trading and Working", 1, True)
+            village_first_job = True
             village()
-
+    elif forest_monster_killed == True and monster_responce == False:
+        rp("The Villagers See You Walk Back Clothes Ripped And Slashed", 1)
+        rp("And Your Weapon Covered In Blood", 1)
+        rp("They Are Suprised To Learn You You Killed The Werewolf", 1)
+        if cursed == True:
+            rp("But Are Significantly Worried About Your New Tail And Sharp Teeth", 1)
+            rp("Their Medical Team Will Sort That Out For You For A Bit Of Gold Later", 1)
+        rp("However They Do Not Know What The Orb Is Either. They Suggest Looking Up The Mountain", 1, True)
+        monster_responce == True
+    elif village_purged == True:
+        rp("Here Lie The Remainents Of The Only Civilisation On This Island", 1)
+        rp("That You Killed", 1)
+        rp("Anyway Other Locations Non-Exsitant Yet", 1)
+        rp("Back To Field")
+        field()
+    else:
+        rp("Welcome To The Village")
+        village_choice = ci("You Can 'TRADE', 'WORK', 'MASSACRE' {NOT AVAILABLE YET}, 'HEAL' or {NEW LOCATIONS NOT AVAILALE YET}", village, "TRADE", "WORK", "MASSACRE", "HEAL", "CHEST")
+        if village_choice == "option_1":
+            trade()
+        elif village_choice == "option_2":
+            work()
+        elif village_choice == "option_3":
+            massacre()
+        elif village_choice == "option_4":
+            heal()
+        elif village_choice == "option_5" and village_chest == False:
+            rp("You Walk Into A Random Villagers House And Loot It", 1)
+            rp("You Got 5 Gold And 1 Bread", 1)
+            inventory.append("bread")
+            gold += 5
+        else:
+            field()
 
 def mountain(): 
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("THIS AREA IS NOT AVAILABLE YET")
     print("RETURNING TO FIELD")
     field()
 
 def cave():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("THIS AREA IS NOT AVAILABLE YET")
     print("RETURNING TO FIELD")
     field()
 
 def river():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("THIS AREA IS NOT AVAILABLE YET")
     print("RETURNING TO FOREST")
     forest()
 
 def swamp():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("THIS AREA IS NOT AVAILABLE YET")
     print("RETURNING TO FOREST")
     forest()
 
 def hut():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     print("THIS AREA IS NOT AVAILABLE YET")
     print("RETURNING TO FOREST")
     forest()
 
 def ending_1():
-      rp("After Standing Up And Thinking For A Bit", 1)
-      rp("You Realise These Are Horrible Terms To Live With", 1)
-      rp("So You Lie Back Down And Fall Back To Sleep", 1)
-      rp("Allowing Nature To Take Your Body", 1)
-      rp("Ending 1 Unlocked!", 1)
-      rp("You Unlocked The Ice Thread Armour Lining", 1)
-      rp("It Slows Enemies Around You", 1)
-      ending_1_choice = ci("Would You Like To Equip It? 'YES' / 'NO'", ending_1, "YES", "NO")
-      if ending_1_choice == "option_1":
-          if armour_lining != "none":
-              armour_lining_available.append(companion)
-          armour_lining = "ice_thread"
-          rp("Ice Thread Armour Lining Equipped", 1, True)
-      else:
-          armour_lining_available.append("ice_thread")
-          rp("Ice Thread Armour Lining Added To Available Armour Linings", 1, True)   
-      beach()
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    rp("After Standing Up And Thinking For A Bit", 1)
+    rp("You Realise These Are Horrible Terms To Live With", 1)
+    rp("So You Lie Back Down And Fall Back To Sleep", 1)
+    rp("Allowing Nature To Take Your Body", 1)
+    rp("Ending 1 Unlocked!", 1)
+    rp("You Unlocked The Ice Thread Armour Lining", 1)
+    rp("It Slows Enemies Around You", 1)
+    ending_1_choice = ci("Would You Like To Equip It? 'YES' / 'NO'", ending_1, "YES", "NO")
+    if ending_1_choice == "option_1":
+        if armour_lining != "none":
+            armour_lining_available.append(companion)
+        armour_lining = "ice_thread"
+        rp("Ice Thread Armour Lining Equipped", 1, True)
+    else:
+        armour_lining_available.append("ice_thread")
+        rp("Ice Thread Armour Lining Added To Available Armour Linings", 1, True)   
+    beach()
 
 def ending_2():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     rp("With All Your Planks Your Start Building A Ship", 1, False, True)
     rp("It's How This Journy Started, On The Seas", 1, False, True)
     rp("The Mystery Of The Island Or Your Memory Was Never Discovered", 1, False, True)
@@ -2181,6 +3222,27 @@ def ending_2():
     beach()
 
 def ending_3():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     rp(f"You Feel Your Mind Fading To The New Animal Nature In Your Body", 1, False, True)
     rp(f"Your Last Thought Before You Become A Creature Of The Night", 1, False, True)
     rp(f"Was The Terror You Felt Looking At The Werewolf", 1, False, True)
@@ -2203,9 +3265,30 @@ def ending_3():
 
 
 def wizard_fight():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     fight_signal()
     while wiz_health > 0 and health > 0:
-        wiz_ran = r.choice["attack", "defend"]
+        wiz_ran = r.choice(["attack", "defend"])
         if wiz_ran == "attack":
             wiz_crit = r.choices(
                 [True, False],
@@ -2271,6 +3354,28 @@ def wizard_fight():
             rp("You Have Been Defeated By The Wizard", 1)
 
 def werewolf_fight():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     rp("As A Full Moons Reveals Itself Through The Thick Branches", 1, False, True)
     rp("You Hear A Loud Howling Coming Towards You", 1, False, True)
     fight_signal()
@@ -2342,6 +3447,47 @@ def werewolf_fight():
         elif "level-1" in cursed:
             cursed.append("level-1.5")
         ww_aod = r.choice(["attack", "defend"])
+        if len(werewolf_effects) > 0:
+            if "burning" in werewolf_effects:
+                werewolf_health -= 3
+                rp(f"The Werewolf Took 3 Damage From The Flames. It Now Has {werewolf_health} Health", 1, False, True)
+                if this_weather == "raining":
+                    werewolf_effects.remove("burning")
+                    rp(f"The Rain Put Out The Flames On The Werewolf", 1, False, True)
+                elif this_weather == "snowing":
+                    werewolf_effects.remove("burning")
+                    rp(f"The Snow Put Out The Flames On The Werewolf", 1, False, True)
+                elif this_weather == "thunderstorming":
+                    werewolf_effects.remove("burning")
+                    rp(f"The Thunderstorm Put Out The Flames On The Werewolf", 1, False, True)
+                else:
+                    recover = r.choice([True, False])
+                    if recover == True:
+                        werewolf_effects.remove("burning")
+                        rp(f"The Werewolf Recovered From Being Posioned", 1, False, True)
+            if "freezing" in werewolf_effects:
+                if this_weather != "heatwave":
+                    ww_aod = r.choice(["attack", "attack", "attack", "defend"])
+                    if ww_aod == "attack":
+                        rp(f"The Werewolf Is Frozen In Place. Your Turn To Attack", 1, False, True)
+                else: 
+                    werewolf_effects.remove("freezing")
+                    rp(f"The Heatwave Defrosted The Werewolf", 1, False, True)
+            if "posioning" in werewolf_effects:
+                werewolf_health -= 1
+                rp(f"The Werewolf Took 1 Damage From The Posion")
+                recover = r.choice([True, False, False, False])
+                if recover == True:
+                    werewolf_effects.remove("posioning")
+                    rp(f"The Werewolf Recovered From Being Frozen")
+            if "shocking" in werewolf_effects:
+                if prev_attack == False:
+                    ww_aod = "attack"
+                else:
+                    ww_aod = r.choice(["attack", "attack", "defend"])
+                if ww_aod == "attack":
+                    rp(f"The Werewolf Was Stunned. Your Turn To Attack")
+                werewolf_effects.remove("shocked")
         if ww_aod == "defend":
             ww_attack = r.choice(["charge", "pounce", "summon"])
             if ww_attack == "charge":
@@ -2398,6 +3544,9 @@ def werewolf_fight():
                                 if splash_range >= 2:
                                     wolf_2 -= splash_damage
                                     rp(f"You Did {splash_damage} Splash Damage To Wolf 2. It Has {wolf_2} Health Left", 1, False, True)
+                                elif piercing >= 2:
+                                    wolf_2 -= damage
+                                    rp(f"You Did {splash_damage} Piercing Damage To Wolf 2. It Has {wolf_2} Health Left", 1, False, True)
                             else:
                                 damage_done = 7 / damage_resistence
                                 health -= damage_done
@@ -2411,6 +3560,9 @@ def werewolf_fight():
                                 if splash_range >= 2:
                                     wolf_1 -= splash_damage
                                     rp(f"You Did {splash_damage} Damage To Wolf 1. It Has {wolf_1} Health Left", 1, False, True)
+                                elif piercing >= 2:
+                                    wolf_2 -= damage
+                                    rp(f"You Did {splash_damage} Piercing Damage To Wolf 2. It Has {wolf_2} Health Left", 1, False, True)
                             else:
                                 damage_done = 7 / damage_resistence
                                 health -= damage_done
@@ -2446,7 +3598,8 @@ def werewolf_fight():
                     rp(f"You Deafeated The Two Wolves")
                     prev_attack = False
         elif ww_aod == "attack":
-            if prev_attack == True:
+            crit_yn = r.randint(1, 100)
+            if prev_attack == True and crit_yn <= crit_chance:
                 crit_attack = quick_time_double(4, "random", "random", "Critical Hit The Werewolf")
                 if crit_attack == True:
                     damage_done = damage * crit_multiplier
@@ -2458,19 +3611,58 @@ def werewolf_fight():
                     prev_attack = False
                 else:
                     rp(f"You Missed Your Critical Hit", 1, False, True)
-                
-
-
-                                
-
-
+                    prev_attack = False
+            else:
+                attack = quick_time_event(3, "random", "Attack The Werewolf")
+                if attack == True:
+                    werewolf_health -= damage
+                    rp(f"You Hit The Werewolf For {damage}. It Now Has {werewolf_health} Health", 1, False, True)
+                else:
+                    rp("You Missed Your Attack", 1, False, True)
+        print()
+    if werewolf_health <= 0:
+        rp(f"You Defeated The Werewolf", 1, False, True)
+        rp(f"It Transfers Back Into A Regular Human", 1, False, True)
+        rp(f"As It Falls To The Ground It Drops A Weird Shimmering Sphere", 1, False, True)
+        rp(f"Maybe The Villagers Know What To Do With It", 1, False, True)
+        if len(cursed) > 0:
+            rp(f"Talking About That You Still Feel The Animilisic Urge Within You", 1, False, True)
+            rp(f"Something To Get Sorted Before It Goes To Far", 1, True)
+            cursed = True
+        print()
+        inventory.append("weird_orb")
+        forest_monster_killed = True
+    if health <= 0:
+        rp(f"The Werewold Killed You", 1, False, False)
 
 def hunt(previous_location):
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     keep_hunt = "option 1"
     rp("You Are Hunting", 1)
     while keep_hunt == "option 1":
         if previous_location == field:
-            animal = r.choice("Cow", "Sheep", "Rabbit")
+            animal = r.choice(["Cow", "Sheep", "Rabbit"])
         if animal == "Cow":
             animal_health = 5
         elif animal == "Sheep":
@@ -2515,18 +3707,37 @@ def hunt(previous_location):
         keep_hunt = ci("Do You Want To Keep Hunting? 'YES' / 'NO'", hunt, "YES", "NO")
     previous_location()
 
-def gather(previous_location):  
-    print("THIS AREA IS NOT AVAILABLE YET") 
-    print("RETURNING TO FOREST")
-    previous_location()
-    keep_gather = "option 1"
+def gather(previous_location): 
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done 
+    keep_gather = "option_1"
     rp("You Are Gathering Resources", 1)
     if previous_location == forest:
         resources = ["stick", "leaf", "mushroom", "honey"]
     gather_choice = cfl(resources, f"You Can Gather {resources}", forest)
-    while keep_gather == "option 1":
+    while keep_gather == "option_1":
         if gather_choice == "stick":
-            correct_option = r.choice["option 1", "option 2"]
+            correct_option = r.choice(["option 1", "option 2"])
             if correct_option == "option 1":
                 stick_pickup = quick_time_choice(3, "random", "random", "Pick Up The Stick", "Step On The Stick")
                 if stick_pickup == "option 1":
@@ -2626,8 +3837,31 @@ def gather(previous_location):
                 inventory.append("leaf")
             rp(f"{leaf_count} Leaves Added To Your Inventory")
         keep_gather = ci("Do You Want Keep Hunting. 'YES'/'", gather, "YES", "NO")
+    previous_location()
 
 def chop(previous_location, mode):
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     if mode == "villager job":
         amount_to_chop = 30 - inventory.count("villager's_logs")
         rp("You Are Chopping Logs For The Villagers", 1)
@@ -2659,66 +3893,365 @@ def chop(previous_location, mode):
             rp("Your Bad Technique Cost You 1 Health", 1, True)
     previous_location()
 
+def trade():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    trade_list_food = ["bread", "berries", "soup", "sweets"]
+    trade_list_weapon = ["spear", "mace", "frozen_arrow", "drill_arrow"]
+    trade_list_class = ["archer"]
+    trade_list_item = ["stick", "rock", "plank"]
+    continue_ = True
+    if gold <= 0:
+        rp(f"You Have {gold}. Not Enough")
+        village()
+    while continue_ == True:
+        if class_ == "archer" or "archer" in class_available:
+            trade_list = [r.choice(trade_list_food), r.choice(trade_list_weapon), r.choice(trade_list_item)]
+        else: 
+            trade_list = [r.choice(trade_list_food), r.choice(trade_list_weapon), r.choice(trade_list_item), r.choice(trade_list_class),]
+        rp(f"Selection From:", 0.5)
+        if trade_list[0] == "bread":
+            rp(f"{trade_list[0]} - 2 Gold", 0.5)
+        elif trade_list[0] == "berries":
+            rp(f"{trade_list[0]} - 1 Gold", 0.5)
+        elif trade_list[0] == "soup":
+            rp(f"{trade_list[0]} - 3 Gold", 0.5)
+        elif trade_list[0] == "sweets":
+            rp(f"{trade_list[0]} - 1 Gold", 0.5)
+        if trade_list[1] == "spear":
+            rp(f"{trade_list[1]} - 2 Gold", 0.5)
+        elif trade_list[1] == "mace":
+            rp(f"{trade_list[1]} - 3 Gold", 0.5)
+        elif trade_list[1] == "frozen_arrow":
+            rp(f"{trade_list[1]} - 5 Gold", 0.5)
+        elif trade_list[1] == "drill_arrow":
+            rp(f"{trade_list[1]} - 11 Gold", 0.5)
+        if trade_list[2] == "stick":
+            rp(f"{trade_list[2]} - 1 Gold", 0.5)
+        elif trade_list[2] == "rock":
+            rp(f"{trade_list[2]} - 1 Gold", 0.5)
+        elif trade_list[2] == "plank":
+            rp(f"{trade_list[2]} - 2 Gold", 0.5)
+        if len(trade_list) >= 4 :
+            rp(f"{trade_list[3]} - 20 Gold", 0.5)
+        print()
+        item_chosen = cfl(trade_list, "Choose An Item (Type 'BACK' To Leave)", village)
+        if item_chosen != "back":
+            if item_chosen == "bread" or item_chosen == "plank":
+                if gold >= 2:
+                    inventory.append(item_chosen)
+                    rp(f"{item_chosen} Added To Inventory", 1)
+                    gold -= 2
+                else:
+                    rp("Not Enough Gold")
+            elif item_chosen == "berries" or item_chosen == "sweets" or item_chosen == "stick" or item_chosen == "rock":
+                if gold >= 1:
+                    inventory.append(item_chosen)
+                    rp(f"{item_chosen} Added To Inventory", 1)
+                    gold -= 1
+                else:
+                    rp("Not Enough Gold")                    
+            elif item_chosen == "soup":
+                if gold >= 3:
+                    inventory.append(item_chosen)
+                    rp(f"{item_chosen} Added To Inventory", 1)
+                    gold -= 3
+                else:
+                    rp("Not Enough Gold")            
+            elif item_chosen == "spear":
+                if gold >= 2:
+                    weapon_available.append("spear")
+                    rp(f"{item_chosen} Added To Available Weapons", 1)
+                    gold -= 2
+                else:
+                    rp("Not Enough Gold")
+            elif item_chosen == "mace":
+                if gold >= 3:
+                    weapon_available.append("mace")
+                    rp(f"{item_chosen} Added To Available Weapons", 1)
+                    gold -= 3
+                else:
+                    rp("Not Enough Gold")                
+            elif item_chosen == "frozen_arrow":
+                if gold >= 5:
+                    arrow_available.append("frozen")
+                    rp(f"{item_chosen} Added To Available Arrows", 1)
+                    gold -= 5  
+                else:
+                    rp("Not Enough Gold")
+            elif item_chosen == "drill_arrow":
+                if gold >= 11:
+                    arrow_available.append("drill")
+                    rp(f"{item_chosen} Added To Available Arrows", 1)
+                    gold -= 11     
+                else:
+                    rp("Not Enough Gold") 
+            elif item_chosen == "archer":
+                if gold >= 20:
+                    class_available.append("archer")
+                    rp(f"{item_chosen} Added To Available Arrows", 1)
+                    gold -= 20
+                else:
+                    rp("Not Enough Gold")
+            rp(f"You Now Have {gold} Gold", 1, True)
+        else:
+            rp("Returning To Village", 1, True)  
+            village()
+            
+
+def work():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    work_ = r.choice(["chop", "forage", "hunt"])
+    if work_ == "chop":
+        chopped = 0
+        rp(f"You Are Going To Chop 30 Logs. You Need 20 To Suceed")
+        for count in range(1, 30 + 1):
+            strength = countspam(7, "random", "Charge The Swing Of The Axe")
+            rp("Wait", r.choice([3, 4, 5, 6, 7, 8]))
+            chop = quick_time_event(1, "random", "Chop Now")
+            if strength >= 30 and chop == True:
+                rp("You Successfully Chopped Through The Log", 1)
+                chopped += 1
+            elif strength < 30 and chop == True:
+                rp("You Hit The Log But It Didn't Cut Through", 1, True)
+            elif strength >= 30 and chop == False:
+                rp("Your Swing Was Strong But You Missed The Log", 1, True)
+            elif strength < 30 and chop == False:
+                rp("Your Swing Was Bad And You Missed The Log", 1)
+                health -= 1
+                rp("Your Bad Technique Cost You 1 Health", 1, True)
+        if chopped >= 20:
+            rp(f"Well Done You Did The Job", 1)
+            gold += 10
+            rp(f"You Got 10 Gold. You Are Now On {gold} Gold", 1, True)
+        else:
+            rp(f"You Failed The Job", 1, True)
+    if work_ == "forage":  
+            rp("You Are Forageing For Mushrooms", 1)
+            rp("You Are Going To Pick 30 Mushroom. 20 Must Be Safe", 1, True)
+            rp("Key:", 0.5)
+            rp("Spotty: Poisonous If Paired With Another Poisonous Trait", 1)
+            rp("Streaky: Completely Safe To Eat", 1)
+            rp("Tiger Patturn: Completely Posionous", 1)
+            rp("No Patturns: No Correlation To Posion", 1)
+            rp("Red: Poisonous If Paired With Another Poisonous Trait", 1)
+            rp("Brown: Safe Unless Paried With A Completly Posionous Trait", 1)
+            rp("White: No Correlation", 1)
+            mushrooms = ["Spotty Red", "Spotty Brown", "Spotty White", "Streaky Red", "Streaky Brown", "Streaky White", "Tiger Stripes Red"]
+            poisionous = ["Spotty Red", "Tiger Stripes Red", "Tiger Stripes Brown", "Tiger Stripes White",]
+            safe = ["Spotty Brown", "Spotty White", "Streaky Red", "Streaky Brown", "Streaky White", "Patturnless Red", "Patturnless Brown", "Patturnless White"]
+            total_mushrooms_picked = 0
+            safe_mushrooms_picked = 0
+            poisionous_muchrooms_picked = 0
+            mushrooms_failed = 0
+            for count in range(1, 30 + 1):
+                correct_option = r.choice(["option 1", "option 2"])
+                if correct_option == "option 1":
+                    option_1 = r.choice(safe)
+                    option_2 = r.choice(poisionous)
+                elif correct_option == "option 2":
+                    option_1 = r.choice(poisionous)
+                    option_2 = r.choice(safe)
+                forage = quick_time_choice(5, "random", "random", f"Forage A {option_1}", f"Forage A {option_2}")
+                if forage == "Option 1":
+                    total_mushrooms_picked += 1
+                    if option_1 in safe:
+                        safe_mushrooms_picked += 1
+                        rp("You Picked A Safe Mushroom", 1)
+                    elif option_1 in poisionous:
+                        poisionous_muchrooms_picked += 1
+                        rp("You Picked A Poisionous Mushroom", 1)
+                elif forage == "Option 2":
+                    total_mushrooms_picked += 1
+                    if option_2 in safe:
+                        safe_mushrooms_picked += 1
+                        rp("You A Picked A Safe Mushroom", 1)
+                    elif option_2 in poisionous:
+                        poisionous_muchrooms_picked += 1
+                        rp("You Picked A Posionous Mushroom", 1)
+                elif forage == False:
+                    mushrooms_failed += 1
+                    rp("You Failed To Choose A Mushroom", 1)
+                print()
+            rp(f"You Picked {total_mushrooms_picked} Mushrooms", 1)
+            rp(f"{safe_mushrooms_picked} Of Which Were Safe", 1)
+            rp(f"And {poisionous_muchrooms_picked} Were Posisionous", 1)
+            rp(f"You Failed To Pick Up {mushrooms_failed} Mushrooms", 1, True)
+            if safe_mushrooms_picked >= 20:
+                rp(f"Well Done You Did The Job", 1)
+                gold += 10
+                rp(f"You Got 10 Gold. You Are Now On {gold} Gold", 1, True)
+            else:
+                rp(f"You Failed The Job", 1, True)
+    elif work_ == "hunt":
+        rp("You Are Hunting Animals", 1)
+        rp("You Are Going To Get 10 Dead Animal Back")
+        animals = 0
+        for count in range(1, 10 + 1):
+            animal = r.choice("Cow", "Sheep", "Rabbit")
+            if animal == "Cow":
+                animal_health = 5
+            elif animal == "Sheep":
+                animal_health = 4
+            elif animal == "Rabbit":
+                animal_health = 2
+            rp(f"You Encounter A {animal}. It Has {animal_health} Health", 1)
+            while animal_health > 0:
+                attack = waitandhit("random", "random", f"Attack The {animal}")
+                if attack == True:
+                    animal_health -= damage
+                    if animal_health <= 0:
+                        animal_health = 0
+                    rp(f"You Did {damage} Damage. The {animal} Now Has {animal_health} Health Left", 1)
+                else:
+                    rp(f"You Missed Your Attack On The {animal}", 1)
+            rp(f"You Defeated The {animal}", 1)
+            if animal == "Cow":
+                rp("Cow Carcuss Added To Villager Meats", 1)
+                animals += 1
+            elif animal == "Sheep":
+                rp("Sheep Carcuss Added To Villager Meats", 1)
+                animals += 1
+            elif animal == "Rabbit":
+                rp("Rabbit Carcuss Added To Villager Meats", 1)
+                animals += 1
+        if animals >= 10:
+            rp(f"Well Done You Did The Job", 1)
+            gold += 10
+            rp(f"You Got 10 Gold. You Are Now On {gold} Gold", 1, True)
+        else:
+            rp(f"You Failed The Job", 1, True)
+    village()
+
+def heal():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    pay = ci("Pay 15 Gold To Heal. 'YES'/'NO'", village, "YES", "NO")
+    if pay == "option_1":
+        if gold >= 15:
+            gold -= 15
+            health = 30
+            energy = 30
+            rp(f"You Spent 15 Gold. You Have {gold} Gold", 1)
+            if cursed == True:
+                cursed = False
+                rp(f"Health At {health}, Energy At {energy} And Cursed Unapplied", 1)
+            else:
+                rp(f"Health At {health} And Energy At {energy}", 1)
+        else: 
+            rp("Not Enough Gold", 1, True)
+    rp("Returning To Village", 1, True)
+    village()
+
+def massacre():
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
+    global armour_affects
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    rp("Not Availble Yet.", 1)
+    village()
 def temp():
-    global health
-    global energy
-    global damage
-    global inventory
-    global gold
-    global armour_base
-    global armour_plate
-    global armour_lining
-    global energy_efficenty
-    global damage_resistence
-    global event_speed
-    global crit_chance
-    global crit_attack
-    global crit_multiplier
+    global health, energy, damage, inventory, gold
+    global armour_base, armour_plate, armour_lining
+    global armour_base_available, armour_plate_available, armour_lining_available
     global armour_affects
-    global class_
-    global spell
-    global weapon
-    global arrow
-    global skill
-    global class_available
-    global spell_available
-    global weapon_available
-    global arrow_available
-    global skill_available
-    global damage_affects
-    global armour_affects
-    global armour_base_available
-    global armour_plate_available
-    global armour_lining_available
-    global beach_wander_loot
-    global beach_dig_loot
-    global beach_fishing_loot
-    global beach_discovered
-    global field_discovered
-    global forest_discovered
-    global overhang_discovered
-    global last_checkpoint
-    global save_dir
-    global companion
-    global companion_available
-    global tutorial_done
-    global text_tutorial_chest
-    global text_tutorial_back
-    global text_tutorial_forward
-    global text_tutorial_done
-    global fight_tutorial_dodge
-    global fight_tutorial_attack
-    global fight_tutorial_crit
-    global fight_tutorial_done
-    global menu_tutorial_save
-    global menu_tutorial_basic
-    global menu_tutorial_access
-    global menu_tutorial_done
-    global weather_chance
-    global neg2_weather
-    global last_weather
-    global this_weather
-    global next_weather
+    global event_speed, energy_efficenty, damage_resistence
+    global crit_chance, crit_attack, crit_multiplier
+    global splash_range, splash_damage, piercing
+    global damage_affects, energy_timer, cursed
+    global class_, spell, weapon, arrow, skill
+    global class_available, spell_available, weapon_available, arrow_available, skill_available
+    global companion, companion_available
+    global game_started, beach_discovered, field_discovered, field_discovered2
+    global forest_discovered, overhang_discovered, village_discovered
+    global village_first_job, forest_monster_killed, monster_responce
+    global village_purged, village_chest, last_checkpoint, save_dir
+    global beach_fishing_loot, beach_dig_loot, beach_wander_loot
+    global weather_chance, thunderstrike_chance, warmth, in_shelter
+    global last_weather_effect_refesh, last_weather_change_refesh, weather_change_addtitional_time
+    global neg2_weather, last_weather, this_weather, next_weather
+    global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
+    global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
+    global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
 
 #shown information
 health = 30
@@ -2765,6 +4298,11 @@ damage_affects = []
 
 energy_timer = 0
 
+cursed = False
+monster_responce = False
+village_purged = False
+village_chest = False
+
 #pet
 companion = "none"
 companion_available = []
@@ -2796,10 +4334,14 @@ last_weather_effect_refesh = 0
 last_weather_change_refesh = 0
 weather_change_addtitional_time = 0
 
-neg2_weather = "temp"
-last_weather = "temp"
-this_weather = "temp"
-next_weather = "temp"
+splash_range = 0
+splash_damage = 0
+piercing = 0
+
+neg2_weather = "cloudy"
+last_weather = "cloudy"
+this_weather = "cloudy"
+new_weather = "cloudy"
 
 warmth = 5
 in_shelter = False
@@ -2838,7 +4380,8 @@ if start_game == "START":
         print("Starting Your New Journey")
         t.sleep(1)
         print()
-        tutorial()
+        if __name__ == "__main__":
+            tutorial()
     else:
         print("Welcome")
         t.sleep(1)
