@@ -1132,7 +1132,7 @@ def weather_effect_refresh():
             t.sleep(1)
             print()
 
-def refresh_all(ignore_death):
+def refresh_all(ignore_death: bool = False, return_norm: bool = False):
     global health, energy, damage, inventory, gold
     global armour_base, armour_plate, armour_lining
     global armour_base_available, armour_plate_available, armour_lining_available
@@ -1188,7 +1188,10 @@ def refresh_all(ignore_death):
             print("Returning To Last Checkpoint")
             t.sleep(1)
             print()
-            last_checkpoint()
+            if return_norm == False:
+                last_checkpoint()
+            else: 
+                return
     if energy <= 0:
         if energy_timer + 60 < t.time():
             energy += 1
@@ -2767,25 +2770,25 @@ def overhang():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    if overhang_discovered == False:
-        rp("As You Walk Of The Gritty Sand You Find A Small Overhang", 1)
-        rp("The Smooth Rock Facing Towards The Calming Sea Would Be A Good Place To Rest", 1)
-        rp("To Gain 1 Energy It Takes 2 Minutes Of Rest.", 1) 
-        rp("A New Energy Will Start Regain Automatically Once One Is Done", 1, True)
-        overhang_discovered = True
-        overhang()
-    else:
-        if energy == 30:
-            rp("You Don't Need To Rest", 1)
-            rp("You Are At Full Energy", 1, True)
-            beach()
+    while True:
+        if overhang_discovered == False:
+            rp("As You Walk Of The Gritty Sand You Find A Small Overhang", 1)
+            rp("The Smooth Rock Facing Towards The Calming Sea Would Be A Good Place To Rest", 1)
+            rp("To Gain 1 Energy It Takes 2 Minutes Of Rest.", 1) 
+            rp("A New Energy Will Start Regain Automatically Once One Is Done", 1, True)
+            overhang_discovered = True
         else:
-            overhang_choice = ci("You Can Rest Here. 'YES' / 'NO'", overhang, "YES", "NO")
-            if overhang_choice == "option 1":
-                rest()
-                beach()
+            if energy == 30:
+                rp("You Don't Need To Rest", 1)
+                rp("You Are At Full Energy", 1, True)
+                return
             else:
-                beach()
+                overhang_choice = ci("You Can Rest Here. 'YES' / 'NO'", overhang, "YES", "NO")
+                if overhang_choice == "option 1":
+                    rest()
+                    return
+                else:
+                    return
            
 def field():
     global health, energy, damage, inventory, gold
@@ -2809,40 +2812,42 @@ def field():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    last_checkpoint = field
-    if field_discovered == False:
-        rp("You Step Of The Irritating Sand And Onto The Lucious Grass", 1)
-        rp("You Hear The Mooing Of Cows In The Background", 1)
-        rp("The Relaxing Peace Is Quickly Broken By A Man", 1)
-        rp("This Is The First Human Interaction You Have Had Since The Ship Wreck", 1)
-        rp("As You Go To Great The Man A Flaming Fire Ball Skims Past Your Face", 1)
-        rp("This Isn't A Man, Its A Wizard And He Isnt Happy", 1, True)
-        wizard_fight()
-    elif field_discovered2 == False:
-        rp("With The Wizard Gone The Field Feels More Relaxing", 1)
-        rp("Some Animals Have Started To Come Back", 1)
-        field_optionxtr = ci("You Can 'HUNT' or 'EXPLORE'", field, "HUNT", "EXPLORE")
-        if field_optionxtr == "option 1":
-            hunt(field)
-        elif field_optionxtr == "option 2": 
-            rp("As You Wander Through The Fresh Lucious Grass", 1)
-            rp("You Are Stopped By A Big Towering Mountain", 1)
-            rp("With A Dark Gaping Hole That Tunnels Down Deep", 1 )
-            rp("And A Contrast Of A Cheerful Village Nearby", 1, True)
-            field_discovered2 = True
-    else:
-        rp("You Can Go To The 'VILLAGE', Climb The 'MOUNTAIN'")
-        field_option = ci("Explore The 'CAVE' Or 'HUNT' The Animals", field, "VILLAGE", "MOUNTAIN", "CAVE", "HUNT")
-        if field_option == "option 1":
-            village()
-        elif field_option == "option 2":
-            mountain()
-        elif field_option == "option 3":
-            cave()
-        elif field_option == "option 4":
-            hunt(field)
-        elif field_option == "back":
-            beach()
+    while True:
+        last_checkpoint = field
+        if field_discovered == False:
+            rp("You Step Of The Irritating Sand And Onto The Lucious Grass", 1)
+            rp("You Hear The Mooing Of Cows In The Background", 1)
+            rp("The Relaxing Peace Is Quickly Broken By A Man", 1)
+            rp("This Is The First Human Interaction You Have Had Since The Ship Wreck", 1)
+            rp("As You Go To Great The Man A Flaming Fire Ball Skims Past Your Face", 1)
+            rp("This Isn't A Man, Its A Wizard And He Isnt Happy", 1, True)
+            wizard_fight()
+        elif field_discovered2 == False:
+            rp("With The Wizard Gone The Field Feels More Relaxing", 1)
+            rp("Some Animals Have Started To Come Back", 1)
+            field_optionxtr = ci("You Can 'HUNT' or 'EXPLORE'", field, "HUNT", "EXPLORE")
+            if field_optionxtr == "option 1":
+                hunt(field)
+                field_discovered2 = True
+            elif field_optionxtr == "option 2": 
+                rp("As You Wander Through The Fresh Lucious Grass", 1)
+                rp("You Are Stopped By A Big Towering Mountain", 1)
+                rp("With A Dark Gaping Hole That Tunnels Down Deep", 1 )
+                rp("And A Contrast Of A Cheerful Village Nearby", 1, True)
+                field_discovered2 = True
+        else:
+            rp("You Can Go To The 'VILLAGE', Climb The 'MOUNTAIN'")
+            field_option = ci("Explore The 'CAVE' Or 'HUNT' The Animals", field, "VILLAGE", "MOUNTAIN", "CAVE", "HUNT")
+            if field_option == "option 1":
+                village()
+            elif field_option == "option 2":
+                mountain()
+            elif field_option == "option 3":
+                cave()
+            elif field_option == "option 4":
+                hunt(field)
+            elif field_option == "back":
+                return
        
 def forest():
     global health, energy, damage, inventory, gold
@@ -2866,47 +2871,47 @@ def forest():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    last_checkpoint = forest
-    if forest_discovered == False:
-        rp("The Disctint Salty Smell Of The Beach Fades Away", 1)
-        rp("Into The Leafy Scent Of The Forest", 1)
-        rp("The Tall Trees And Their Bushy Leaves Block Out Much Of The Sunlight", 1)
-        rp("The Floor Is Covered In A Range Of Moss, Fungi, Leaves, And Animals")
-        rp("The Sticks Look Dry And Flammable", 1, True)
-        forest_discovered = True
-        forest()
-    elif village_discovered == True and forest_monster_killed == False:
-        rp("You Should Have Take Then Villager's Warning", 1)
-        werewolf_fight()
-    elif "villager's_axe" in inventory and inventory.count("villager's_log") < 30:
-        rp("You Are Here To Gather Logs For The Villagers")
-        chop(forest, 'villager job')
-    elif "villager's_axe" in inventory or "axe" in inventory:
-        forest_choice = ci("You Can 'GATHER' Resources, 'CHOP' Logs Or Go To The 'RIVER', 'SWAMP' Or  A Loneley 'HUT'", forest, "GATHER", "CHOP", "RIVER", "SWAMP", "HUT")
-        if forest_choice == "option 1":
-            gather(forest)
-        elif forest_choice == "option 2":
-            chop(forest, 'normal')
-        elif forest_choice == "option 3":
-            river()
-        elif forest_choice == "option 4":
-            swamp()
-        elif forest_choice == "option 5":
-            hut()
-        elif forest_choice == "back":
-            beach()
-    else:   
-        forest_choice = ci("You Can 'GATHER' Resources Or Go To The 'RIVER', 'SWAMP' Or A Lonely 'HUT", forest, "GATHER", "RIVER", "SWAMP", "HUT")
-        if forest_choice == "option 1":
-            gather(forest)
-        elif forest_choice == "option 2":
-            river()
-        elif forest_choice == "option 3":   
-            swamp()
-        elif forest_choice == "option 4":
-            hut()
-        elif forest_choice == "back":
-            beach()
+    while True:
+        last_checkpoint = forest
+        if forest_discovered == False:
+            rp("The Disctint Salty Smell Of The Beach Fades Away", 1)
+            rp("Into The Leafy Scent Of The Forest", 1)
+            rp("The Tall Trees And Their Bushy Leaves Block Out Much Of The Sunlight", 1)
+            rp("The Floor Is Covered In A Range Of Moss, Fungi, Leaves, And Animals")
+            rp("The Sticks Look Dry And Flammable", 1, True)
+            forest_discovered = True
+        elif village_discovered == True and forest_monster_killed == False:
+            rp("You Should Have Take Then Villager's Warning", 1)
+            werewolf_fight()
+        elif "villager's_axe" in inventory and inventory.count("villager's_log") < 30:
+            rp("You Are Here To Gather Logs For The Villagers")
+            chop(forest, 'villager job')
+        elif "villager's_axe" in inventory or "axe" in inventory:
+            forest_choice = ci("You Can 'GATHER' Resources, 'CHOP' Logs Or Go To The 'RIVER', 'SWAMP' Or  A Loneley 'HUT'", forest, "GATHER", "CHOP", "RIVER", "SWAMP", "HUT")
+            if forest_choice == "option 1":
+                gather(forest)
+            elif forest_choice == "option 2":
+                chop(forest, 'normal')
+            elif forest_choice == "option 3":
+                river()
+            elif forest_choice == "option 4":
+                swamp()
+            elif forest_choice == "option 5":
+                hut()
+            elif forest_choice == "back":
+                return
+        else:   
+            forest_choice = ci("You Can 'GATHER' Resources Or Go To The 'RIVER', 'SWAMP' Or A Lonely 'HUT", forest, "GATHER", "RIVER", "SWAMP", "HUT")
+            if forest_choice == "option 1":
+                gather(forest)
+            elif forest_choice == "option 2":
+                river()
+            elif forest_choice == "option 3":   
+                swamp()
+            elif forest_choice == "option 4":
+                hut()
+            elif forest_choice == "back":
+                return
 
 def village():
     global health, energy, damage, inventory, gold
@@ -2930,70 +2935,70 @@ def village():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    last_checkpoint = village
-    if village_discovered == False:
-        rp("As You Walk Into The First Civilisation", 1)
-        rp("You Have Seen Since You Landed Here", 1)
-        rp("The Bustling Town Awaken A Long Forgetton Feeling", 1)
-        rp("Of Belonging But Also Hard Labour", 1)
-        rp("However You Don't Have Long Before You Are Noticed", 1)
-        rp("They Don't Trust You But Are Willing To With Proof", 1)
-        rp("Take This Axe And Collect 30 Logs From The Forest", 1)
-        rp("And Then Come Back And Delieve Them To Earn Their Trust", 1)
-        if "villager's_axe" not in inventory:
-            inventory.append("villager's_axe")
-            rp("Villager's Axe Added To Inventory", 1, True)
+    while True:
+        last_checkpoint = village
+        if village_discovered == False:
+            rp("As You Walk Into The First Civilisation", 1)
+            rp("You Have Seen Since You Landed Here", 1)
+            rp("The Bustling Town Awaken A Long Forgetton Feeling", 1)
+            rp("Of Belonging But Also Hard Labour", 1)
+            rp("However You Don't Have Long Before You Are Noticed", 1)
+            rp("They Don't Trust You But Are Willing To With Proof", 1)
+            rp("Take This Axe And Collect 30 Logs From The Forest", 1)
+            rp("And Then Come Back And Delieve Them To Earn Their Trust", 1)
+            if "villager's_axe" not in inventory:
+                inventory.append("villager's_axe")
+                rp("Villager's Axe Added To Inventory", 1, True)
+            else:
+                print()
+            village_discovered = True
+            return
+        elif village_first_job == False:
+            if inventory.count("villager's_log") < 30:
+                rp("You Don't Have Enough Logs Yet", 1, True)
+                return
+            elif inventory.count("villager's_log") >= 30:
+                log_taken = inventory.count("villager's_log")
+                for count in range(1, log_taken + 1):
+                    inventory.remove("villager's_log")
+                rp("The Villagers Are Thankful For Your Help", 1)
+                rp("They Can Now Stay Warm And Away From The Monster In The Woods", 1)
+                rp("You Didn't See Any Monster?", 1)
+                rp("Villager Discovered. Come Back Her For Trading and Working", 1, True)
+                village_first_job = True
+        elif forest_monster_killed == True and monster_responce == False:
+            rp("The Villagers See You Walk Back Clothes Ripped And Slashed", 1)
+            rp("And Your Weapon Covered In Blood", 1)
+            rp("They Are Suprised To Learn You You Killed The Werewolf", 1)
+            if cursed == True:
+                rp("But Are Significantly Worried About Your New Tail And Sharp Teeth", 1)
+                rp("Their Medical Team Will Sort That Out For You For A Bit Of Gold Later", 1)
+            rp("However They Do Not Know What The Orb Is Either. They Suggest Looking Up The Mountain", 1, True)
+            monster_responce == True
+        elif village_purged == True:
+            rp("Here Lie The Remainents Of The Only Civilisation On This Island", 1)
+            rp("That You Killed", 1)
+            rp("Anyway Other Locations Non-Exsitant Yet", 1)
+            rp("Back To Field")
+            return
         else:
-            print()
-        village_discovered = True
-        field()
-    elif village_first_job == False:
-        if inventory.count("villager's_log") < 30:
-            rp("You Don't Have Enough Logs Yet", 1, True)
-            field()
-        elif inventory.count("villager's_log") >= 30:
-            log_taken = inventory.count("villager's_log")
-            for count in range(1, log_taken + 1):
-                inventory.remove("villager's_log")
-            rp("The Villagers Are Thankful For Your Help", 1)
-            rp("They Can Now Stay Warm And Away From The Monster In The Woods", 1)
-            rp("You Didn't See Any Monster?", 1)
-            rp("Villager Discovered. Come Back Her For Trading and Working", 1, True)
-            village_first_job = True
-            village()
-    elif forest_monster_killed == True and monster_responce == False:
-        rp("The Villagers See You Walk Back Clothes Ripped And Slashed", 1)
-        rp("And Your Weapon Covered In Blood", 1)
-        rp("They Are Suprised To Learn You You Killed The Werewolf", 1)
-        if cursed == True:
-            rp("But Are Significantly Worried About Your New Tail And Sharp Teeth", 1)
-            rp("Their Medical Team Will Sort That Out For You For A Bit Of Gold Later", 1)
-        rp("However They Do Not Know What The Orb Is Either. They Suggest Looking Up The Mountain", 1, True)
-        monster_responce == True
-    elif village_purged == True:
-        rp("Here Lie The Remainents Of The Only Civilisation On This Island", 1)
-        rp("That You Killed", 1)
-        rp("Anyway Other Locations Non-Exsitant Yet", 1)
-        rp("Back To Field")
-        field()
-    else:
-        rp("Welcome To The Village")
-        village_choice = ci("You Can 'TRADE', 'WORK', 'MASSACRE' {NOT AVAILABLE YET}, 'HEAL' or {NEW LOCATIONS NOT AVAILALE YET}", village, "TRADE", "WORK", "MASSACRE", "HEAL", "CHEST")
-        if village_choice == "option_1":
-            trade()
-        elif village_choice == "option_2":
-            work()
-        elif village_choice == "option_3":
-            massacre()
-        elif village_choice == "option_4":
-            heal()
-        elif village_choice == "option_5" and village_chest == False:
-            rp("You Walk Into A Random Villagers House And Loot It", 1)
-            rp("You Got 5 Gold And 1 Bread", 1)
-            inventory.append("bread")
-            gold += 5
-        else:
-            field()
+            rp("Welcome To The Village")
+            village_choice = ci("You Can 'TRADE', 'WORK', 'MASSACRE' {NOT AVAILABLE YET}, 'HEAL' or {NEW LOCATIONS NOT AVAILALE YET}", village, "TRADE", "WORK", "MASSACRE", "HEAL", "CHEST")
+            if village_choice == "option_1":
+                trade()
+            elif village_choice == "option_2":
+                work()
+            elif village_choice == "option_3":
+                massacre()
+            elif village_choice == "option_4":
+                heal()
+            elif village_choice == "option_5" and village_chest == False:
+                rp("You Walk Into A Random Villagers House And Loot It", 1)
+                rp("You Got 5 Gold And 1 Bread", 1)
+                inventory.append("bread")
+                gold += 5
+            else:
+                return
 
 def mountain(): 
     global health, energy, damage, inventory, gold
@@ -3017,9 +3022,10 @@ def mountain():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("THIS AREA IS NOT AVAILABLE YET")
-    print("RETURNING TO FIELD")
-    field()
+    while True:
+        print("THIS AREA IS NOT AVAILABLE YET")
+        print("RETURNING TO FIELD")
+        return
 
 def cave():
     global health, energy, damage, inventory, gold
@@ -3043,9 +3049,10 @@ def cave():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("THIS AREA IS NOT AVAILABLE YET")
-    print("RETURNING TO FIELD")
-    field()
+    while True:
+        print("THIS AREA IS NOT AVAILABLE YET")
+        print("RETURNING TO FIELD")
+        return
 
 def river():
     global health, energy, damage, inventory, gold
@@ -3069,9 +3076,10 @@ def river():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("THIS AREA IS NOT AVAILABLE YET")
-    print("RETURNING TO FOREST")
-    forest()
+    while True:
+        print("THIS AREA IS NOT AVAILABLE YET")
+        print("RETURNING TO FOREST")
+        return
 
 def swamp():
     global health, energy, damage, inventory, gold
@@ -3095,9 +3103,10 @@ def swamp():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("THIS AREA IS NOT AVAILABLE YET")
-    print("RETURNING TO FOREST")
-    forest()
+    while True:
+        print("THIS AREA IS NOT AVAILABLE YET")
+        print("RETURNING TO FOREST")
+        return
 
 def hut():
     global health, energy, damage, inventory, gold
@@ -3121,9 +3130,10 @@ def hut():
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
-    print("THIS AREA IS NOT AVAILABLE YET")
-    print("RETURNING TO FOREST")
-    forest()
+    while True:
+        print("THIS AREA IS NOT AVAILABLE YET")
+        print("RETURNING TO FOREST")
+        return
 
 def ending_1():
     global health, energy, damage, inventory, gold
@@ -3163,7 +3173,7 @@ def ending_1():
     else:
         armour_lining_available.append("ice_thread")
         rp("Ice Thread Armour Lining Added To Available Armour Linings", 1, True)   
-    beach()
+    return
 
 def ending_2():
     global health, energy, damage, inventory, gold
@@ -3203,7 +3213,7 @@ def ending_2():
     else:
         companion_available.append("parrot")
         rp("Parrot Added To Available Companions", True, False)
-    beach()
+    return
 
 def ending_3():
     global health, energy, damage, inventory, gold
@@ -3245,7 +3255,8 @@ def ending_3():
         rp("Wolf Added To Available Companions", 1, True)
     rp(f"You Did Die Though", 1)
     health = 0
-    refresh_all(False)
+    refresh_all(False, True)
+    return
 
 
 def wizard_fight():
@@ -3370,6 +3381,7 @@ def werewolf_fight():
     while werewolf_health > 0 and health > 0:
         if "level-10" in cursed:
             ending_3()
+            return
         elif "level-9.5" in cursed:
             cursed.append("level-10")
         elif "level-9" in cursed:
@@ -3616,8 +3628,11 @@ def werewolf_fight():
         print()
         inventory.append("weird_orb")
         forest_monster_killed = True
+        return
     if health <= 0:
-        rp(f"The Werewold Killed You", 1, False, False)
+        rp(f"The Werewold Killed You", 1, False, True)
+        refresh_all(False, True)
+        return
 
 def hunt(previous_location):
     global health, energy, damage, inventory, gold
@@ -3689,7 +3704,7 @@ def hunt(previous_location):
             inventory.append("rabbit_hide")
             rp("Rabbit Hide Added To Inventory", 1, True)
         keep_hunt = ci("Do You Want To Keep Hunting? 'YES' / 'NO'", hunt, "YES", "NO")
-    previous_location()
+    return
 
 def gather(previous_location): 
     global health, energy, damage, inventory, gold
@@ -3821,7 +3836,7 @@ def gather(previous_location):
                 inventory.append("leaf")
             rp(f"{leaf_count} Leaves Added To Your Inventory")
         keep_gather = ci("Do You Want Keep Hunting. 'YES'/'", gather, "YES", "NO")
-    previous_location()
+    return
 
 def chop(previous_location, mode):
     global health, energy, damage, inventory, gold
@@ -3875,7 +3890,7 @@ def chop(previous_location, mode):
             rp("You Swing Was Bad And You Missed The Log", 1)
             health -= 1
             rp("Your Bad Technique Cost You 1 Health", 1, True)
-    previous_location()
+    return
 
 def trade():
     global health, energy, damage, inventory, gold
@@ -4000,7 +4015,7 @@ def trade():
             rp(f"You Now Have {gold} Gold", 1, True)
         else:
             rp("Returning To Village", 1, True)  
-            village()
+    return
             
 
 def work():
@@ -4146,7 +4161,7 @@ def work():
             rp(f"You Got 10 Gold. You Are Now On {gold} Gold", 1, True)
         else:
             rp(f"You Failed The Job", 1, True)
-    village()
+    return
 
 def heal():
     global health, energy, damage, inventory, gold
@@ -4186,7 +4201,7 @@ def heal():
         else: 
             rp("Not Enough Gold", 1, True)
     rp("Returning To Village", 1, True)
-    village()
+    return
 
 def massacre():
     global health, energy, damage, inventory, gold
@@ -4212,7 +4227,8 @@ def massacre():
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     rp("Not Availble Yet.", 1)
-    village()
+    return 
+    
 def temp():
     global health, energy, damage, inventory, gold
     global armour_base, armour_plate, armour_lining
