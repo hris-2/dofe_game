@@ -75,6 +75,7 @@ def save_data():
         "spell_available": spell_available,
         "arrow_available": arrow_available,
         "skill_available": skill_available,
+        "game_started": game_started,
         "beach_discovered": beach_discovered,
         "field_discovered": field_discovered,
         "forest_discovered": forest_discovered,
@@ -144,6 +145,7 @@ def load_save():
     next_weather = data.get("next_weather", "none")
     last_weather_change_refesh = data.get("last_weather_change_refresh", 1)
     last_weather_effect_refesh = data.get("last_weather_effect_refresh", 1)
+    game_started = data.get("game_started", False)
     beach_discovered = data.get("beach_discovered", False)
     field_discovered = data.get("field_discovered", False)
     forest_discovered = data.get("forest_discovered", False)
@@ -1370,6 +1372,7 @@ def menu_home(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    global printed_menu_home
     printed_menu_home = False
     while True:
         if printed_menu_home == False:
@@ -1379,6 +1382,7 @@ def menu_home(previous_location_function):
             rp("Press 'c' For Your Class, Weapon And Companion", 0.5)
             rp("Press 'd' For Current Weather Effects", 0.5)
             rp("Or Press 'e' To Go Back", 1, True)
+            printed_menu_home == True
             if k.is_pressed("a"):
                 menu_basic(previous_location_function)
             elif k.is_pressed("b"):
@@ -1413,6 +1417,7 @@ def menu_basic(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    global printed_menu_home
     rp("Basic Information:", 0.5)
     rp(f"Health: {health}", 0.5)
     rp(f"Energy: {energy}", 0.5)
@@ -1443,6 +1448,7 @@ def menu_armour(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    global printed_menu_home
     printed_menu_home = False
     while True:
         rp("Armour Information:", 0.5)
@@ -1477,8 +1483,8 @@ def menu_armour(previous_location_function):
                 rp(f"{select_armour_plate} Has Been Applied", 1, True)
             else:
                 rp("Not Vailid", 1)
-        elif armour_change == "BASE":
-            rp(f"You Have {armour_lining_available} Armour Bases Available", 1)
+        elif armour_change == "LINING":
+            rp(f"You Have {armour_lining_available} Armour Lining Available", 1)
             rp("To Select An Armour Please Type It How It Shown Above Else Type 'EXIT'")
             select_armour_lining = str(input())
             print()
@@ -1516,6 +1522,7 @@ def menu_class(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    global printed_menu_home
     printed_menu_home = False
     while True:
         if class_ == "wizard":
@@ -1612,6 +1619,7 @@ def menu_class_change(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    global printed_menu_home
     if len(class_available) == 0:
         rp("You Have No Available Classes To Change Too", 1)
         rp("Going Back", 1, True)
@@ -1656,6 +1664,7 @@ def menu_class_weapon_change(previous_location_function):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    global printed_menu_home
     if class_ == "wizard":
         if len(spell_available) == 0:
             rp("You Have No Available Spells", 1)
@@ -1768,6 +1777,8 @@ def menu_weather(previous_location):
     global tutorial_done, text_tutorial_chest, text_tutorial_back, text_tutorial_forward, text_tutorial_done
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
+    global printed_menu_home
+    printed_menu_home = False
     if this_weather == "sunny":
         rp("The Weather Is Sunny", 1)
         rp("Energy Efficenty Is Decreased", 1, True)
@@ -2286,17 +2297,20 @@ def fight_tutorial():
                         white_box_health -= white_box_health_taken
                         print(f"You Attacked the White Box For {white_box_health_taken} Damage. It Now Has {white_box_health} Health Left")
                         crit_attack = True
+                        if fight_tutorial_attack == False: 
+                            fight_tutorial_attack = True
+                            print("Well Done You Hit A Normal Attack")
                     else:
                         print("You Missed Your Attack")
                         crit_attack = False
-    if white_box_health >= 0:
-        t.sleep(1)
-        print("You Defeated the White Box But Not Complete The Task")
-        t.sleep(1)
-        print("Restarting")
-        crit_attack = False
-        print()
-        t.sleep(1)
+        if white_box_health >= 0:
+            t.sleep(1)
+            print("You Defeated the White Box But Not Complete The Task")
+            t.sleep(1)
+            print("Restarting")
+            crit_attack = False
+            print()
+            t.sleep(1)
 
 def menu_tuorial_part_1(): 
     global health, energy, damage, inventory, gold
@@ -2524,6 +2538,7 @@ def beach_wander():
             rp("Fishing Rod Added To Inventory", 1)
             rp(f"You Lost {energy_lost_beach_wander_fish_rod} Energy. You Are Now On {energy}", 1)
             beach_discovered = True
+            game_started = True
             beach_wander_option_1 = ci("Do You Want To Keep Wandering? 'YES'/'NO'", beach_wander, "YES", "NO")
             if beach_wander_option_1 != "option_1":
                 return
@@ -2605,6 +2620,7 @@ def beach_dig():
                     rp(f"You Lost {energy_lost_beach_dig_fish_rod} Energy. You Are Now On {energy}", 1)
                     inventory.append("fishing_rod")
                     beach_discovered = True
+                    game_started = True
                     keep_digging_1 = ci("Do You Want To Keep Digging? 'YES/'NO'", beach_dig, "YES", "NO")
                     if keep_digging_1 != "option_1":
                         return
@@ -4367,6 +4383,9 @@ loading_time = round(loading_time, 4)
 print(f"Loaded In {loading_time} Seconds")
 print()
 
+if o.path.exists(save_dir):
+    load_save()
+    
 print("Type 'START' To Start")
 start_game = str(input())
 print()
