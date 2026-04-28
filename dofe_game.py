@@ -1333,7 +1333,7 @@ def cfl(list_to_choose_from: list = ["empty"], prompt: str = "", this_location =
     User Must Type The Option How It Is Shown In The List To Select It
     '''
     cfl_choice = "SOMETHING RANDOMLY IMPOSSIBLE FOR TO ACTUALLY BE IN THE GAME"
-    while cfl_choice not in list_to_choose_from :
+    while cfl_choice not in list_to_choose_from:
         rp(prompt, 1)
         rp("You Must Type It As Seen Above", 1)
         cfl_choice = str(input())
@@ -3042,6 +3042,46 @@ def mountain():
         print("THIS AREA IS NOT AVAILABLE YET")
         print("RETURNING TO FIELD")
         return
+        rp("Climbing The Mountain Has Become Exhasting And Difficult")
+        climbed_mountain == False
+        climb_left1 = quick_time_event(2, "random", "Lift Your Left Foot Up")
+        if climb_left1 == True:
+            climb_right1 = quick_time_event(2, "random", "Lift Your Right Foot Up")
+            if climb_right1 == True:
+                climb_left2 = quick_time_event(2, "random", "To Lift Your Left Foot Up")
+                if climb_left2 == True:
+                    climb_right2 = quick_time_event(2, "random", "Lift Your Right Foot Up")
+                    if climb_right2 == True:
+                        climb_left3 = quick_time_event(2, "random", "Lift Your Left Foot Up")
+                        if climb_left3 == True:
+                            climb_right3 = quick_time_event(2, "random", "Lift Your Left Foot Up")
+                            if climb_right3 == True:
+                                climbed_mountain = True
+                                rp("The Climb Was Exhasting", 1)
+                                energy_lost = 10 / energy_efficenty
+                                energy -= energy_lost
+                                rp(f"You Lost {energy_lost} Energy. You Are Now On {energy}",  1, True)
+        if climbed_mountain == False:
+            rp("You Gave Up And Fell Back Down The Mountain", 1)
+            energy_lost = 8 / energy_efficenty
+            energy -= energy_lost
+            rp(f"You Lost {energy_lost} Energy. You Are Now On {energy}", 1, True)
+            return
+        rp("You Managed To Climb The Mountain", 1)
+        if "weird_orb" in inventory:
+            rp("The Weird Glowing Orb Lift Away From You", 1)
+            rp("It Glides Towards A Seemling Normal Wall", 1)
+            rp("Untill The Snow And Ice Cracks Of It", 1)
+            rp("Revealing A Mystical Hierlyphic Door", 1)
+            inventory.remove('weird_orb')
+            rp("Opening It Revealing A Weird Temple", 1)
+            mountain_door = True 
+        if montain_discovered == False:
+            rp("You Hear A Loud Roar With A Wave Heat Soon After", 1)
+            rp("And The Audioable Flapping", 1)
+            dragon_fight()
+        else:
+
 
 def cave():
     global health, energy, damage, inventory, gold
@@ -3611,7 +3651,7 @@ def werewolf_fight():
                     prev_attack = False
         elif ww_aod == "attack":
             crit_yn = r.randint(1, 100)
-            if prev_attack == True and crit_yn <= crit_chance:
+            if prev_attack == True and crit_yn <= crit_chance: 
                 crit_attack = quick_time_double(4, "random", "random", "Critical Hit The Werewolf")
                 if crit_attack == True:
                     damage_done = damage * crit_multiplier
@@ -3649,6 +3689,12 @@ def werewolf_fight():
         rp(f"The Werewold Killed You", 1, False, True)
         refresh_all(False, True)
         return
+
+def dragon_fight():
+    fight_signal()
+    dragon_health = 100
+    dragon_effects = []
+    while dragon_health
 
 def hunt(previous_location):
     global health, energy, damage, inventory, gold
@@ -4243,7 +4289,12 @@ def massacre():
     global fight_tutorial_dodge, fight_tutorial_attack, fight_tutorial_crit, fight_tutorial_done
     global menu_tutorial_save, menu_tutorial_basic, menu_tutorial_access, menu_tutorial_done
     rp("Not Availble Yet.", 1)
-    return 
+    overcome = quick_time_spam(5, "random", 50, "Overcome Your Goodwill")
+    if overcome == False:
+        rp("Your Too Good To Do This", 1)
+        return
+    else:
+        rp("You Start Too") 
     
 def temp():
     global health, energy, damage, inventory, gold
@@ -4333,6 +4384,8 @@ overhang_discovered = False
 village_discovered = False
 village_first_job = False
 forest_monster_killed = False
+mountain_discovered = False
+moutain_door = False
 
 last_checkpoint = "none"
 
